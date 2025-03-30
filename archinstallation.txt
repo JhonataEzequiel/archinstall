@@ -1,4 +1,4 @@
-sudo pacman -S --needed gdm xdg-user-dirs-gtk power-profiles-daemon xorg-server nautilus gedit file-roller evince adwaita-icon-theme xdg-desktop-portal-gnome baobab gnome-{shell,control-center,settings-daemon,session,tweaks,calculator,calendar,themes-extra,disk-utility,screenshot,system-monitor,backgrounds,console,keyring}
+sudo pacman -S --needed gdm xdg-user-dirs-gtk power-profiles-daemon xorg-server nautilus gedit file-roller evince adwaita-icon-theme xdg-desktop-portal-gnome baobab gnome-shell gnome-control-center gnome-settings-daemon gnome-session gnome-tweaks gnome-calculator gnome-themes-extra gnome-disk-utility gnome-screenshot gnome-system-monitor gnome-backgrounds gnome-console
 
 #habilitar o gdm
 sudo systemctl enable gdm && sudo systemctl start gdm
