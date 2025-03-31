@@ -31,7 +31,7 @@ sudo pacman -R gnome-console
 https://aur.chaotic.cx/docs
 
 #Games
-yay -S --needed nvidia-prime heroic-games-launcher-bin steam lutris gamescope mangohud wine winetricks vkd3d lib32-nvidia-utils glfw goverlay-bin wqy-zenhei protonplus gamemode
+yay -S --needed nvidia-prime heroic-games-launcher-bin steam lutris gamescope mangohud wine winetricks vkd3d lib32-nvidia-utils glfw goverlay-bin wqy-zenhei protonplus gamemode jdk21-openjdk
 
 #Emuladores
 yay -S --needed melonds-git azahar shadps4-git mgba-qt-git rpcs3-git pcsx2-git duckstation ryujinx-canary cemu-git dolphin-emu-git kega-fusion ppsspp-git vita3k-git mesen2-git
