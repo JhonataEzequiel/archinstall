@@ -1,4 +1,4 @@
-sudo pacman -S --needed gdm xdg-user-dirs-gtk power-profiles-daemon xorg-server nautilus gedit file-roller evince adwaita-icon-theme xdg-desktop-portal-gnome baobab gnome-shell gnome-control-center gnome-settings-daemon gnome-session gnome-tweaks gnome-calculator gnome-themes-extra gnome-disk-utility gnome-system-monitor gnome-backgrounds gnome-console extension-manager gnome-online-accounts gvfs-google gvfs && sudo systemctl enable --now gdm
+sudo pacman -S --needed gdm xdg-user-dirs-gtk power-profiles-daemon xorg-server nautilus gedit file-roller evince adwaita-icon-theme xdg-desktop-portal-gnome baobab gnome-shell gnome-control-center gnome-settings-daemon gnome-session gnome-tweaks gnome-calculator gnome-themes-extra gnome-disk-utility gnome-system-monitor gnome-backgrounds gnome-console extension-manager gnome-online-accounts gvfs-google gvfs os-prober && sudo systemctl enable --now gdm
 
 #reflector
 sudo pacman -S reflector && sudo reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist
@@ -42,6 +42,7 @@ yay -S --needed melonds-git azahar shadps4-git mgba-qt-git rpcs3-git pcsx2-git d
 #Cachyos repos
 curl https://mirror.cachyos.org/cachyos-repo.tar.xz -o cachyos-repo.tar.xz && tar xvf cachyos-repo.tar.xz && cd cachyos-repo && sudo ./cachyos-repo.sh && cd && rm -rf cachyos-repo
 
-yay -S --needed cachyos-kernel-manager cachyos-settings
+#instalando o kernel customizado do cachyos
+yay -S --needed cachyos-settings linux-cachyos linux-cachyos-headers
 
-yay -S linux-cachyos linux-cachyos-headers
+sudo update-grub
