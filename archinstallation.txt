@@ -1,10 +1,7 @@
-sudo pacman -S --needed gdm xdg-user-dirs-gtk power-profiles-daemon xorg-server nautilus gedit file-roller evince adwaita-icon-theme xdg-desktop-portal-gnome baobab gnome-shell gnome-control-center gnome-settings-daemon gnome-session gnome-tweaks gnome-calculator gnome-themes-extra gnome-disk-utility gnome-system-monitor gnome-backgrounds gnome-console extension-manager gnome-online-accounts gvfs-google gvfs os-prober ufw loupe && sudo systemctl enable --now gdm
+sudo pacman -S --needed gdm xdg-user-dirs-gtk power-profiles-daemon xorg-server nautilus gedit file-roller evince adwaita-icon-theme xdg-desktop-portal-gnome baobab gnome-shell gnome-control-center gnome-settings-daemon gnome-session gnome-tweaks gnome-calculator gnome-themes-extra gnome-disk-utility gnome-system-monitor gnome-backgrounds gnome-console extension-manager gnome-online-accounts gvfs-google gvfs os-prober ufw loupe python-pip && sudo systemctl enable --now gdm
 
 #reflector
 sudo pacman -S reflector && sudo reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist
-
-#Flatpak
-sudo pacman -S --needed flatpak
 
 #Pacotes preferidos
 sudo pacman -S --needed dconf bluez bluez-utils nano git curl wget tldr timeshift fastfetch htop pacman-contrib discord telegram-desktop vlc libreoffice-still gimp kdenlive qbittorrent audacity reflector dconf-editor
@@ -25,7 +22,7 @@ sudo pacman -S --needed base-devel && git clone https://aur.archlinux.org/yay.gi
 cd && yay --version && rm -rf yay
 
 #Pacotes preferidos AUR
-yay -S --needed update-grub zen-browser-bin ttf-ms-fonts ttf-tahoma ttf-vista-fonts peazip bottles nautilus-open-any-terminal ghostty spotify proton-vpn-gtk-app
+yay -S --needed update-grub zen-browser-bin ttf-ms-fonts ttf-tahoma ttf-vista-fonts peazip bottles nautilus-open-any-terminal ghostty spotify proton-vpn-gtk-app upscayl-desktop-git
 
 #remover o gnome-console
 sudo pacman -R gnome-console
@@ -45,4 +42,8 @@ curl https://mirror.cachyos.org/cachyos-repo.tar.xz -o cachyos-repo.tar.xz && ta
 #instalando o kernel customizado do cachyos
 yay -S --needed cachyos-settings linux-cachyos linux-cachyos-headers
 
+#se tiver windows instalado
 sudo update-grub
+
+#Flatpak
+sudo pacman -S --needed flatpak
