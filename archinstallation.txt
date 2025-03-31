@@ -1,10 +1,10 @@
 sudo pacman -S --needed gdm xdg-user-dirs-gtk power-profiles-daemon xorg-server nautilus gedit file-roller evince adwaita-icon-theme xdg-desktop-portal-gnome baobab gnome-shell gnome-control-center gnome-settings-daemon gnome-session gnome-tweaks gnome-calculator gnome-themes-extra gnome-disk-utility gnome-system-monitor gnome-backgrounds gnome-console extension-manager gnome-online-accounts gvfs-google gvfs os-prober ufw loupe python-pip && sudo systemctl enable --now gdm
 
 #reflector
-sudo pacman -S reflector && sudo reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist
+sudo pacman -S --needed reflector && sudo reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist
 
 #Pacotes preferidos
-sudo pacman -S --needed dconf bluez bluez-utils nano git curl wget tldr timeshift fastfetch htop pacman-contrib discord telegram-desktop vlc libreoffice-still gimp kdenlive qbittorrent audacity reflector dconf-editor
+sudo pacman -S --needed dconf bluez bluez-utils nano git curl wget tldr timeshift fastfetch htop pacman-contrib discord telegram-desktop vlc libreoffice-still gimp kdenlive qbittorrent audacity dconf-editor
 
 #fonts 
 sudo pacman -S --needed noto-fonts-cjk noto-fonts adobe-source-code-pro-fonts noto-fonts-emoji otf-font-awesome ttf-droid ttf-fira-code ttf-jetbrains-mono-nerd
@@ -31,7 +31,7 @@ sudo pacman -R gnome-console
 https://aur.chaotic.cx/docs
 
 #Games
-yay -S --needed nvidia-prime heroic-games-launcher-bin steam lutris gamescope mangohud wine winetricks vkd3d lib32-nvidia-utils glfw goverlay-bin wqy-zenhei protonplus
+yay -S --needed nvidia-prime heroic-games-launcher-bin steam lutris gamescope mangohud wine winetricks vkd3d lib32-nvidia-utils glfw goverlay-bin wqy-zenhei protonplus gamemode
 
 #Emuladores
 yay -S --needed melonds-git azahar shadps4-git mgba-qt-git rpcs3-git pcsx2-git duckstation ryujinx-canary citron-git cemu-git dolphin-emu-git kega-fusion ppsspp-git vita3k-git mesen2-git
@@ -42,7 +42,7 @@ curl https://mirror.cachyos.org/cachyos-repo.tar.xz -o cachyos-repo.tar.xz && ta
 #instalando o kernel customizado do cachyos
 yay -S --needed cachyos-settings linux-cachyos linux-cachyos-headers
 
-#se tiver windows instalado
+#se tiver windows instalado ou tiver instalado o kernel do cachyos
 sudo update-grub
 
 #Flatpak
