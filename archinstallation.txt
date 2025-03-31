@@ -23,7 +23,10 @@ sudo pacman -S --needed base-devel && git clone https://aur.archlinux.org/yay.gi
 cd && rm -rf yay
 
 #Pacotes preferidos AUR
-yay -S --needed update-grub zen-browser-bin ttf-ms-fonts ttf-tahoma ttf-vista-fonts peazip bottles nautilus-open-any-terminal ghostty spotify proton-vpn-gtk-app upscayl-desktop-git motrix
+yay -S --needed update-grub zen-browser-bin ttf-ms-fonts ttf-tahoma ttf-vista-fonts peazip bottles ghostty spotify proton-vpn-gtk-app upscayl-desktop-git motrix
+
+#Para usar o Ghostty no nautilus
+yay -S nautilus-open-any-terminal
 
 #remover o gnome-console
 sudo pacman -R gnome-console
