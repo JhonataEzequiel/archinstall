@@ -1,47 +1,47 @@
-sudo pacman -S --needed gdm xdg-user-dirs-gtk power-profiles-daemon xorg-server nautilus gedit file-roller evince adwaita-icon-theme xdg-desktop-portal-gnome baobab gnome-shell gnome-control-center gnome-settings-daemon gnome-session gnome-tweaks gnome-calculator gnome-themes-extra gnome-disk-utility gnome-screenshot gnome-system-monitor gnome-backgrounds gnome-console
+sudo pacman -S --needed gdm xdg-user-dirs-gtk power-profiles-daemon xorg-server nautilus gedit file-roller evince adwaita-icon-theme xdg-desktop-portal-gnome baobab gnome-shell gnome-control-center gnome-settings-daemon gnome-session gnome-tweaks gnome-calculator gnome-themes-extra gnome-disk-utility gnome-system-monitor gnome-backgrounds gnome-console extension-manager gnome-online-accounts gvfs-google gvfs && sudo systemctl enable --now gdm
 
-#habilitar o gdm
-sudo systemctl enable gdm && sudo systemctl start gdm
+#reflector
+sudo pacman -S reflector && sudo reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist
 
 #Flatpak
-sudo --needed pacman -S flatpak
+sudo pacman -S --needed flatpak
 
 #Pacotes preferidos
-sudo pacman -S  --needed dconf bluez bluez-utils nano git curl wget tldr timeshift fastfetch htop pacman-contrib discord telegram-desktop vlc libreoffice-still gimp kdenlive qbittorrent audacity reflector dconf-editor
+sudo pacman -S --needed dconf bluez bluez-utils nano git curl wget tldr timeshift fastfetch htop pacman-contrib discord telegram-desktop vlc libreoffice-still gimp kdenlive qbittorrent audacity reflector dconf-editor
 
 #fonts 
 sudo pacman -S --needed noto-fonts-cjk noto-fonts adobe-source-code-pro-fonts noto-fonts-emoji otf-font-awesome ttf-droid ttf-fira-code ttf-jetbrains-mono-nerd
+
+#nvidia drivers
+sudo pacman -S egl-gbm egl-x11 nvidia-open-dkms nvidia-utils
 
 #Habilitando serviços importantes
 sudo systemctl enable --now bluetooth.service && sudo systemctl enable paccache.timer
 
 #Instalação do Yay
-sudo pacman -S --needed base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -s && sudo makepkg -i
+sudo pacman -S --needed base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
 
 #Remoção da pasta do Yay
 cd && yay --version && rm -rf yay
 
-#instalar o chaotic-aur
-https://aur.chaotic.cx/docs
-
-#nvidia drivers
-curl -fsSL https://christitus.com/linux | sh
-
 #Pacotes preferidos AUR
 yay -S --needed update-grub zen-browser-bin ttf-ms-fonts ttf-tahoma ttf-vista-fonts peazip bottles nautilus-open-any-terminal ghostty
 
+#remover o gnome-console
+sudo pacman -R gnome-console
+
+#instalar o chaotic-aur
+https://aur.chaotic.cx/docs
+
 #Games
-yay -S --needed arch-gaming-meta nvidia-prime heroic-games-launcher-bin
+yay -S --needed nvidia-prime heroic-games-launcher-bin steam lutris gamescope mangohud wine winetricks vkd3d lib32-nvidia-utils glfw goverlay-bin wqy-zenhei
 
 #Emuladores
-yay -S --needed --noconfirm melonds-git azahar shadps4-git mgba-qt-git rpcs3-git pcsx2-git duckstation ryujinx-canary citron-git cemu-git dolphin-emu-git kega-fusion ppsspp-git vita3k-git mesen2-git
+yay -S --needed melonds-git azahar shadps4-git mgba-qt-git rpcs3-git pcsx2-git duckstation ryujinx-canary citron-git cemu-git dolphin-emu-git kega-fusion ppsspp-git vita3k-git mesen2-git
 
 #Cachyos repos
-curl https://mirror.cachyos.org/cachyos-repo.tar.xz -o cachyos-repo.tar.xz
-tar xvf cachyos-repo.tar.xz && cd cachyos-repo
-sudo ./cachyos-repo.sh
+curl https://mirror.cachyos.org/cachyos-repo.tar.xz -o cachyos-repo.tar.xz && tar xvf cachyos-repo.tar.xz && cd cachyos-repo && sudo ./cachyos-repo.sh && cd && rm -rf cachyos-repo
 
 yay -S --needed cachyos-kernel-manager cachyos-settings
 
-#Limpeza do Gnome
-yay -Rns  --noconfirm gnome-{tour,characters,connections,console,contacts,text-editor,maps,weather,logs,clocks} decibels simple-scan malcontent totem epiphany
+yay -S linux-cachyos linux-cachyos-headers
