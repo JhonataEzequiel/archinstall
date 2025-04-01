@@ -1,5 +1,6 @@
 sudo pacman -S --needed gdm xdg-user-dirs-gtk power-profiles-daemon xorg-server nautilus gedit file-roller evince adwaita-icon-theme xdg-desktop-portal-gnome baobab gnome-shell gnome-control-center gnome-settings-daemon gnome-session gnome-tweaks gnome-calculator gnome-themes-extra gnome-disk-utility gnome-system-monitor gnome-backgrounds gnome-console extension-manager gnome-online-accounts gvfs-google gvfs os-prober ufw loupe python-pip && sudo systemctl enable --now gdm
-sudo pacman -S --needed sddm xdg-user-dirs plasma-desktop konsole dolphin kate spectacle plasma-nm plasma-pa powerdevil kscreen kinfocenter breeze-icons xdg-desktop-portal-kde kcalc ark partitionmanager systemsettings plasma-workspace plasma-systemmonitor kde-gtk-config bluedevil discover filelight kdeplasma-addons okular os-prober ufw python-pip xorg-server && sudo systemctl enable sddm && sudo systemctl start sddm
+sudo pacman -S --needed sddm xdg-user-dirs plasma-desktop konsole dolphin kate spectacle plasma-nm plasma-pa powerdevil kscreen kinfocenter breeze-icons xdg-desktop-portal-kde kcalc ark partitionmanager systemsettings plasma-workspace plasma-systemmonitor kde-gtk-config bluedevil discover filelight kdeplasma-addons okular os-prober ufw python-pip xorg-server 
+sudo systemctl enable --now sddm
 
 #reflector
 sudo pacman -S --needed reflector && sudo reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist
