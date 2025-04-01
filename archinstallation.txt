@@ -1,5 +1,6 @@
-sudo pacman -S --needed gdm xdg-user-dirs-gtk power-profiles-daemon xorg-server nautilus gedit file-roller evince adwaita-icon-theme xdg-desktop-portal-gnome baobab gnome-shell gnome-control-center gnome-settings-daemon gnome-session gnome-tweaks gnome-calculator gnome-themes-extra gnome-disk-utility gnome-system-monitor gnome-backgrounds gnome-console extension-manager gnome-online-accounts gvfs-google gvfs os-prober ufw loupe python-pip && sudo systemctl enable --now gdm
-sudo pacman -S --needed sddm xdg-user-dirs plasma-desktop konsole dolphin kate spectacle plasma-nm plasma-pa powerdevil kscreen kinfocenter breeze-icons xdg-desktop-portal-kde kcalc ark partitionmanager systemsettings plasma-workspace plasma-systemmonitor kde-gtk-config bluedevil discover filelight kdeplasma-addons okular os-prober ufw python-pip xorg-server 
+sudo pacman -S --needed gdm xdg-user-dirs-gtk power-profiles-daemon xorg-server nautilus gedit file-roller evince adwaita-icon-theme xdg-desktop-portal-gnome baobab gnome-shell gnome-control-center gnome-settings-daemon gnome-session gnome-tweaks gnome-calculator gnome-themes-extra gnome-disk-utility gnome-system-monitor gnome-backgrounds gnome-console extension-manager gnome-online-accounts gvfs-google gvfs os-prober ufw loupe python-pip
+sudo systemctl enable --now gdm
+sudo pacman -S --needed sddm xdg-user-dirs plasma-desktop konsole dolphin kate spectacle plasma-nm plasma-pa powerdevil kscreen kinfocenter breeze-icons xdg-desktop-portal-kde kcalc ark partitionmanager systemsettings plasma-workspace plasma-systemmonitor kde-gtk-config bluedevil discover filelight kdeplasma-addons okular os-prober ufw python-pip xorg-server gwenview kwalletmanager sddm-kcm
 sudo systemctl enable --now sddm
 
 #reflector
@@ -24,7 +25,7 @@ sudo pacman -S --needed base-devel && git clone https://aur.archlinux.org/yay.gi
 cd && rm -rf yay
 
 #Pacotes preferidos AUR
-yay -S --needed update-grub zen-browser-bin ttf-ms-fonts ttf-tahoma ttf-vista-fonts peazip bottles ghostty spotify proton-vpn-gtk-app upscayl-desktop-git motrix
+yay -S --needed update-grub zen-browser-bin ttf-ms-fonts ttf-tahoma ttf-vista-fonts peazip bottles ghostty
 
 #Para usar o Ghostty no nautilus
 yay -S nautilus-open-any-terminal
@@ -55,3 +56,6 @@ sudo update-grub
 
 #Flatpak
 sudo pacman -S --needed flatpak
+
+#outros pacotes aur
+yay -S --needed motrix spotify proton-vpn-gtk-app upscayl-desktop-git
