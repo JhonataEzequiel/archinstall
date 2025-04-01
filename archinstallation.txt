@@ -3,10 +3,10 @@ sudo systemctl enable --now gdm
 sudo pacman -S --needed sddm xdg-user-dirs plasma-desktop konsole dolphin kate spectacle plasma-nm plasma-pa powerdevil kscreen kinfocenter breeze-icons xdg-desktop-portal-kde kcalc ark partitionmanager systemsettings plasma-workspace plasma-systemmonitor kde-gtk-config bluedevil discover filelight kdeplasma-addons okular os-prober ufw python-pip xorg-server gwenview kwalletmanager sddm-kcm
 sudo systemctl enable --now sddm
 
-#reflector
+#reflector and update mirrors
 sudo pacman -S --needed reflector && sudo reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist
 
-#Pacotes preferidos
+#base packages
 sudo pacman -S --needed dconf bluez bluez-utils nano git curl wget tldr timeshift fastfetch htop pacman-contrib discord telegram-desktop vlc libreoffice-still gimp kdenlive qbittorrent audacity dconf-editor
 
 #fonts 
@@ -15,47 +15,50 @@ sudo pacman -S --needed noto-fonts-cjk noto-fonts adobe-source-code-pro-fonts no
 #nvidia drivers
 sudo pacman -S egl-gbm egl-x11 nvidia-open-dkms nvidia-utils
 
-#Habilitando serviços importantes
+#enableling some services
 sudo systemctl enable --now bluetooth.service && sudo systemctl enable paccache.timer
 
-#Instalação do Yay
+#yay installation
 sudo pacman -S --needed base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
 
-#Remoção da pasta do Yay
+#removing yay folder (not uninstalling, just cleaning the folder)
 cd && rm -rf yay
 
-#Pacotes preferidos AUR
-yay -S --needed update-grub zen-browser-bin ttf-ms-fonts ttf-tahoma ttf-vista-fonts peazip bottles ghostty
+#Some good AUR Packages
+yay -S --needed update-grub zen-browser-bin ttf-ms-fonts ttf-tahoma ttf-vista-fonts peazip bottles ghostty spotify proton-vpn-gtk-app upscayl-desktop-git
 
-#Para usar o Ghostty no nautilus
+#Extension Manager for GNOME
+yay -S --needed extension-manager
+
+#Add ghostty to nautilus
 yay -S nautilus-open-any-terminal
 
-#remover o gnome-console
+#remove gnome-console
 sudo pacman -R gnome-console
 
-#remover o konsole
+#remove konsole
 sudo pacman -R konsole
 
-#instalar o chaotic-aur
+#install chaotic aur
 https://aur.chaotic.cx/docs
 
 #Games
 yay -S --needed nvidia-prime heroic-games-launcher-bin steam lutris gamescope mangohud wine winetricks vkd3d lib32-nvidia-utils glfw goverlay-bin wqy-zenhei protonplus gamemode jdk21-openjdk
 
-#Emuladores
+#Emulators
 yay -S --needed melonds-git azahar shadps4-git mgba-qt-git rpcs3-git pcsx2-git duckstation ryujinx-canary cemu-git dolphin-emu-git kega-fusion ppsspp-git vita3k-git mesen2-git
 
 #Cachyos repos
 curl https://mirror.cachyos.org/cachyos-repo.tar.xz -o cachyos-repo.tar.xz && tar xvf cachyos-repo.tar.xz && cd cachyos-repo && sudo ./cachyos-repo.sh && cd && rm -rf cachyos-repo
 
-#instalando o kernel customizado do cachyos
+#custom cachyos kernel
 yay -S --needed cachyos-settings linux-cachyos linux-cachyos-headers
 
-#se tiver windows instalado ou tiver instalado o kernel do cachyos
+#dual boot or new kernels
 sudo update-grub
 
 #Flatpak
 sudo pacman -S --needed flatpak
 
-#outros pacotes aur
-yay -S --needed motrix spotify proton-vpn-gtk-app upscayl-desktop-git
+#other aur packages (need cachyos repos)
+yay -S --needed motrix
