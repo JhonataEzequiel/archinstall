@@ -7,7 +7,7 @@ sudo systemctl enable --now sddm
 sudo pacman -S --needed reflector && sudo reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist
 
 #base packages
-sudo pacman -S --needed dconf bluez bluez-utils nano git curl wget tldr timeshift fastfetch htop pacman-contrib discord telegram-desktop vlc libreoffice-still gimp kdenlive qbittorrent audacity dconf-editor
+sudo pacman -S --needed dconf bluez bluez-utils nano git curl wget tealdeer timeshift fastfetch htop pacman-contrib discord telegram-desktop vlc libreoffice-still gimp kdenlive qbittorrent audacity dconf-editor
 
 #fonts 
 sudo pacman -S --needed noto-fonts-cjk noto-fonts adobe-source-code-pro-fonts noto-fonts-emoji otf-font-awesome ttf-droid ttf-fira-code ttf-jetbrains-mono-nerd
