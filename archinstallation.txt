@@ -13,7 +13,7 @@ sudo pacman -S --needed dconf bluez bluez-utils nano git curl wget tealdeer time
 sudo pacman -S --needed noto-fonts-cjk noto-fonts adobe-source-code-pro-fonts noto-fonts-emoji otf-font-awesome ttf-droid ttf-fira-code ttf-jetbrains-mono-nerd
 
 #nvidia drivers
-sudo pacman -S egl-gbm egl-x11 nvidia-open-dkms nvidia-utils
+sudo pacman -S egl-gbm egl-x11 nvidia-open-dkms nvidia-utils nvidia-prime
 
 #enableling some services
 sudo systemctl enable --now bluetooth.service && sudo systemctl enable paccache.timer
@@ -43,7 +43,7 @@ sudo pacman -R konsole
 https://aur.chaotic.cx/docs
 
 #Games
-yay -S --needed nvidia-prime heroic-games-launcher-bin steam lutris gamescope mangohud wine winetricks vkd3d lib32-nvidia-utils glfw goverlay-bin wqy-zenhei protonplus gamemode jdk21-openjdk
+yay -S --needed heroic-games-launcher-bin steam lutris gamescope mangohud wine winetricks vkd3d lib32-nvidia-utils glfw goverlay-bin wqy-zenhei protonplus gamemode jdk21-openjdk
 
 #Emulators
 yay -S --needed melonds-git azahar shadps4-git mgba-qt-git rpcs3-git pcsx2-git duckstation ryujinx-canary cemu-git dolphin-emu-git kega-fusion ppsspp-git vita3k-git mesen2-git
