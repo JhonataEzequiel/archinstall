@@ -25,7 +25,7 @@ sudo pacman -S --needed base-devel && git clone https://aur.archlinux.org/yay.gi
 cd && rm -rf yay
 
 #Some good AUR Packages
-yay -S --needed update-grub zen-browser-bin ttf-ms-fonts ttf-tahoma ttf-vista-fonts peazip bottles ghostty spotify proton-vpn-gtk-app upscayl-desktop-git stremio parsec-bin
+yay -S --needed update-grub zen-browser-bin ttf-ms-fonts ttf-tahoma ttf-vista-fonts peazip bottles ghostty spotify proton-vpn-gtk-app upscayl-desktop-git stremio parsec-bin obsidian
 
 #Extension Manager for GNOME
 yay -S --needed extension-manager
