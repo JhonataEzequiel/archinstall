@@ -48,6 +48,12 @@ yay -S --needed heroic-games-launcher-bin steam lutris gamescope mangohud wine w
 #Emulators
 yay -S --needed melonds-git azahar shadps4-git mgba-qt-git rpcs3-git pcsx2-git duckstation-git ryujinx-canary cemu-git dolphin-emu-git kega-fusion ppsspp-git vita3k-git mesen2-git
 
+#Create Folders for Emulators First Option
+mkdir "Nintendo DS" "Sega Mega Drive" "PlayStation 4" "Game Boy Advance" "PlayStation 3" "PlayStation 2" "PlayStation 1" "Nintendo Switch" "Wii U" "Nintendo GameCube" "Nintendo Wii" "Sega Master System" "Game Gear" "Sega CD" "Sega 32X" "PlayStation Portable" "PlayStation Vita" "Nintendo Entertainment System" "Super Nintendo Entertainment System" "Game Boy" "Game Boy Color" "Nintendo 3DS"
+
+#Create Folders for Emulators Second Option
+mkdir NDS SMD PS4 GBA PS3 PS2 PS1 Switch WiiU GC Wii SMS GG SCD 32X PSP Vita NES SNES GB 3DS GBC
+
 #Cachyos repos
 curl https://mirror.cachyos.org/cachyos-repo.tar.xz -o cachyos-repo.tar.xz && tar xvf cachyos-repo.tar.xz && cd cachyos-repo && sudo ./cachyos-repo.sh && cd && rm -rf cachyos-repo
 
