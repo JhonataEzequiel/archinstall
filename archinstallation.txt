@@ -13,7 +13,7 @@ sudo pacman -S --needed dconf bluez bluez-utils nano git curl wget tealdeer time
 sudo pacman -S --needed noto-fonts-cjk noto-fonts adobe-source-code-pro-fonts noto-fonts-emoji otf-font-awesome ttf-droid ttf-fira-code ttf-jetbrains-mono-nerd
 
 #nvidia drivers
-sudo pacman -S egl-gbm egl-x11 nvidia-open-dkms nvidia-utils nvidia-prime
+sudo pacman -S egl-gbm egl-x11 nvidia-dkms nvidia-utils nvidia-prime
 
 #enableling some services
 sudo systemctl enable --now bluetooth.service && sudo systemctl enable paccache.timer
@@ -26,6 +26,9 @@ cd && rm -rf yay
 
 #Some good AUR Packages
 yay -S --needed update-grub zen-browser-bin ttf-ms-fonts ttf-tahoma ttf-vista-fonts peazip bottles ghostty spotify proton-vpn-gtk-app upscayl-desktop-git stremio parsec-bin obsidian apostrophe pokemon-colorscripts-git vesktop
+
+#Starship
+curl -sS https://starship.rs/install.sh | sh
 
 #Extension Manager for GNOME
 yay -S --needed extension-manager
