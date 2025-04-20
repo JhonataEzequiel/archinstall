@@ -8,7 +8,7 @@
 ### For GNOME
 To run the installation execute the following command:
 ```
-git clone https://github.com/JhonataEzequiel/archinstall.git && instal.sh
+git clone https://github.com/JhonataEzequiel/archinstall.git && cd archinstall && ./instal.sh
 ```
 
 ## Reviewing the Commands
