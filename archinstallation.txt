@@ -1,13 +1,13 @@
-sudo pacman -S --needed gdm xdg-user-dirs-gtk power-profiles-daemon xorg-server nautilus gedit file-roller evince adwaita-icon-theme xdg-desktop-portal-gnome baobab gnome-shell gnome-control-center gnome-settings-daemon gnome-session gnome-tweaks gnome-calculator gnome-themes-extra gnome-disk-utility gnome-system-monitor gnome-backgrounds gnome-console gnome-online-accounts gvfs-google gvfs os-prober ufw loupe python-pip xdg-desktop-portal-gnome gnome-menus
+sudo pacman -S --needed gdm xdg-user-dirs-gtk power-profiles-daemon xorg-server nautilus gedit file-roller evince adwaita-icon-theme xdg-desktop-portal-gnome baobab gnome-shell gnome-control-center gnome-settings-daemon gnome-session gnome-tweaks gnome-calculator gnome-disk-utility gnome-console gnome-online-accounts gvfs-google gvfs loupe gnome-menus
 sudo systemctl enable --now gdm
-sudo pacman -S --needed sddm xdg-user-dirs plasma-desktop konsole dolphin kate spectacle plasma-nm plasma-pa powerdevil kscreen kinfocenter breeze-icons xdg-desktop-portal-kde kcalc ark partitionmanager systemsettings plasma-workspace plasma-systemmonitor kde-gtk-config bluedevil discover filelight kdeplasma-addons okular os-prober ufw python-pip xorg-server gwenview kwalletmanager sddm-kcm
+sudo pacman -S --needed sddm xdg-user-dirs plasma-desktop konsole dolphin kate spectacle plasma-nm plasma-pa powerdevil kscreen kinfocenter breeze-icons xdg-desktop-portal-kde kcalc ark partitionmanager systemsettings plasma-workspace plasma-systemmonitor kde-gtk-config bluedevil discover filelight kdeplasma-addons okular xorg-server gwenview sddm-kcm dolphin-plugins elisa
 sudo systemctl enable --now sddm
 
 #reflector and update mirrors
 sudo pacman -S --needed reflector && sudo reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist
 
 #base packages
-sudo pacman -S --needed dconf bluez bluez-utils nano git curl wget tealdeer timeshift fastfetch htop pacman-contrib discord telegram-desktop vlc libreoffice-still gimp kdenlive qbittorrent audacity dconf-editor obs-studio unzip unrar p7zip tar
+sudo pacman -S --needed dconf bluez bluez-utils nano git curl wget tealdeer timeshift fastfetch htop pacman-contrib discord telegram-desktop vlc libreoffice-still gimp kdenlive qbittorrent audacity dconf-editor obs-studio unzip unrar p7zip tar python-pip os-prober ufw
 
 #fonts 
 sudo pacman -S --needed noto-fonts-cjk noto-fonts adobe-source-code-pro-fonts noto-fonts-emoji otf-font-awesome ttf-droid ttf-fira-code ttf-jetbrains-mono-nerd
@@ -16,7 +16,7 @@ sudo pacman -S --needed noto-fonts-cjk noto-fonts adobe-source-code-pro-fonts no
 sudo pacman -S egl-gbm egl-x11 nvidia-dkms nvidia-utils nvidia-prime
 
 #enableling some services
-sudo systemctl enable --now bluetooth.service && sudo systemctl enable paccache.timer
+sudo systemctl enable --now bluetooth.service && sudo systemctl enable paccache.timer && systemctl enable --now cronie.service
 
 #yay installation
 sudo pacman -S --needed base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
@@ -48,7 +48,7 @@ https://aur.chaotic.cx/docs
 #Games
 yay -S --needed heroic-games-launcher-bin steam lutris gamescope mangohud wine winetricks vkd3d lib32-nvidia-utils glfw goverlay-bin wqy-zenhei protonplus gamemode jdk21-openjdk
 
-#Emulators
+#Emulators with aur
 yay -S --needed melonds-git azahar shadps4-git mgba-qt-git rpcs3-git pcsx2-git duckstation-git ryujinx-canary cemu-git dolphin-emu-git kega-fusion ppsspp-git vita3k-git mesen2-git
 
 #Create Folders for Emulators First Option
@@ -61,7 +61,7 @@ mkdir NDS SMD PS4 GBA PS3 PS2 PS1 Switch WiiU GC Wii SMS GG SCD 32X PSP Vita NES
 curl https://mirror.cachyos.org/cachyos-repo.tar.xz -o cachyos-repo.tar.xz && tar xvf cachyos-repo.tar.xz && cd cachyos-repo && sudo ./cachyos-repo.sh && cd && rm -rf cachyos-repo
 
 #custom cachyos kernel
-yay -S --needed cachyos-settings linux-cachyos linux-cachyos-headers
+yay -S --needed linux-cachyos linux-cachyos-headers
 
 #dual boot or new kernels
 sudo update-grub
