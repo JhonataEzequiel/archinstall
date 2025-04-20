@@ -8,6 +8,10 @@ if ! sudo pacman -S --needed reflector || ! sudo reflector --sort rate --latest 
 fi
 echo "Done updating mirrorlist"
 
+# Main Drivers
+echo "Installing open-source video drivers"
+sudo pacman -S intel-media-driver libva-intel-driver libva-mesa-driver mesa vulkan-intel vulkan-nouveau vulkan-radeon xf86-video-amdgpu xf86-video-ati xf86-video-nouveau xf86-video-vmware xorg-server xorg-init
+
 # Choosing DE
 while true; do
     echo "Choose your Desktop Environment:"
@@ -19,7 +23,7 @@ while true; do
     case $choiceDE in
         1)
             echo "Installing GNOME and its base packages..."
-            if sudo pacman -S --needed gdm xdg-user-dirs-gtk power-profiles-daemon xorg-server nautilus gedit file-roller evince adwaita-icon-theme xdg-desktop-portal-gnome baobab gnome-shell gnome-control-center gnome-settings-daemon gnome-session gnome-tweaks gnome-calculator gnome-disk-utility gnome-online-accounts gvfs-google gvfs loupe gnome-menus gnome-software; then
+            if sudo pacman -S --needed gdm xdg-user-dirs-gtk power-profiles-daemon nautilus gedit file-roller evince adwaita-icon-theme xdg-desktop-portal-gnome baobab gnome-shell gnome-control-center gnome-settings-daemon gnome-session gnome-tweaks gnome-calculator gnome-disk-utility gnome-online-accounts gvfs-google gvfs loupe gnome-menus gnome-software; then
                 echo "Finished Installing GNOME"
                 break
             else
@@ -29,7 +33,7 @@ while true; do
             ;;
         2)
             echo "Installing KDE Plasma and its base packages..."
-            if sudo pacman -S --needed sddm xdg-user-dirs plasma-desktop dolphin kate spectacle plasma-nm plasma-pa powerdevil kscreen kinfocenter breeze-icons xdg-desktop-portal-kde kcalc ark partitionmanager systemsettings plasma-workspace plasma-systemmonitor kde-gtk-config bluedevil discover filelight kdeplasma-addons okular xorg-server gwenview sddm-kcm dolphin-plugins elisa; then
+            if sudo pacman -S --needed sddm xdg-user-dirs plasma-desktop dolphin kate spectacle plasma-nm plasma-pa powerdevil kscreen kinfocenter breeze-icons xdg-desktop-portal-kde kcalc ark partitionmanager systemsettings plasma-workspace plasma-systemmonitor kde-gtk-config bluedevil discover filelight kdeplasma-addons okular gwenview sddm-kcm dolphin-plugins elisa; then
                 echo "Finished Installing KDE Plasma"
                 break
             else
