@@ -229,4 +229,13 @@ sudo update-grub
 
 echo "adding flatpak support"
 sudo pacman -S --needed flatpak
-
+case choiceDE in
+    1)
+        sudo systemctl enable gdm
+        ;;
+    2) sudo systemctl enable sddm
+        ;;
+esac
+echo "Rebooting in 5 seconds"
+sleep 5
+reboot
