@@ -10,7 +10,7 @@ echo "Done updating mirrorlist"
 
 # Main Drivers
 echo "Installing open-source video drivers"
-sudo pacman -S --needed intel-media-driver libva-intel-driver libva-mesa-driver mesa vulkan-intel vulkan-nouveau vulkan-radeon xf86-video-amdgpu xf86-video-ati xf86-video-nouveau xf86-video-vmware xorg-server xorg-init
+sudo pacman -S --needed intel-media-driver libva-intel-driver libva-mesa-driver mesa vulkan-intel vulkan-nouveau vulkan-radeon xf86-video-amdgpu xf86-video-ati xf86-video-nouveau xf86-video-vmware xorg-server xorg-xinit mesa-utils
 
 # Choosing DE
 while true; do
@@ -23,7 +23,7 @@ while true; do
     case $choiceDE in
         1)
             echo "Installing GNOME and its base packages..."
-            if sudo pacman -S --needed gdm xdg-user-dirs-gtk power-profiles-daemon nautilus gedit file-roller evince adwaita-icon-theme xdg-desktop-portal-gnome baobab gnome-shell gnome-control-center gnome-settings-daemon gnome-session gnome-tweaks gnome-calculator gnome-disk-utility gnome-online-accounts gvfs-google gvfs loupe gnome-menus gnome-software; then
+            if sudo pacman -S --needed gdm xdg-user-dirs-gtk power-profiles-daemon nautilus gedit file-roller papers adwaita-icon-theme xdg-desktop-portal-gnome baobab gnome-shell gnome-control-center gnome-settings-daemon gnome-session gnome-tweaks gnome-calculator gnome-disk-utility gnome-online-accounts gvfs-google gvfs loupe gnome-menus gnome-software; then
                 echo "Finished Installing GNOME"
                 break
             else
@@ -53,7 +53,7 @@ while true; do
 done
 
 echo "Installing base Packages"
-sudo pacman -S --needed dconf bluez bluez-utils nano git curl wget tealdeer timeshift fastfetch htop pacman-contrib discord telegram-desktop vlc libreoffice-still gimp kdenlive qbittorrent audacity dconf-editor obs-studio unzip unrar p7zip tar python-pip os-prober ufw
+sudo pacman -S --needed dconf bluez bluez-utils nano git curl wget tealdeer timeshift fastfetch htop pacman-contrib discord telegram-desktop vlc libreoffice-still gimp kdenlive qbittorrent audacity dconf-editor obs-studio unzip unrar p7zip tar python-pip os-prober ufw mission-center
 echo "Finished installing base packages"
 
 echo "Installing Fonts for different Languages"
@@ -68,12 +68,12 @@ read -p "Enter 1, 2, or 3: " choiceNV
 case $choiceNV in
     1)
         echo "Installing proprietary drivers"
-        sudo pacman -S egl-gbm egl-x11 nvidia-dkms nvidia-utils nvidia-prime
+        sudo pacman -S --needed egl-gbm egl-x11 nvidia-dkms nvidia-utils nvidia-prime
         echo "Installed proprietary drivers"
         ;;
     2)
         echo "Installing open drivers"
-        sudo pacman -S egl-gbm egl-x11 nvidia-open-dkms nvidia-utils nvidia-prime
+        sudo pacman -S --needed egl-gbm egl-x11 nvidia-open-dkms nvidia-utils nvidia-prime
         ;;
     *)
         ;;
@@ -90,7 +90,7 @@ sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
 sudo pacman-key --lsign-key 3056513887B78AEB
 sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst'
 sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
-cat pacman.conf > /etc/pacman.conf
+sudo cp pacman.conf /etc/pacman.conf
 sudo pacman -Syu
 
 echo "Installing ms-fonts"
@@ -100,20 +100,48 @@ echo "Select a browser"
 echo "1) Firefox"
 echo "2) Brave"
 echo "3) Zen"
-echo "4) Don't want to install a browser"
-read -p "Enter 1-4: " choiceBrowser
-case choiceBrowser in
+echo "4) Vivaldi"
+echo "5) Chrome"
+echo "6) Floorp"
+echo "7) Librewolf"
+echo "8) Chromium"
+echo "9) Firedragon"
+echo "10) Waterfox"
+echo "11) Don't want to install a browser"
+read -p "Enter 1-11: " choiceBR
+case $choiceBR in
     1)
-        sudo pacman -S firefox
+        sudo pacman -S --needed firefox
         "Firefox Installed"
         ;;
     2)
-        yay -S brave
+        yay -S --needed brave
         "Brave Installed"
         ;;
     3)
-        yay -S zen-browser-bin
+        yay -S --needed zen-browser-bin
         "Zen Installed"
+        ;;
+    4)
+        sudo pacman -S --needed vivaldi
+        ;;
+    5)
+        yay -S --needed chrome
+        ;;
+    6)
+        yay -S --needed floorp
+        ;;
+    7)
+        yay -S --needed librewolf
+        ;;
+    8)
+        yay -S --needed chromium
+        ;;
+    9)
+        yay -S --needed firedragon
+        ;;
+    10)
+        yay -S --needed waterfox
         ;;
     *)
         echo "Skipped browser installation"
@@ -127,21 +155,21 @@ echo "3) konsole"
 echo "4) alacritty"
 echo "5) ghostyy"
 read -p "Enter 1-5: " choiceTE
-case choiceTE in
+case $choiceTE in
     1)
-        sudo pacman -S gnome-console
+        sudo pacman -S --needed gnome-console
         ;;
     2)
-        sudo pacman -S ptyxis
+        sudo pacman -S --needed ptyxis
         ;;
     3)
-        sudo pacman -S konsole
+        sudo pacman -S --needed konsole
         ;;
     4)
-        yay -S alacritty
+        yay -S --needed alacritty
         ;;
     5)
-        yay -S ghostty
+        yay -S --needed ghostty
         ;;
     *)
         echo "skipping terminal emulator installation"
@@ -152,10 +180,10 @@ echo "Do you wish to install starship and a better bashrc?"
 echo "1) Yes"
 echo "2) No"
 read -p "Enter 1 or 2: " choiceSS
-case choiceSS in
+case $choiceSS in
     1)
         curl -sS https://starship.rs/install.sh | sh
-        cat bashrc.txt > ~/.bashrc
+        sudo cp .bashrc ~/.bashrc
         echo "Done"
         ;;
     *)
@@ -163,7 +191,7 @@ case choiceSS in
         ;;
 esac
 
-case choiceDE in
+case $choiceDE in
      1)
         echo "Installing extension manager for gnome"
         yay -S --needed extension-manager
@@ -176,21 +204,29 @@ echo "Do you want to install gaming packages?"
 echo "1) Yes"
 echo "2) No"
 read -p "Enter 1-2: " choiceGM
-case choiceGM in
+case $choiceGM in
     1)
-        yay -S --needed heroic-games-launcher-bin steam lutris gamescope mangohud wine winetricks vkd3d lib32-nvidia-utils glfw goverlay-bin wqy-zenhei protonplus gamemode jdk21-openjdk
-        echo "Finished installing gaming packages"
+        case $choiceNV in
+            1)
+                yay -S --needed heroic-games-launcher-bin steam lutris gamescope mangohud wine winetricks vkd3d lib32-nvidia-utils glfw goverlay-bin wqy-zenhei protonplus gamemode jdk21-openjdk
+                echo "Finished installing gaming packages"
+                ;;
+            2)
+                yay -S --needed heroic-games-launcher-bin steam lutris gamescope mangohud wine winetricks vkd3d glfw goverlay-bin wqy-zenhei protonplus gamemode jdk21-openjdk
+                echo "Finished installing gaming packages"
+                ;;
+        esac
         ;;
     *)
         echo "Skipped gaming packages"
         ;;
 esac
 
-echo "Do you want to install emulators from the aur? (Experimental, and can take a long time)"
+echo "Do you want to install emulators from the aur? (Can take a long time, but it's more up to date then flatpak)"
 echo "1) Yes"
 echo "2) No"
 read -p "Enter 1-2: " choiceEMU
-case choiceEMU in
+case $choiceEMU in
     1)
         echo "Installing Emulators"
         yay -S --needed melonds-git azahar shadps4-git mgba-qt-git rpcs3-git pcsx2-git duckstation-git ryujinx-canary cemu-git dolphin-emu-git kega-fusion ppsspp-git vita3k-git mesen2-git
@@ -205,7 +241,7 @@ echo "Do you wish to add cachyos repos?"
 echo "1) Yes"
 echo "2) No"
 read -p "Enter 1-2: " choiceCA
-case choiceCA in
+case $choiceCA in
     1)
         curl https://mirror.cachyos.org/cachyos-repo.tar.xz -o cachyos-repo.tar.xz && tar xvf cachyos-repo.tar.xz && cd cachyos-repo && sudo ./cachyos-repo.sh && cd && rm -rf cachyos-repo cachyos-repo.tar.xz
         echo "Repos added"
@@ -213,7 +249,7 @@ case choiceCA in
         echo "1) Yes"
         echo "2) No"
         read -p "Enter 1-2: " choiceCK
-        case choiceCK in
+        case $choiceCK in
             1)
                 yay -S --needed linux-cachyos linux-cachyos-headers
                 echo "custom kernel added"
@@ -233,13 +269,41 @@ sudo update-grub
 
 echo "adding flatpak support"
 sudo pacman -S --needed flatpak
-case choiceDE in
+
+echo "Do you wish to add some good flatpak apps?"
+echo "Komikku, Gear Lever, and Emulators"
+echo "1) Yes"
+echo "2) No"
+read -p "Enter 1-2: " choiceFP
+case $choiceFP in
+    1)
+        flatpak install flathub info.febvre.Komikku
+        flatpak install flathub it.mijorus.gearlever
+        flatpak install flathub com.carpeludum.KegaFusion
+        flatpak install flathub info.cemu.Cemu
+        flatpak install flathub io.github.ryubing.Ryujinx
+        flatpak install flathub net.pcsx2.PCSX2
+        flatpak install flathub net.rpcs3.RPCS3
+        flatpak install flathub io.mgba.mGBA
+        flatpak install flathub net.shadps4.shadPS4
+        flatpak install flathub org.azahar_emu.Azahar
+        flatpak install flathub net.kuribo64.melonDS
+        flatpak install flathub org.DolphinEmu.dolphin-emu
+        flatpak install flathub org.ppsspp.PPSSPP
+        flatpak install flathub org.duckstation.DuckStation
+        flatpak install flathub com.github.ADBeveridge.Raider
+        ;;
+    2)
+        ;;
+esac
+
+case $choiceDE in
     1)
         sudo systemctl enable gdm
         ;;
     2) sudo systemctl enable sddm
         ;;
 esac
-echo "Rebooting in 5 seconds"
+echo "Rebooting in 5 seconds for everything to apply correctly"
 sleep 5
 reboot
