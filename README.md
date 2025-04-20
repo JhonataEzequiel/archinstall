@@ -12,4 +12,4 @@ chmod +x archinstall/install.sh
 ```
 
 ## Reviewing the Commands
-1. Review the commands in `archinstallation.txt`
+1. Review the commands in `install.sh`
