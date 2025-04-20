@@ -53,8 +53,21 @@ while true; do
 done
 
 echo "Installing base Packages"
-sudo pacman -S --needed dconf bluez bluez-utils nano git curl wget tealdeer timeshift fastfetch htop pacman-contrib discord telegram-desktop vlc libreoffice-still gimp kdenlive qbittorrent audacity dconf-editor obs-studio unzip unrar p7zip tar python-pip os-prober ufw mission-center
+sudo pacman -S --needed dconf bluez bluez-utils nano git curl wget pacman-contrib unzip unrar p7zip tar python-pip os-prober ufw
 echo "Finished installing base packages"
+
+echo "Do you wish to install additional packages that can be useful?"
+echo "discord telegram-desktop vlc libreoffice-still gimp kdenlive qbittorrent audacity obs-studio mission-center tealdeer timeshift fastfetch htop dconf-editor"
+echo "1) Yes"
+echo "2) No"
+read -p "Enter 1-2: " choicePKG
+case $choicePKG in
+    1)
+        sudo pacman -S --needed discord telegram-desktop vlc libreoffice-still gimp kdenlive qbittorrent audacity obs-studio mission-center tealdeer timeshift fastfetch htop dconf-editor
+        ;;
+    *)
+        ;;
+esac
 
 echo "Installing Fonts for different Languages"
 sudo pacman -S --needed noto-fonts-cjk noto-fonts adobe-source-code-pro-fonts noto-fonts-emoji otf-font-awesome ttf-droid ttf-fira-code ttf-jetbrains-mono-nerd
@@ -83,7 +96,7 @@ echo "Enabling Bluetooth, paccache, and timeshift"
 sudo systemctl enable --now bluetooth.service && sudo systemctl enable paccache.timer && systemctl enable --now cronie.service
 
 echo "Installing yay as an AUR helper"
-sudo pacman -S --needed base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si && cd && rm -rf yay
+sudo pacman -S --needed base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si && cd .. && rm -rf yay
 
 echo "Installing chaotic-aur"
 sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
