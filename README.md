@@ -6,7 +6,9 @@
 ## Installation Instructions
 To run the installation execute the following command:
 ```
-git clone https://github.com/JhonataEzequiel/archinstall.git && cd archinstall && chmod +x install.sh && ./install.sh
+git clone https://github.com/JhonataEzequiel/archinstall.git
+chmod +x archinstall/install.sh
+./install.sh
 ```
 
 ## Reviewing the Commands
