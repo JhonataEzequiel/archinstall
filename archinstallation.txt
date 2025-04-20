@@ -227,7 +227,7 @@ case $choiceCA in
         echo "1) Yes"
         echo "2) No"
         read -p "Enter 1-2: " choiceCK
-        case choiceCK in
+        case $choiceCK in
             1)
                 yay -S --needed linux-cachyos linux-cachyos-headers
                 echo "custom kernel added"
