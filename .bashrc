@@ -61,7 +61,7 @@ alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias update-system="yay -Syu && flatpak update"
 alias clear-packages='sudo pacman -Rns $(sudo pacman -Qtdq)'
-alias speedup-mirrors="sudo reflector --country BR --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist"
+alias speedup-mirrors="sudo reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist"
 alias test-nvidia="prime-run glxinfo | grep 'OpenGL renderer'"
 alias show-ip-wifi="ip address | grep wlp8s0 | grep inet | awk '{print $2}' | cut -d'/' -f1"
 alias show-ip="ip address | grep eth0 | grep inet | awk '{print $2}' | cut -d'/' -f1"
