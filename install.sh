@@ -116,7 +116,7 @@ echo "2) No"
 read -p "Enter 1-2: " choiceAUR
 case $choiceAUR in
     1)
-        yay -S proton-vpn-gtk-app upscayl-desktop-git stremio parsec-bin obsidian apostrophe pokemon-colorscripts-git vscodium
+        yay -S --needed proton-vpn-gtk-app upscayl-desktop-git stremio parsec-bin obsidian apostrophe pokemon-colorscripts-git vscodium
         ;;
     *)
         ;;
