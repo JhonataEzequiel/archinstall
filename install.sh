@@ -109,6 +109,19 @@ sudo pacman -Syu
 echo "Installing ms-fonts"
 yay -S --needed ttf-ms-fonts ttf-tahoma ttf-vista-fonts
 
+echo "Do you wish to add some aur packages?"
+echo "(proton-vpn-gtk-app upscayl-desktop-git stremio parsec-bin obsidian apostrophe pokemon-colorscripts-git vscodium)"
+echo "1) Yes"
+echo "2) No"
+read -p "Enter 1-2: " choiceAUR
+case $choiceAUR in
+    1)
+        yay -S proton-vpn-gtk-app upscayl-desktop-git stremio parsec-bin obsidian apostrophe pokemon-colorscripts-git vscodium
+        ;;
+    *)
+        ;;
+esac
+
 echo "Select a browser"
 echo "1) Firefox"
 echo "2) Brave"
@@ -221,7 +234,7 @@ case $choiceGM in
     1)
         case $choiceNV in
             1)
-                yay -S --needed heroic-games-launcher-bin steam lutris gamescope mangohud wine winetricks vkd3d lib32-nvidia-utils glfw goverlay-bin wqy-zenhei protonplus gamemode jdk21-openjdk
+                yay -S --needed heroic-games-launcher-bin steam lutris gamescope mangohud wine winetricks vkd3d lib32-nvidia-utils glfw goverlay wqy-zenhei protonplus gamemode jdk21-openjdk
                 echo "Finished installing gaming packages"
                 ;;
             2)
@@ -256,7 +269,7 @@ echo "2) No"
 read -p "Enter 1-2: " choiceCA
 case $choiceCA in
     1)
-        curl https://mirror.cachyos.org/cachyos-repo.tar.xz -o cachyos-repo.tar.xz && tar xvf cachyos-repo.tar.xz && cd cachyos-repo && sudo ./cachyos-repo.sh && cd && rm -rf cachyos-repo cachyos-repo.tar.xz
+        curl https://mirror.cachyos.org/cachyos-repo.tar.xz -o cachyos-repo.tar.xz && tar xvf cachyos-repo.tar.xz && cd cachyos-repo && sudo ./cachyos-repo.sh && cd .. && rm -rf cachyos-repo cachyos-repo.tar.xz
         echo "Repos added"
         echo "Do you wish to add cachyos custom Kernels?"
         echo "1) Yes"
@@ -290,21 +303,7 @@ echo "2) No"
 read -p "Enter 1-2: " choiceFP
 case $choiceFP in
     1)
-        flatpak install flathub info.febvre.Komikku
-        flatpak install flathub it.mijorus.gearlever
-        flatpak install flathub com.carpeludum.KegaFusion
-        flatpak install flathub info.cemu.Cemu
-        flatpak install flathub io.github.ryubing.Ryujinx
-        flatpak install flathub net.pcsx2.PCSX2
-        flatpak install flathub net.rpcs3.RPCS3
-        flatpak install flathub io.mgba.mGBA
-        flatpak install flathub net.shadps4.shadPS4
-        flatpak install flathub org.azahar_emu.Azahar
-        flatpak install flathub net.kuribo64.melonDS
-        flatpak install flathub org.DolphinEmu.dolphin-emu
-        flatpak install flathub org.ppsspp.PPSSPP
-        flatpak install flathub org.duckstation.DuckStation
-        flatpak install flathub com.github.ADBeveridge.Raider
+        flatpak install flathub info.febvre.Komikku it.mijorus.gearlever com.carpeludum.KegaFusion info.cemu.Cemu io.github.ryubing.Ryujinx net.pcsx2.PCSX2 net.rpcs3.RPCS3 io.mgba.mGBA net.shadps4.shadPS4 org.azahar_emu.Azahar net.kuribo64.melonDS org.DolphinEmu.dolphin-emu org.ppsspp.PPSSPP org.duckstation.DuckStation com.github.ADBeveridge.Raider
         ;;
     2)
         ;;
