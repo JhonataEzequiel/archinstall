@@ -1,0 +1,65 @@
+{
+    "height": 32,
+    "spacing": 4,
+    "modules-left": [
+        "hyprland/workspaces",
+        "wlr/taskbar",
+        "hyprland/window",
+    ],
+    "modules-center": [
+        "clock"
+    ],
+    "modules-right": [
+        "tray",
+        "battery",
+        "custom/wlogout"
+    ],
+    "hyprland/workspaces": {
+        "all-outputs": true,
+        "warp-on-scroll": false,
+        "format": "{name}: {icon}",
+        "format-icons": {
+            "urgent": "",
+            "active": "",
+            "default": ""
+        }
+    },
+    "battery": {
+        "states": {
+            //"full": 100,
+            //"good": 95,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{icon} {capacity}%",
+        "format-charging": "  {capacity}%",
+        "format-plugged": "  {capacity}%",
+        "format-alt": "{icon}  {time}",
+        // "format-good": "", // An empty format will hide the module
+        // "format-full": "",
+        "format-icons": [" ", " ", " ", " ", " "]
+    },
+    "wlr/taskbar": {
+        "format": "{icon}",
+        "icon-size": 18,
+        "tooltip-format": "{title}",
+        "on-click": "activate",
+        "on-click-middle": "close",
+        "ignore-list": ["Alacritty", "kitty"],
+        "app_ids-mapping": {
+            "firefoxdeveloperedition": "firefox-developer-edition"
+        },
+        "rewrite": {
+            "Firefox Web Browser": "Firefox",
+            "Foot Server": "Terminal"
+        }
+    },
+    "custom/wlogout": {
+        "format": "⏻",
+        "tooltip": false,
+        "on-click": "wlogout"
+    },
+    "tray": {
+        "spacing" : 10
+    }
+}

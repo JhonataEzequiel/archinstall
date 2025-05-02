@@ -17,8 +17,9 @@ while true; do
     echo "Choose your Desktop Environment:"
     echo "1) GNOME"
     echo "2) KDE Plasma"
-    echo "3) Exit the Script"
-    read -p "Enter 1, 2 or 3: " choiceDE
+    echo "3) Hyprland"
+    echo "4) Exit the Script"
+    read -p "Enter 1, 2, 3 or 4: " choiceDE
 
     case $choiceDE in
         1)
@@ -42,6 +43,15 @@ while true; do
             fi
             ;;
         3)
+            echo "Installing Hyprland and it's configs"
+            if sudo pacman -S --needed xdg-desktop-portal xdg-desktop-portal-wlr sddm xdg-user-dirs dolphin ark; then
+                echo "Finished Installing base Hyprland packages"
+                break
+            else
+                echo "Error: Hyprland installation failed. Please check your internet or repositories."
+                exit 1
+            ;;
+        4)
             echo "Exiting"
             exit 1
             break
@@ -57,20 +67,20 @@ sudo pacman -S --needed dconf bluez bluez-utils nano git curl wget pacman-contri
 echo "Finished installing base packages"
 
 echo "Do you wish to install additional packages that can be useful?"
-echo "discord telegram-desktop vlc libreoffice-still gimp kdenlive qbittorrent audacity obs-studio mission-center tealdeer timeshift fastfetch htop dconf-editor"
+echo "discord telegram-desktop vlc libreoffice-still gimp kdenlive qbittorrent audacity obs-studio mission-center tealdeer timeshift fastfetch htop dconf-editor btop"
 echo "1) Yes"
 echo "2) No"
 read -p "Enter 1-2: " choicePKG
 case $choicePKG in
     1)
-        sudo pacman -S --needed discord telegram-desktop vlc libreoffice-still gimp kdenlive qbittorrent audacity obs-studio mission-center tealdeer timeshift fastfetch htop dconf-editor
+        sudo pacman -S --needed discord telegram-desktop vlc libreoffice-still gimp kdenlive qbittorrent audacity obs-studio mission-center tealdeer timeshift fastfetch htop dconf-editor btop
         ;;
     *)
         ;;
 esac
 
 echo "Installing Fonts for different Languages"
-sudo pacman -S --needed noto-fonts-cjk noto-fonts adobe-source-code-pro-fonts noto-fonts-emoji otf-font-awesome ttf-droid ttf-fira-code ttf-jetbrains-mono-nerd
+sudo pacman -S --needed noto-fonts-cjk noto-fonts adobe-source-code-pro-fonts noto-fonts-emoji otf-font-awesome ttf-droid ttf-fira-code ttf-jetbrains-mono-nerd ttf-font-awesome
 echo "Finished installing fonts"
 
 echo "Do you wish to install nvidia drivers?"
@@ -108,6 +118,14 @@ sudo pacman -Syu
 
 echo "Installing ms-fonts"
 yay -S --needed ttf-ms-fonts ttf-tahoma ttf-vista-fonts
+
+case $choiceDE in
+    4)
+        yay -S --needed hyprland wlogout network-manager-applet blueman hypridle waybar wofi hyprpaper swaync kitty brightnessctl pavulcontrol hyprshot xdg-desktop-portal-hyprland polkit-gnome qt5-wayland qt6-wayland
+        ;;
+    *)
+        ;;
+esac
 
 echo "Do you wish to add some aur packages?"
 echo "(proton-vpn-gtk-app upscayl-desktop-git stremio parsec-bin obsidian apostrophe pokemon-colorscripts-git vscodium)"
