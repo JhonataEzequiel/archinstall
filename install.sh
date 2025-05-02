@@ -44,12 +44,13 @@ while true; do
             ;;
         3)
             echo "Installing Hyprland and it's configs"
-            if sudo pacman -S --needed xdg-desktop-portal xdg-desktop-portal-wlr sddm xdg-user-dirs dolphin ark; then
+            if sudo pacman -S --needed xdg-desktop-portal xdg-desktop-portal-wlr sddm xdg-user-dirs dolphin ark pavucontrol power-profiles-daemon; then
                 echo "Finished Installing base Hyprland packages"
                 break
             else
                 echo "Error: Hyprland installation failed. Please check your internet or repositories."
                 exit 1
+	    fi
             ;;
         4)
             echo "Exiting"
@@ -57,7 +58,7 @@ while true; do
             break
             ;;
         *)
-            echo "Invalid Choice! Please enter 1 or 2."
+            echo "Invalid Choice! Please enter 1, 2, or 3."
             ;;
     esac
 done
@@ -73,7 +74,7 @@ echo "2) No"
 read -p "Enter 1-2: " choicePKG
 case $choicePKG in
     1)
-        sudo pacman -S --needed discord telegram-desktop vlc libreoffice-still gimp kdenlive qbittorrent audacity obs-studio mission-center tealdeer timeshift fastfetch htop dconf-editor btop
+        sudo pacman -S --needed vlc libreoffice-still tealdeer timeshift fastfetch
         ;;
     *)
         ;;
@@ -106,7 +107,12 @@ echo "Enabling Bluetooth, paccache, and timeshift"
 sudo systemctl enable --now bluetooth.service && sudo systemctl enable paccache.timer && systemctl enable --now cronie.service
 
 echo "Installing yay as an AUR helper"
-sudo pacman -S --needed base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si && cd .. && rm -rf yay
+sudo pacman -S --needed base-devel 
+git clone https://aur.archlinux.org/yay.git 
+cd yay 
+makepkg -si 
+cd .. 
+rm -rf yay
 
 echo "Installing chaotic-aur"
 sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
@@ -121,7 +127,7 @@ yay -S --needed ttf-ms-fonts ttf-tahoma ttf-vista-fonts
 
 case $choiceDE in
     3)
-        yay -S --needed hyprland wlogout network-manager-applet blueman hypridle waybar wofi hyprpaper swaync kitty brightnessctl pavulcontrol hyprshot xdg-desktop-portal-hyprland polkit-gnome qt5-wayland qt6-wayland
+        yay -S --needed hyprland wlogout network-manager-applet blueman hypridle waybar wofi hyprpaper swaync kitty brightnessctl pavulcontrol hyprshot xdg-desktop-portal-hyprland polkit-kde-agent qt5-wayland qt6-wayland
         cp -r kitty ~/.config/
         cp -r hypr ~/.config/
         cp -r waybar ~/.config/ 
@@ -201,7 +207,8 @@ echo "2) ptyxis"
 echo "3) konsole"
 echo "4) alacritty"
 echo "5) ghostyy"
-read -p "Enter 1-5: " choiceTE
+echo "6) kitty"
+read -p "Enter 1-6: " choiceTE
 case $choiceDE in
     3)
         ;;
@@ -222,6 +229,9 @@ case $choiceDE in
             5)
                 yay -S --needed ghostty
                 ;;
+	         6)
+		        sudo pacman -S --needed kitty
+		        ;;
             *)
                 echo "skipping terminal emulator installation"
                 ;;
