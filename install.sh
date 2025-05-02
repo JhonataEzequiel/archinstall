@@ -68,7 +68,7 @@ sudo pacman -S --needed dconf bluez bluez-utils nano git curl wget pacman-contri
 echo "Finished installing base packages"
 
 echo "Do you wish to install additional packages that can be useful?"
-echo "discord telegram-desktop vlc libreoffice-still gimp kdenlive qbittorrent audacity obs-studio mission-center tealdeer timeshift fastfetch htop dconf-editor btop"
+echo "vlc libreoffice-still tealdeer timeshift fastfetch"
 echo "1) Yes"
 echo "2) No"
 read -p "Enter 1-2: " choicePKG
@@ -136,14 +136,13 @@ case $choiceDE in
         ;;
 esac
 
-echo "Do you wish to add some aur packages?"
-echo "(proton-vpn-gtk-app upscayl-desktop-git stremio parsec-bin obsidian apostrophe pokemon-colorscripts-git vscodium)"
+echo "Do you wish to add some extra packages? (Utility, editors, etc)"
 echo "1) Yes"
 echo "2) No"
 read -p "Enter 1-2: " choiceAUR
 case $choiceAUR in
     1)
-        yay -S --needed proton-vpn-gtk-app upscayl-desktop-git stremio parsec-bin obsidian apostrophe pokemon-colorscripts-git vscodium
+        yay -S --needed proton-vpn-gtk-app upscayl-desktop-git stremio parsec-bin obsidian pokemon-colorscripts-git vscodium gimp kdenlive qbittorrent audacity obs-studio vesktop
         ;;
     *)
         ;;
@@ -314,6 +313,7 @@ case $choiceCA in
         case $choiceCK in
             1)
                 yay -S --needed linux-cachyos linux-cachyos-headers
+                yay -S --needed bpf chwd scx-manager scx-scheds
                 echo "custom kernel added"
                 ;;
             *)
@@ -327,6 +327,7 @@ case $choiceCA in
 esac
 
 echo "updating grub"
+sudo pacman -S --needed update-grub
 sudo update-grub
 
 echo "adding flatpak support"
