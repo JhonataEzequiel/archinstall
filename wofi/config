@@ -1,0 +1,16 @@
+# Appearance
+style=~/.config/wofi/style.css
+show=drun
+prompt=Run:
+width=600
+height=400
+location=center
+
+# Behavior
+allow_markup=true
+insensitive=true
+term=foot  # Or your preferred terminal
+hide_scroll=true
+show_icons=true
+columns=1
+no_actions=true

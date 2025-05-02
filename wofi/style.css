@@ -1,0 +1,52 @@
+* {
+font-family: JetBrainsMono Nerd Font, sans-serif;
+font-size: 14px;
+color: #ffffff;
+background-color: #000000; /* Fallback for unstyled elements */
+}
+
+/* Main window */
+window {
+    background-color: rgba(0, 0, 0, 0.85); /* Opaque dark */
+    border-radius: 8px;
+    padding: 10px;
+}
+
+/* Input field */
+#input {
+background-color: rgba(255, 255, 255, 0.1);
+color: #cdd6f4;
+border-radius: 4px;
+padding: 6px 10px;
+margin-bottom: 8px;
+}
+
+/* Prompt */
+#prompt {
+color: #f5c2e7;
+font-weight: bold;
+}
+
+/* Entries */
+#entry {
+padding: 6px 10px;
+border-radius: 4px;
+background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Selected entry */
+#entry:selected {
+background-color: rgba(255, 255, 255, 0.2);
+color: #f5c2e7;
+box-shadow: 0 0 6px rgba(255, 255, 255, 0.2);
+}
+
+/* Scroll */
+#scroll {
+margin-top: 4px;
+}
+
+/* Error / message */
+#message {
+color: #f38ba8;
+}
