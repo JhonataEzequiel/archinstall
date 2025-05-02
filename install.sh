@@ -131,6 +131,7 @@ case $choiceDE in
         cp -r kitty ~/.config/
         cp -r hypr ~/.config/
         cp -r waybar ~/.config/
+        cp -r wofi ~/.config/
         sudo usermod -aG video $USER
         ;;
     *)
