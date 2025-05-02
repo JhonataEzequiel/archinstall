@@ -44,7 +44,7 @@ while true; do
             ;;
         3)
             echo "Installing Hyprland and it's configs"
-            if sudo pacman -S --needed xdg-desktop-portal xdg-desktop-portal-wlr sddm xdg-user-dirs dolphin ark pavucontrol power-profiles-daemon; then
+            if sudo pacman -S --needed xdg-desktop-portal xdg-desktop-portal-wlr sddm xdg-user-dirs nautilus gedit pavucontrol power-profiles-daemon; then
                 echo "Finished Installing base Hyprland packages"
                 break
             else
