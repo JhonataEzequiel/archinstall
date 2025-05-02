@@ -63,7 +63,7 @@ while true; do
 done
 
 echo "Installing base Packages"
-sudo pacman -S --needed dconf bluez bluez-utils nano git curl wget pacman-contrib unzip unrar p7zip tar python-pip os-prober ufw
+sudo pacman -S --needed dconf bluez bluez-utils nano git curl wget pacman-contrib unzip unrar p7zip tar python-pip os-prober ufw zip
 echo "Finished installing base packages"
 
 echo "Do you wish to install additional packages that can be useful?"
@@ -120,8 +120,11 @@ echo "Installing ms-fonts"
 yay -S --needed ttf-ms-fonts ttf-tahoma ttf-vista-fonts
 
 case $choiceDE in
-    4)
+    3)
         yay -S --needed hyprland wlogout network-manager-applet blueman hypridle waybar wofi hyprpaper swaync kitty brightnessctl pavulcontrol hyprshot xdg-desktop-portal-hyprland polkit-gnome qt5-wayland qt6-wayland
+        cp -r kitty ~/.config/
+        cp -r hypr ~/.config/
+        cp -r waybar ~/.config/ 
         ;;
     *)
         ;;
@@ -199,25 +202,30 @@ echo "3) konsole"
 echo "4) alacritty"
 echo "5) ghostyy"
 read -p "Enter 1-5: " choiceTE
-case $choiceTE in
-    1)
-        sudo pacman -S --needed gnome-console
-        ;;
-    2)
-        sudo pacman -S --needed ptyxis
-        ;;
+case $choiceDE in
     3)
-        sudo pacman -S --needed konsole
-        ;;
-    4)
-        yay -S --needed alacritty
-        ;;
-    5)
-        yay -S --needed ghostty
         ;;
     *)
-        echo "skipping terminal emulator installation"
-        ;;
+        case $choiceTE in
+            1)
+                sudo pacman -S --needed gnome-console
+                ;;
+            2)
+                sudo pacman -S --needed ptyxis
+                ;;
+            3)
+                sudo pacman -S --needed konsole
+                ;;
+            4)
+                yay -S --needed alacritty
+                ;;
+            5)
+                yay -S --needed ghostty
+                ;;
+            *)
+                echo "skipping terminal emulator installation"
+                ;;
+        esac
 esac
 
 echo "Do you wish to install starship and a better bashrc?"
@@ -332,6 +340,9 @@ case $choiceDE in
         sudo systemctl enable gdm
         ;;
     2) sudo systemctl enable sddm
+        ;;
+    3)
+        sudo systemctl enable sddm
         ;;
 esac
 echo "Rebooting in 5 seconds for everything to apply correctly"
