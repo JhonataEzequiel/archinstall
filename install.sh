@@ -127,10 +127,11 @@ yay -S --needed ttf-ms-fonts ttf-tahoma ttf-vista-fonts
 
 case $choiceDE in
     3)
-        yay -S --needed hyprland wlogout network-manager-applet blueman hypridle waybar wofi hyprpaper swaync kitty brightnessctl pavulcontrol hyprshot xdg-desktop-portal-hyprland polkit-kde-agent qt5-wayland qt6-wayland
+        yay -S --needed hyprland wlogout network-manager-applet blueman hypridle waybar wofi hyprpaper swaync kitty brightnessctl pavulcontrol hyprshot xdg-desktop-portal-hyprland polkit-kde-agent qt5-wayland qt6-wayland light
         cp -r kitty ~/.config/
         cp -r hypr ~/.config/
-        cp -r waybar ~/.config/ 
+        cp -r waybar ~/.config/
+        sudo usermod -aG video $USER
         ;;
     *)
         ;;
