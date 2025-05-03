@@ -24,7 +24,7 @@ while true; do
     case $choiceDE in
         1)
             echo "Installing GNOME and its base packages..."
-            if sudo pacman -S --needed gdm xdg-user-dirs-gtk power-profiles-daemon nautilus gedit file-roller papers adwaita-icon-theme xdg-desktop-portal-gnome baobab gnome-shell gnome-control-center gnome-settings-daemon gnome-session gnome-tweaks gnome-calculator gnome-disk-utility gnome-online-accounts gvfs-google gvfs loupe gnome-menus gnome-software; then
+            if sudo pacman -S --needed gdm xdg-user-dirs-gtk power-profiles-daemon nautilus gnome-text-editor file-roller papers adwaita-icon-theme xdg-desktop-portal-gnome baobab gnome-shell gnome-control-center gnome-settings-daemon gnome-session gnome-tweaks gnome-calculator gnome-disk-utility gnome-online-accounts gvfs-google gvfs loupe gnome-menus gnome-software decibels resources; then
                 echo "Finished Installing GNOME"
                 break
             else
@@ -126,20 +126,6 @@ echo "Installing ms-fonts"
 yay -S --needed ttf-ms-fonts ttf-tahoma ttf-vista-fonts
 
 case $choiceDE in
-    1)
-        echo "Do you want to install some extra gnome packages?"
-        echo "apostrophe decibels resources"
-        echo "1 - Yes"
-        echo "2 - No"
-        read -p "Enter 1-2: " choiceGPKG
-        case $choiceGPKG in
-            1)
-                yay -S --needed apostrophe decibels resources
-                ;;
-            *)
-                ;;
-        esac
-        ;;
     3)
         yay -S --needed hyprland wlogout network-manager-applet blueman hypridle waybar wofi hyprpaper swaync kitty pavulcontrol hyprshot xdg-desktop-portal-hyprland polkit-kde-agent qt5-wayland qt6-wayland light hyprlock
         cp -r kitty ~/.config/
