@@ -74,7 +74,7 @@ echo "2) No"
 read -p "Enter 1-2: " choicePKG
 case $choicePKG in
     1)
-        sudo pacman -S --needed vlc libreoffice-still tealdeer timeshift fastfetch
+        sudo pacman -S --needed vlc libreoffice-still tealdeer timeshift fastfetch thunderbird
         ;;
     *)
         ;;
