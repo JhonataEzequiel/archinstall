@@ -24,7 +24,7 @@ while true; do
     case $choiceDE in
         1)
             echo "Installing GNOME and its base packages..."
-            if sudo pacman -S --needed gdm xdg-user-dirs-gtk power-profiles-daemon nautilus gnome-text-editor file-roller papers adwaita-icon-theme xdg-desktop-portal-gnome baobab gnome-shell gnome-control-center gnome-settings-daemon gnome-session gnome-tweaks gnome-calculator gnome-disk-utility gnome-online-accounts gvfs-google gvfs loupe gnome-menus gnome-software decibels resources; then
+            if sudo pacman -S --needed gdm xdg-user-dirs-gtk power-profiles-daemon nautilus gnome-text-editor file-roller papers adwaita-icon-theme xdg-desktop-portal-gnome baobab gnome-shell gnome-control-center gnome-settings-daemon gnome-session gnome-tweaks gnome-calculator gnome-disk-utility gnome-online-accounts gvfs-google gvfs loupe gnome-menus gnome-software decibels mission-center; then
                 echo "Finished Installing GNOME"
                 break
             else
