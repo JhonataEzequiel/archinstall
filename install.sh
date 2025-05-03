@@ -126,6 +126,20 @@ echo "Installing ms-fonts"
 yay -S --needed ttf-ms-fonts ttf-tahoma ttf-vista-fonts
 
 case $choiceDE in
+    1)
+        echo "Do you want to install some extra gnome packages?"
+        echo "apostrophe decibels resources"
+        echo "1 - Yes"
+        echo "2 - No"
+        read -p "Enter 1-2: " choiceGPKG
+        case $choiceGPKG in
+            1)
+                yay -S --needed apostrophe decibels resources
+                ;;
+            *)
+                ;;
+        esac
+        ;;
     3)
         yay -S --needed hyprland wlogout network-manager-applet blueman hypridle waybar wofi hyprpaper swaync kitty pavulcontrol hyprshot xdg-desktop-portal-hyprland polkit-kde-agent qt5-wayland qt6-wayland light hyprlock
         cp -r kitty ~/.config/
