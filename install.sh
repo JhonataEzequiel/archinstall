@@ -44,13 +44,13 @@ while true; do
             ;;
         3)
             echo "Installing Hyprland and it's configs"
-            if sudo pacman -S --needed xdg-desktop-portal xdg-desktop-portal-wlr sddm xdg-user-dirs nautilus gedit pavucontrol power-profiles-daemon; then
+            if sudo pacman -S --needed xdg-desktop-portal xdg-desktop-portal-wlr sddm xdg-user-dirs dolphin ark pavucontrol power-profiles-daemon; then
                 echo "Finished Installing base Hyprland packages"
                 break
             else
                 echo "Error: Hyprland installation failed. Please check your internet or repositories."
                 exit 1
-	    fi
+	        fi
             ;;
         4)
             echo "Exiting"
@@ -127,7 +127,7 @@ yay -S --needed ttf-ms-fonts ttf-tahoma ttf-vista-fonts
 
 case $choiceDE in
     3)
-        yay -S --needed hyprland wlogout network-manager-applet blueman hypridle waybar wofi hyprpaper swaync kitty brightnessctl pavulcontrol hyprshot xdg-desktop-portal-hyprland polkit-kde-agent qt5-wayland qt6-wayland light papirus-icon-theme xsettingsd
+        yay -S --needed hyprland wlogout network-manager-applet blueman hypridle waybar wofi hyprpaper swaync kitty pavulcontrol hyprshot xdg-desktop-portal-hyprland polkit-kde-agent qt5-wayland qt6-wayland light hyprlock
         cp -r kitty ~/.config/
         cp -r hypr ~/.config/
         cp -r waybar ~/.config/
@@ -202,7 +202,7 @@ case $choiceBR in
         ;;
 esac
 
-echo "Choose a Terminal"
+echo "Choose a Terminal (only kitty for hyprland is configured by default)"
 echo "1) gnome-console"
 echo "2) ptyxis"
 echo "3) konsole"
@@ -306,7 +306,13 @@ echo "2) No"
 read -p "Enter 1-2: " choiceCA
 case $choiceCA in
     1)
-        curl https://mirror.cachyos.org/cachyos-repo.tar.xz -o cachyos-repo.tar.xz && tar xvf cachyos-repo.tar.xz && cd cachyos-repo && sudo ./cachyos-repo.sh && cd .. && rm -rf cachyos-repo cachyos-repo.tar.xz
+        curl https://mirror.cachyos.org/cachyos-repo.tar.xz -o cachyos-repo.tar.xz
+        tar xvf cachyos-repo.tar.xz
+        cd cachyos-repo
+        sudo ./cachyos-repo.sh
+        cd ..
+        rm -rf cachyos-repo cachyos-repo.tar.xz
+
         echo "Repos added"
         echo "Do you wish to add cachyos custom Kernels?"
         echo "1) Yes"
@@ -314,8 +320,7 @@ case $choiceCA in
         read -p "Enter 1-2: " choiceCK
         case $choiceCK in
             1)
-                yay -S --needed linux-cachyos linux-cachyos-headers
-                yay -S --needed bpf chwd scx-manager scx-scheds
+                yay -S --needed linux-cachyos linux-cachyos-headers bpf chwd scx-manager scx-scheds
                 echo "custom kernel added"
                 ;;
             *)
