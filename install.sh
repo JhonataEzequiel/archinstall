@@ -347,7 +347,7 @@ echo "2) No"
 read -p "Enter 1-2: " choiceFP
 case $choiceFP in
     1)
-        flatpak install flathub info.febvre.Komikku it.mijorus.gearlever com.carpeludum.KegaFusion info.cemu.Cemu io.github.ryubing.Ryujinx net.pcsx2.PCSX2 net.rpcs3.RPCS3 io.mgba.mGBA net.shadps4.shadPS4 org.azahar_emu.Azahar net.kuribo64.melonDS org.DolphinEmu.dolphin-emu org.ppsspp.PPSSPP org.duckstation.DuckStation com.github.ADBeveridge.Raider
+        flatpak install flathub info.febvre.Komikku it.mijorus.gearlever com.carpeludum.KegaFusion info.cemu.Cemu io.github.ryubing.Ryujinx net.pcsx2.PCSX2 net.rpcs3.RPCS3 io.mgba.mGBA net.shadps4.shadPS4 org.azahar_emu.Azahar net.kuribo64.melonDS org.DolphinEmu.dolphin-emu org.ppsspp.PPSSPP org.duckstation.DuckStation com.github.ADBeveridge.Raider flatpak install flathub net.agalwood.Motrix
         ;;
     2)
         ;;
