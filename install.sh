@@ -229,6 +229,16 @@ case $choiceDE in
                 ;;
             5)
                 yay -S --needed ghostty
+                echo "Do you want my ghostty customization?"
+                echo "1) Yes"
+                echo "2) No"
+                read -p "Enter 1-2: " choiceGH
+                case $choiceGH in
+                    1)
+                        cp -r ghostty ~/.config/
+                    *)
+                        ;;
+                esac
                 ;;
 	         6)
 		        sudo pacman -S --needed kitty
