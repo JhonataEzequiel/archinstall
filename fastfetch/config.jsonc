@@ -1,0 +1,86 @@
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+  "logo": {
+    "type": "file",
+    "source": "~/.config/fastfetch/logo.txt",
+    "padding": {
+      "top": 2,
+      "left": 4
+    },
+    "color": {
+      "1": "blue"
+    }
+  },
+  "display": {
+    "separator": " ➜ ",
+    "color": "blue",
+    "key": {
+      "width": 12,
+      "color": "cyan"
+    },
+    "bar": {
+      "charElapsed": "█",
+      "charTotal": "─"
+    }
+  },
+  "modules": [
+    {
+      "type": "title",
+      "color": {
+        "user": "yellow",
+        "host": "green"
+      }
+    },
+    "separator",
+    {
+      "type": "os",
+      "key": "OS",
+      "format": "{name}"
+    },
+    {
+      "type": "kernel",
+      "key": "Kernel"
+    },
+    {
+      "type": "packages",
+      "key": "Packages"
+    },
+    {
+      "type": "display",
+      "key": "Display"
+    },
+    {
+      "type": "de",
+      "key": "DE"
+    },
+    {
+      "type": "wm",
+      "key": "WM"
+    },
+    {
+      "type": "terminal",
+      "key": "Terminal"
+    },
+    {
+      "type": "cpu",
+      "key": "CPU"
+    },
+    {
+      "type": "gpu",
+      "key": "GPU"
+    },
+    {
+      "type": "memory",
+      "key": "Memory"
+    },
+    {
+      "type": "disk",
+      "key": "Disk"
+    },
+    "break",
+    {
+      "type": "colors",
+      "symbol": "circle"
+    }
+  ]
+}

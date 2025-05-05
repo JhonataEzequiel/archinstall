@@ -24,7 +24,7 @@ while true; do
     case $choiceDE in
         1)
             echo "Installing GNOME and its base packages..."
-            if sudo pacman -S --needed gdm xdg-user-dirs-gtk power-profiles-daemon nautilus gnome-text-editor file-roller papers adwaita-icon-theme xdg-desktop-portal-gnome baobab gnome-shell gnome-control-center gnome-settings-daemon gnome-session gnome-tweaks gnome-calculator gnome-disk-utility gnome-online-accounts gvfs-google gvfs loupe gnome-menus gnome-software decibels mission-center; then
+            if sudo pacman -S --needed gdm xdg-user-dirs-gtk power-profiles-daemon nautilus gnome-text-editor papers adwaita-icon-theme xdg-desktop-portal-gnome baobab gnome-shell gnome-control-center gnome-settings-daemon gnome-session gnome-tweaks gnome-calculator gnome-disk-utility gnome-online-accounts gvfs-google gvfs loupe gnome-menus gnome-software decibels mission-center; then
                 echo "Finished Installing GNOME"
                 break
             else
@@ -239,13 +239,14 @@ case $choiceDE in
         esac
 esac
 
-echo "Do you wish to install starship and a better bashrc?"
+echo "Do you wish to install a more beautiful bash?"
 echo "1) Yes"
 echo "2) No"
 read -p "Enter 1 or 2: " choiceSS
 case $choiceSS in
     1)
         curl -sS https://starship.rs/install.sh | sh
+        sudo cp -r fastfetch ~/.config/
         sudo cp .bashrc ~/.bashrc
         echo "Done"
         ;;
@@ -347,7 +348,10 @@ echo "2) No"
 read -p "Enter 1-2: " choiceFP
 case $choiceFP in
     1)
-        flatpak install flathub info.febvre.Komikku it.mijorus.gearlever com.carpeludum.KegaFusion info.cemu.Cemu io.github.ryubing.Ryujinx net.pcsx2.PCSX2 net.rpcs3.RPCS3 io.mgba.mGBA net.shadps4.shadPS4 org.azahar_emu.Azahar net.kuribo64.melonDS org.DolphinEmu.dolphin-emu org.ppsspp.PPSSPP org.duckstation.DuckStation com.github.ADBeveridge.Raider flatpak install flathub net.agalwood.Motrix
+        flatpak install flathub \
+            info.febvre.Komikku it.mijorus.gearlever com.carpeludum.KegaFusion info.cemu.Cemu io.github.ryubing.Ryujinx net.pcsx2.PCSX2 \
+            net.rpcs3.RPCS3 io.mgba.mGBA net.shadps4.shadPS4 org.azahar_emu.Azahar net.kuribo64.melonDS org.DolphinEmu.dolphin-emu org.ppsspp.PPSSPP \
+            org.duckstation.DuckStation com.github.ADBeveridge.Raider com.usebottles.bottles com.github.tchx84.Flatseal
         ;;
     2)
         ;;
