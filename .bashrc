@@ -3,6 +3,7 @@
 
 eval "$(starship init bash)"
 #pokemon-colorscripts --no-title -r 5
+fastfetch
 
 # Functions
 extract() {

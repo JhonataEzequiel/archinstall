@@ -25,7 +25,7 @@ fi
 sudo reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist
 echo "Mirrorlist updated successfully."
 
-install_pacman -Syy
+sudo pacman -Syy
 
 # Main Drivers
 echo "Installing open-source video drivers"
