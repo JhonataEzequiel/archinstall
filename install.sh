@@ -1,16 +1,163 @@
 #!/bin/bash
 
-# Update mirrorlist using reflector
-echo "Updating Mirrorlist for a faster download!"
-if ! sudo pacman -S --needed reflector || ! sudo reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist; then
-    echo "Error: Failed to update mirrorlist. Please check your internet connection or permissions."
+# Package lists stored in arrays for easier maintenance
+video_drivers=(
+    intel-media-driver libva-intel-driver libva-mesa-driver mesa
+    vulkan-intel vulkan-nouveau vulkan-radeon xf86-video-amdgpu
+    xf86-video-ati xf86-video-nouveau xf86-video-vmware
+    xorg-server xorg-xinit mesa-utils
+)
+
+gnome_packages=(
+    gdm xdg-user-dirs-gtk power-profiles-daemon nautilus
+    gnome-text-editor papers adwaita-icon-theme xdg-desktop-portal-gnome
+    baobab gnome-shell gnome-control-center gnome-settings-daemon
+    gnome-session gnome-tweaks gnome-calculator gnome-disk-utility
+    gnome-online-accounts gvfs-google gvfs loupe gnome-menus
+    gnome-software decibels mission-center
+)
+
+kde_packages=(
+    sddm xdg-user-dirs plasma-desktop dolphin kate spectacle
+    plasma-nm plasma-pa powerdevil kscreen kinfocenter breeze-icons
+    xdg-desktop-portal-kde kcalc ark partitionmanager systemsettings
+    plasma-workspace plasma-systemmonitor kde-gtk-config bluedevil
+    discover filelight kdeplasma-addons okular gwenview sddm-kcm
+    dolphin-plugins elisa
+)
+
+hyprland_packages=(
+    xdg-desktop-portal xdg-desktop-portal-wlr sddm xdg-user-dirs
+    dolphin ark pavucontrol power-profiles-daemon
+)
+
+base_packages=(
+    dconf bluez bluez-utils nano git curl wget pacman-contrib
+    unzip unrar p7zip tar python-pip os-prober ufw zip timeshift
+)
+
+additional_packages=(
+    vlc libreoffice-still tealdeer fastfetch thunderbird
+)
+
+font_packages=(
+    noto-fonts-cjk noto-fonts adobe-source-code-pro-fonts
+    noto-fonts-emoji otf-font-awesome ttf-droid ttf-fira-code
+    ttf-jetbrains-mono-nerd ttf-font-awesome
+)
+
+nvidia_proprietary=(
+    egl-gbm egl-x11 nvidia-dkms nvidia-utils nvidia-prime
+)
+
+nvidia_open=(
+    egl-gbm egl-x11 nvidia-open-dkms nvidia-utils nvidia-prime
+)
+
+ms_fonts=(
+    ttf-ms-fonts ttf-tahoma ttf-vista-fonts
+)
+
+hyprland_aur=(
+    hyprland wlogout network-manager-applet blueman hypridle
+    waybar wofi hyprpaper swaync kitty pavulcontrol hyprshot
+    xdg-desktop-portal-hyprland polkit-kde-agent qt5-wayland
+    qt6-wayland light hyprlock
+)
+
+extra_aur=(
+    proton-vpn-gtk-app upscayl-desktop-git stremio parsec-bin
+    obsidian pokemon-colorscripts-git vscodium gimp kdenlive
+    qbittorrent audacity obs-studio vesktop
+)
+
+gaming_nvidia_proprietary=(
+    heroic-games-launcher-bin steam lutris gamescope mangohud
+    wine winetricks vkd3d lib32-nvidia-utils glfw goverlay
+    wqy-zenhei protonplus gamemode jdk21-openjdk
+)
+
+gaming_nvidia_open=(
+    heroic-games-launcher-bin steam lutris gamescope mangohud
+    wine winetricks vkd3d glfw goverlay-bin wqy-zenhei
+    protonplus gamemode jdk21-openjdk
+)
+
+cachyos_kernels=(
+    linux-cachyos linux-cachyos-headers bpf chwd scx-manager
+    scx-scheds
+)
+
+emulators_aur=(
+    melonds-git azahar shadps4-git mgba-qt-git rpcs3-git
+    pcsx2-git duckstation-git ryujinx-canary cemu-git
+    dolphin-emu-git kega-fusion ppsspp-git vita3k-git
+)
+
+emulators_mixed_aur=(
+    melonds-git shadps4-git vita3k-git
+)
+
+emulators_flatpak=(
+    org.DolphinEmu.dolphin-emu io.mgba.mGBA com.carpeludum.KegaFusion
+    org.ppsspp.PPSSPP net.pcsx2.PCSX2 io.github.ryubing.Ryujinx
+    org.duckstation.DuckStation info.cemu.Cemu org.azahar_emu.Azahar
+    net.rpcs3.RPCS3 com.snes9x.Snes9x
+)
+
+emulators_flatpak_complete=(
+    org.DolphinEmu.dolphin-emu io.mgba.mGBA com.carpeludum.KegaFusion
+    org.ppsspp.PPSSPP net.pcsx2.PCSX2 io.github.ryubing.Ryujinx
+    org.duckstation.DuckStation info.cemu.Cemu org.azahar_emu.Azahar
+    net.rpcs3.RPCS3 com.snes9x.Snes9x net.shadps4.shadPS4 net.kuribo64.melonDS
+)
+
+flatpak_packages=(
+    info.febvre.Komikku it.mijorus.gearlever com.github.ADBeveridge.Raider
+    com.usebottles.bottles com.github.tchx84.Flatseal
+)
+
+# Functions for package installation
+install_pacman() {
+    sudo pacman -S --needed "$@"
+}
+
+install_yay() {
+    yay -S --needed "$@"
+}
+
+install_flatpak() {
+    flatpak install flathub "$@"
+}
+
+# Check if running on Arch Linux
+if [[ ! -f /etc/arch-release ]]; then
+    echo "Error: This script is designed for Arch Linux only."
     exit 1
 fi
-echo "Done updating mirrorlist"
+
+# Check for required commands
+for cmd in pacman git sudo; do
+    if ! command -v "$cmd" &> /dev/null; then
+        echo "Error: $cmd is not installed."
+        exit 1
+    fi
+done
+
+# Update mirrorlist using reflector
+echo "Updating mirrorlist for faster downloads..."
+if ! command -v reflector &> /dev/null; then
+    echo "Installing reflector..."
+    install_pacman reflector
+fi
+sudo reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist
+echo "Mirrorlist updated successfully."
+
+install_pacman -Syy
 
 # Main Drivers
 echo "Installing open-source video drivers"
-sudo pacman -S --needed intel-media-driver libva-intel-driver libva-mesa-driver mesa vulkan-intel vulkan-nouveau vulkan-radeon xf86-video-amdgpu xf86-video-ati xf86-video-nouveau xf86-video-vmware xorg-server xorg-xinit mesa-utils
+install_pacman "${video_drivers[@]}"
 
 # Choosing DE
 while true; do
@@ -24,7 +171,7 @@ while true; do
     case $choiceDE in
         1)
             echo "Installing GNOME and its base packages..."
-            if sudo pacman -S --needed gdm xdg-user-dirs-gtk power-profiles-daemon nautilus gnome-text-editor papers adwaita-icon-theme xdg-desktop-portal-gnome baobab gnome-shell gnome-control-center gnome-settings-daemon gnome-session gnome-tweaks gnome-calculator gnome-disk-utility gnome-online-accounts gvfs-google gvfs loupe gnome-menus gnome-software decibels mission-center; then
+            if install_pacman "${gnome_packages[@]}"; then
                 echo "Finished Installing GNOME"
                 break
             else
@@ -34,7 +181,7 @@ while true; do
             ;;
         2)
             echo "Installing KDE Plasma and its base packages..."
-            if sudo pacman -S --needed sddm xdg-user-dirs plasma-desktop dolphin kate spectacle plasma-nm plasma-pa powerdevil kscreen kinfocenter breeze-icons xdg-desktop-portal-kde kcalc ark partitionmanager systemsettings plasma-workspace plasma-systemmonitor kde-gtk-config bluedevil discover filelight kdeplasma-addons okular gwenview sddm-kcm dolphin-plugins elisa; then
+            if install_pacman "${kde_packages[@]}"; then
                 echo "Finished Installing KDE Plasma"
                 break
             else
@@ -43,19 +190,18 @@ while true; do
             fi
             ;;
         3)
-            echo "Installing Hyprland and it's configs"
-            if sudo pacman -S --needed xdg-desktop-portal xdg-desktop-portal-wlr sddm xdg-user-dirs dolphin ark pavucontrol power-profiles-daemon; then
+            echo "Installing Hyprland and its configs"
+            if install_pacman "${hyprland_packages[@]}"; then
                 echo "Finished Installing base Hyprland packages"
                 break
             else
                 echo "Error: Hyprland installation failed. Please check your internet or repositories."
                 exit 1
-	        fi
+            fi
             ;;
         4)
             echo "Exiting"
-            exit 1
-            break
+            exit 0
             ;;
         *)
             echo "Invalid Choice! Please enter 1, 2, or 3."
@@ -64,55 +210,71 @@ while true; do
 done
 
 echo "Installing base Packages"
-sudo pacman -S --needed dconf bluez bluez-utils nano git curl wget pacman-contrib unzip unrar p7zip tar python-pip os-prober ufw zip
+install_pacman "${base_packages[@]}"
 echo "Finished installing base packages"
 
 echo "Do you wish to install additional packages that can be useful?"
-echo "vlc libreoffice-still tealdeer timeshift fastfetch"
+echo "vlc libreoffice-still tealdeer fastfetch thunderbird"
 echo "1) Yes"
 echo "2) No"
 read -p "Enter 1-2: " choicePKG
 case $choicePKG in
     1)
-        sudo pacman -S --needed vlc libreoffice-still tealdeer timeshift fastfetch thunderbird
+        install_pacman "${additional_packages[@]}"
         ;;
     *)
         ;;
 esac
 
 echo "Installing Fonts for different Languages"
-sudo pacman -S --needed noto-fonts-cjk noto-fonts adobe-source-code-pro-fonts noto-fonts-emoji otf-font-awesome ttf-droid ttf-fira-code ttf-jetbrains-mono-nerd ttf-font-awesome
+install_pacman "${font_packages[@]}"
 echo "Finished installing fonts"
 
-echo "Do you wish to install nvidia drivers?"
-echo "1) Yes, proprietary drivers"
-echo "2) Yes, open drivers"
-echo "3) No"
-read -p "Enter 1, 2, or 3: " choiceNV
-case $choiceNV in
-    1)
-        echo "Installing proprietary drivers"
-        sudo pacman -S --needed egl-gbm egl-x11 nvidia-dkms nvidia-utils nvidia-prime
-        echo "Installed proprietary drivers"
-        ;;
-    2)
-        echo "Installing open drivers"
-        sudo pacman -S --needed egl-gbm egl-x11 nvidia-open-dkms nvidia-utils nvidia-prime
-        ;;
-    *)
-        ;;
-esac
+if lspci | grep -i nvidia &> /dev/null; then
+    echo "NVIDIA hardware detected."
+    echo "NVIDIA driver options:"
+    echo "1) Proprietary: Better performance, closed-source."
+    echo "2) Open: Open-source, may have lower performance."
+    echo "3) No: Skip NVIDIA drivers."
+    read -p "Enter 1, 2, or 3: " choiceNV
+    case $choiceNV in
+        1)
+            echo "Installing proprietary drivers"
+            install_pacman "${nvidia_proprietary[@]}"
+            echo "Installed proprietary drivers"
+            ;;
+        2)
+            echo "Installing open drivers"
+            install_pacman "${nvidia_open[@]}"
+            ;;
+        *)
+            ;;
+    esac
+else
+    echo "No NVIDIA hardware detected. Skipping NVIDIA driver installation."
+    choiceNV=3
+fi
 
 echo "Enabling Bluetooth, paccache, and timeshift"
-sudo systemctl enable --now bluetooth.service && sudo systemctl enable paccache.timer && systemctl enable --now cronie.service
+sudo systemctl enable --now bluetooth.service
+sudo systemctl enable paccache.timer
+systemctl enable --now cronie.service
 
-echo "Installing yay as an AUR helper"
-sudo pacman -S --needed base-devel 
-git clone https://aur.archlinux.org/yay.git 
-cd yay 
-makepkg -si 
-cd .. 
-rm -rf yay
+if command -v yay &> /dev/null; then
+    echo "yay is already installed."
+else
+    echo "Installing yay as an AUR helper"
+    install_pacman base-devel
+    git clone https://aur.archlinux.org/yay.git
+    cd yay
+    makepkg -si
+    cd ..
+    rm -rf yay
+fi
+
+if [[ ! -f pacman.conf ]]; then
+    touch /etc/pacman.conf
+fi
 
 echo "Installing chaotic-aur"
 sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
@@ -123,11 +285,11 @@ sudo cp pacman.conf /etc/pacman.conf
 sudo pacman -Syu
 
 echo "Installing ms-fonts"
-yay -S --needed ttf-ms-fonts ttf-tahoma ttf-vista-fonts
+install_yay "${ms_fonts[@]}"
 
 case $choiceDE in
     3)
-        yay -S --needed hyprland wlogout network-manager-applet blueman hypridle waybar wofi hyprpaper swaync kitty pavulcontrol hyprshot xdg-desktop-portal-hyprland polkit-kde-agent qt5-wayland qt6-wayland light hyprlock
+        install_yay "${hyprland_aur[@]}"
         cp -r kitty ~/.config/
         cp -r hypr ~/.config/
         cp -r waybar ~/.config/
@@ -144,107 +306,59 @@ echo "2) No"
 read -p "Enter 1-2: " choiceAUR
 case $choiceAUR in
     1)
-        yay -S --needed proton-vpn-gtk-app upscayl-desktop-git stremio parsec-bin obsidian pokemon-colorscripts-git vscodium gimp kdenlive qbittorrent audacity obs-studio vesktop
+        install_yay "${extra_aur[@]}"
         ;;
     *)
         ;;
 esac
 
 echo "Select a browser"
-echo "1) Firefox"
-echo "2) Brave"
-echo "3) Zen"
-echo "4) Vivaldi"
-echo "5) Chrome"
-echo "6) Floorp"
-echo "7) Librewolf"
-echo "8) Chromium"
-echo "9) Firedragon"
-echo "10) Waterfox"
-echo "11) Don't want to install a browser"
-read -p "Enter 1-11: " choiceBR
-case $choiceBR in
-    1)
-        sudo pacman -S --needed firefox
-        "Firefox Installed"
-        ;;
-    2)
-        yay -S --needed brave
-        "Brave Installed"
-        ;;
-    3)
-        yay -S --needed zen-browser-bin
-        "Zen Installed"
-        ;;
-    4)
-        sudo pacman -S --needed vivaldi
-        ;;
-    5)
-        yay -S --needed chrome
-        ;;
-    6)
-        yay -S --needed floorp
-        ;;
-    7)
-        yay -S --needed librewolf
-        ;;
-    8)
-        yay -S --needed chromium
-        ;;
-    9)
-        yay -S --needed firedragon
-        ;;
-    10)
-        yay -S --needed waterfox
-        ;;
-    *)
-        echo "Skipped browser installation"
-        ;;
-esac
+browsers=("firefox" "brave" "zen-browser-bin" "vivaldi" "chrome" "floorp" "librewolf" "chromium" "firedragon" "waterfox" "none")
+for i in "${!browsers[@]}"; do
+    echo "$((i+1))) ${browsers[i]}"
+done
+read -p "Enter 1-${#browsers[@]}: " choiceBR
+if [[ "${browsers[choiceBR-1]}" != "none" ]]; then
+    if [[ "${browsers[choiceBR-1]}" == "firefox" || "${browsers[choiceBR-1]}" == "vivaldi" ]]; then
+        install_pacman "${browsers[choiceBR-1]}"
+    else
+        install_yay "${browsers[choiceBR-1]}"
+    fi
+    echo "${browsers[choiceBR-1]} installed."
+fi
 
 echo "Choose a Terminal (only kitty for hyprland is configured by default)"
-echo "1) gnome-console"
-echo "2) ptyxis"
-echo "3) konsole"
-echo "4) alacritty"
-echo "5) ghostyy"
-echo "6) kitty"
-read -p "Enter 1-6: " choiceTE
+terminals=("gnome-console" "ptyxis" "konsole" "alacritty" "ghostty" "kitty" "none")
+for i in "${!terminals[@]}"; do
+    echo "$((i+1))) ${terminals[i]}"
+done
+read -p "Enter 1-${#terminals[@]}: " choiceTE
 case $choiceDE in
     3)
         ;;
     *)
         case $choiceTE in
-            1)
-                sudo pacman -S --needed gnome-console
+            1|2|3|6)
+                install_pacman "${terminals[choiceTE-1]}"
                 ;;
-            2)
-                sudo pacman -S --needed ptyxis
+            4|5)
+                install_yay "${terminals[choiceTE-1]}"
+                if [[ "${terminals[choiceTE-1]}" == "ghostty" ]]; then
+                    echo "Do you want my ghostty customization?"
+                    echo "1) Yes"
+                    echo "2) No"
+                    read -p "Enter 1-2: " choiceGH
+                    case $choiceGH in
+                        1)
+                            cp -r ghostty ~/.config/
+                            ;;
+                        *)
+                            ;;
+                    esac
+                fi
                 ;;
-            3)
-                sudo pacman -S --needed konsole
-                ;;
-            4)
-                yay -S --needed alacritty
-                ;;
-            5)
-                yay -S --needed ghostty
-                echo "Do you want my ghostty customization?"
-                echo "1) Yes"
-                echo "2) No"
-                read -p "Enter 1-2: " choiceGH
-                case $choiceGH in
-                    1)
-                        cp -r ghostty ~/.config/
-                    *)
-                        ;;
-                esac
-                ;;
-	         6)
-		        sudo pacman -S --needed kitty
-		        ;;
             *)
-                echo "skipping terminal emulator installation"
+                echo "Skipping terminal emulator installation"
                 ;;
         esac
 esac
@@ -266,9 +380,9 @@ case $choiceSS in
 esac
 
 case $choiceDE in
-     1)
+    1)
         echo "Installing extension manager for gnome"
-        yay -S --needed extension-manager
+        install_yay extension-manager
         ;;
     *)
         ;;
@@ -282,11 +396,11 @@ case $choiceGM in
     1)
         case $choiceNV in
             1)
-                yay -S --needed heroic-games-launcher-bin steam lutris gamescope mangohud wine winetricks vkd3d lib32-nvidia-utils glfw goverlay wqy-zenhei protonplus gamemode jdk21-openjdk
+                install_yay "${gaming_nvidia_proprietary[@]}"
                 echo "Finished installing gaming packages"
                 ;;
             2)
-                yay -S --needed heroic-games-launcher-bin steam lutris gamescope mangohud wine winetricks vkd3d glfw goverlay-bin wqy-zenhei protonplus gamemode jdk21-openjdk
+                install_yay "${gaming_nvidia_open[@]}"
                 echo "Finished installing gaming packages"
                 ;;
         esac
@@ -316,8 +430,8 @@ case $choiceCA in
         read -p "Enter 1-2: " choiceCK
         case $choiceCK in
             1)
-                yay -S --needed linux-cachyos linux-cachyos-headers bpf chwd scx-manager scx-scheds
-                echo "custom kernel added"
+                install_yay "${cachyos_kernels[@]}"
+                echo "Custom kernel added"
                 ;;
             *)
                 echo "Skipped custom kernel"
@@ -329,12 +443,12 @@ case $choiceCA in
         ;;
 esac
 
-echo "updating grub"
-sudo pacman -S --needed update-grub
+echo "Updating grub"
+install_pacman update-grub
 sudo update-grub
 
-echo "adding flatpak support"
-sudo pacman -S --needed flatpak
+echo "Adding flatpak support"
+install_pacman flatpak
 
 echo "Do you want to install video game emulators?"
 echo "1) Yes, via flatpak"
@@ -344,20 +458,17 @@ echo "4) No"
 read -p "Enter 1-4: " choiceEM
 case $choiceEM in
     1)
-        flatpak install flathub \
-            com.carpeludum.KegaFusion info.cemu.Cemu io.github.ryubing.Ryujinx net.pcsx2.PCSX2 \
-            net.rpcs3.RPCS3 io.mgba.mGBA net.shadps4.shadPS4 org.azahar_emu.Azahar net.kuribo64.melonDS org.DolphinEmu.dolphin-emu org.ppsspp.PPSSPP \
-            org.duckstation.DuckStation 
+        install_flatpak "${emulators_flatpak_complete[@]}"
         ;;
     2)
         echo "Installing Emulators"
-        yay -S --needed melonds-git azahar shadps4-git mgba-qt-git rpcs3-git pcsx2-git duckstation-git ryujinx-canary cemu-git dolphin-emu-git kega-fusion ppsspp-git vita3k-git
+        install_yay "${emulators_aur[@]}"
         echo "Emulators Installed"
         ;;
     3)
-        yay -S --needed melonds-git shadps4-git vita3k-git
-        flatpak install flathub org.DolphinEmu.dolphin-emu io.mgba.mGBA com.carpeludum.KegaFusion org.ppsspp.PPSSPP net.pcsx2.PCSX2 io.github.ryubing.Ryujinx \
-            org.duckstation.DuckStation info.cemu.Cemu org.azahar_emu.Azahar net.rpcs3.RPCS3 com.snes9x.Snes9x
+        install_yay "${emulators_mixed_aur[@]}"
+        install_flatpak "${emulators_flatpak[@]}"
+        ;;
     *)
         echo "Skipped Emulators"
         ;;
@@ -369,21 +480,24 @@ echo "2) No"
 read -p "Enter 1-2: " choiceFP
 case $choiceFP in
     1)
-        flatpak install flathub info.febvre.Komikku it.mijorus.gearlever com.github.ADBeveridge.Raider com.usebottles.bottles com.github.tchx84.Flatseal
+        install_flatpak "${flatpak_packages[@]}"
+        ;;
     *)
         ;;
 esac
 
-case $choiceDE in
-    1)
-        sudo systemctl enable gdm
-        ;;
-    2) sudo systemctl enable sddm
-        ;;
-    3)
-        sudo systemctl enable sddm
-        ;;
-esac
-echo "Rebooting in 5 seconds for everything to apply correctly"
-sleep 5
-reboot
+if systemctl is-enabled gdm &> /dev/null || systemctl is-enabled sddm &> /dev/null; then
+    echo "A display manager is already enabled. Skipping."
+else
+    sudo systemctl enable "${choiceDE == 1 ? gdm : sddm}"
+fi
+
+echo "Installation complete. Reboot required to apply changes."
+read -p "Reboot now? (y/N): " reboot_choice
+if [[ "$reboot_choice" =~ ^[Yy]$ ]]; then
+    echo "Rebooting in 5 seconds..."
+    sleep 5
+    reboot
+else
+    echo "Please reboot manually to apply changes."
+fi
