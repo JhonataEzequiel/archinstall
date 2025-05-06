@@ -296,21 +296,6 @@ case $choiceGM in
         ;;
 esac
 
-echo "Do you want to install emulators from the aur? (Can take a long time, but it's more up to date then flatpak)"
-echo "1) Yes"
-echo "2) No"
-read -p "Enter 1-2: " choiceEMU
-case $choiceEMU in
-    1)
-        echo "Installing Emulators"
-        yay -S --needed melonds-git azahar shadps4-git mgba-qt-git rpcs3-git pcsx2-git duckstation-git ryujinx-canary cemu-git dolphin-emu-git kega-fusion ppsspp-git vita3k-git mesen2-git
-        echo "Emulators Installed"
-        ;;
-    *)
-        echo "Skipped Emulators"
-        ;;
-esac
-
 echo "Do you wish to add cachyos repos?"
 echo "1) Yes"
 echo "2) No"
@@ -351,11 +336,13 @@ sudo update-grub
 echo "adding flatpak support"
 sudo pacman -S --needed flatpak
 
-echo "Do you want to install emulators as flatpak packages?"
-echo "1) Yes"
-echo "2) No"
-read -p "Enter 1-2: " choiceFE
-case $choiceFE in
+echo "Do you want to install video game emulators?"
+echo "1) Yes, via flatpak"
+echo "2) Yes, via AUR packages"
+echo "3) Yes, mix them up for better packages and updates (recommended)"
+echo "4) No"
+read -p "Enter 1-4: " choiceEM
+case $choiceEM in
     1)
         flatpak install flathub \
             com.carpeludum.KegaFusion info.cemu.Cemu io.github.ryubing.Ryujinx net.pcsx2.PCSX2 \
@@ -363,6 +350,16 @@ case $choiceFE in
             org.duckstation.DuckStation 
         ;;
     2)
+        echo "Installing Emulators"
+        yay -S --needed melonds-git azahar shadps4-git mgba-qt-git rpcs3-git pcsx2-git duckstation-git ryujinx-canary cemu-git dolphin-emu-git kega-fusion ppsspp-git vita3k-git
+        echo "Emulators Installed"
+        ;;
+    3)
+        yay -S --needed melonds-git shadps4-git vita3k-git
+        flatpak install flathub org.DolphinEmu.dolphin-emu io.mgba.mGBA com.carpeludum.KegaFusion org.ppsspp.PPSSPP net.pcsx2.PCSX2 io.github.ryubing.Ryujinx \
+            org.duckstation.DuckStation info.cemu.Cemu org.azahar_emu.Azahar net.rpcs3.RPCS3 com.snes9x.Snes9x
+    *)
+        echo "Skipped Emulators"
         ;;
 esac
 
