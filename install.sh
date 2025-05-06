@@ -351,19 +351,29 @@ sudo update-grub
 echo "adding flatpak support"
 sudo pacman -S --needed flatpak
 
-echo "Do you wish to add some good flatpak apps?"
-echo "Komikku, Gear Lever, and Emulators"
+echo "Do you want to install emulators as flatpak packages?"
+echo "1) Yes"
+echo "2) No"
+read -p "Enter 1-2: " choiceFE
+case $choiceFE in
+    1)
+        flatpak install flathub \
+            com.carpeludum.KegaFusion info.cemu.Cemu io.github.ryubing.Ryujinx net.pcsx2.PCSX2 \
+            net.rpcs3.RPCS3 io.mgba.mGBA net.shadps4.shadPS4 org.azahar_emu.Azahar net.kuribo64.melonDS org.DolphinEmu.dolphin-emu org.ppsspp.PPSSPP \
+            org.duckstation.DuckStation 
+        ;;
+    2)
+        ;;
+esac
+
+echo "Do you want to install some good flatpak packages?"
 echo "1) Yes"
 echo "2) No"
 read -p "Enter 1-2: " choiceFP
 case $choiceFP in
     1)
-        flatpak install flathub \
-            info.febvre.Komikku it.mijorus.gearlever com.carpeludum.KegaFusion info.cemu.Cemu io.github.ryubing.Ryujinx net.pcsx2.PCSX2 \
-            net.rpcs3.RPCS3 io.mgba.mGBA net.shadps4.shadPS4 org.azahar_emu.Azahar net.kuribo64.melonDS org.DolphinEmu.dolphin-emu org.ppsspp.PPSSPP \
-            org.duckstation.DuckStation com.github.ADBeveridge.Raider com.usebottles.bottles com.github.tchx84.Flatseal
-        ;;
-    2)
+        flatpak install flathub info.febvre.Komikku it.mijorus.gearlever com.github.ADBeveridge.Raider com.usebottles.bottles com.github.tchx84.Flatseal
+    *)
         ;;
 esac
 
