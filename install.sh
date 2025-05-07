@@ -255,6 +255,7 @@ case $choiceDE in
     1)
         echo "Installing extension manager for gnome"
         install_yay extension-manager
+        gsettings set org.gnome.mutter check-alive-timeout 0
         ;;
     *)
         ;;
