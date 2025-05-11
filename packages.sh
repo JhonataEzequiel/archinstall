@@ -23,7 +23,7 @@ kde_packages=(
     xdg-desktop-portal-kde kcalc ark partitionmanager systemsettings
     plasma-workspace plasma-systemmonitor kde-gtk-config bluedevil
     discover filelight kdeplasma-addons okular gwenview sddm-kcm
-    dolphin-plugins elisa
+    dolphin-plugins elisa power-profiles-daemon
 )
 
 hyprland_packages=(
@@ -33,7 +33,7 @@ hyprland_packages=(
 
 base_packages=(
     dconf bluez bluez-utils git curl wget pacman-contrib
-    unzip unrar p7zip tar python-pip os-prober ufw zip timeshift
+    unzip unrar 7zip tar python-pip os-prober ufw zip timeshift
     fuse2
 )
 
