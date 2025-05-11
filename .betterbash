@@ -65,6 +65,17 @@ gitall() {
     git add . && git commit -m "$1" && git push && echo "Changes committed and pushed."
 }
 
+# Yazi Config
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
+export EDITOR='nano' # change to your prefered one
+
 # aliases
 alias ls='eza --icons'
 alias grep='rg'
