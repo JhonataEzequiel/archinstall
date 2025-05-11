@@ -106,6 +106,7 @@ read -p "Enter 1-2: " choiceTPKG
 case $choiceTPKG in
     1)
         install_pacman ${terminal_packages[@]}
+        tldr --update
         ;;
     *)
         ;;
