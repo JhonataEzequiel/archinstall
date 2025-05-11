@@ -42,7 +42,7 @@ additional_packages=(
 )
 
 terminal_packages=(
-    dysk tealdeer btop fastfetch bat 
+    dysk tealdeer btop fastfetch bat fd eza fzf zoxide ripgrep yazi
 )
 
 terminal_text_editors=(

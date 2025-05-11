@@ -11,76 +11,100 @@
       "1": "blue"
     }
   },
-  "display": {
-    "separator": " ➜ ",
-    "color": "blue",
-    "key": {
-      "width": 12,
-      "color": "cyan"
-    },
-    "bar": {
-      "charElapsed": "█",
-      "charTotal": "─"
-    }
-  },
   "modules": [
     {
-      "type": "title",
-      "color": {
-        "user": "yellow",
-        "host": "green"
-      }
+      "type": "command",
+      "key": "  ",
+      "keyColor": "blue",
+      "text": "splash=$(hyprctl splash);echo $splash"
     },
-    "separator",
+    {
+      "type": "title",
+      "key": "  ",
+      "format": "{6} {7} {8}"
+    },
+    {
+      "type": "custom",
+      "format": "┌──────────────────────────────────────────┐"
+    },
     {
       "type": "os",
-      "key": "OS",
-      "format": "{name}"
+      "key": "  󰣇 OS",
+      "format": "{2}",
+      "keyColor": "red"
     },
     {
       "type": "kernel",
-      "key": "Kernel"
+      "key": "   Kernel",
+      "format": "{2}",
+      "keyColor": "red"
     },
     {
       "type": "packages",
-      "key": "Packages"
+      "key": "  󰏗 Packages",
+      "keyColor": "green"
     },
     {
       "type": "display",
-      "key": "Display"
-    },
-    {
-      "type": "de",
-      "key": "DE"
-    },
-    {
-      "type": "wm",
-      "key": "WM"
+      "key": "  󰍹 Display",
+      "format": "{1}x{2} @ {3}Hz [{7}]",
+      "keyColor": "green"
     },
     {
       "type": "terminal",
-      "key": "Terminal"
+      "key": "   Terminal",
+      "keyColor": "yellow"
+    },
+    {
+      "type": "wm",
+      "key": "  󱗃 WM",
+      "format": "{2}",
+      "keyColor": "yellow"
     },
     {
       "type": "cpu",
-      "key": "CPU"
+      "format": "{1} @ {7}",
+      "key": "   CPU",
+      "keyColor": "blue"
     },
     {
       "type": "gpu",
-      "key": "GPU"
+      "format": "{1} {2}",
+      "key": "  󰊴 GPU",
+      "keyColor": "blue"
+    },
+    {
+      "type": "gpu",
+      "format": "{3}",
+      "key": "   GPU Driver",
+      "keyColor": "magenta"
     },
     {
       "type": "memory",
-      "key": "Memory"
+      "key": "   Memory ",
+      "keyColor": "magenta"
     },
     {
       "type": "disk",
-      "key": "Disk"
+      "key": "  󱦟 OS Age ",
+      "folders": "/",
+      "keyColor": "red",
+      "format": "{days} days"
     },
-    "break",
+    {
+      "type": "uptime",
+      "key": "  󱫐 Uptime ",
+      "keyColor": "red"
+    },
+    {
+      "type": "custom",
+      "format": "└──────────────────────────────────────────┘"
+    },
     {
       "type": "colors",
+      "paddingLeft": 2,
       "symbol": "circle"
-    }
+    },
+    "break"
   ]
 }

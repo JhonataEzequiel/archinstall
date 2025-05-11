@@ -2,8 +2,14 @@
 [[ $- != *i* ]] && return
 
 eval "$(starship init bash)"
-#pokemon-colorscripts --no-title -r 5
+eval "$(zoxide init bash)"
+# pokemon-colorscripts --no-title -r
 fastfetch
+
+# Enable completion for eza, ripgrep, etc.
+[ -f /usr/share/bash-completion/completions/eza ] && source /usr/share/bash-completion/completions/eza
+[ -f /usr/share/bash-completion/completions/rg ] && source /usr/share/bash-completion/completions/rg
+[ -f /usr/share/bash-completion/completions/fd ] && source /usr/share/bash-completion/completions/fd
 
 # Functions
 extract() {
@@ -60,10 +66,13 @@ gitall() {
 }
 
 # aliases
-alias ls='ls --color=auto'
-alias grep='grep --color=auto'
+alias ls='eza --icons'
+alias grep='rg'
+alias find='fd'
+alias cd='z'
+alias cat='bat'
 alias update-system="yay -Syu && flatpak update"
-alias clear-packages='sudo pacman -Rns $(sudo pacman -Qtdq)'
+alias clear-packages='yay -Rns $(yay -Qtdq)'
 alias speedup-mirrors="sudo reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist"
 alias test-nvidia="prime-run glxinfo | grep 'OpenGL renderer'"
 alias show-ip-wifi="ip address | grep wlp8s0 | grep inet | awk '{print $2}' | cut -d'/' -f1"

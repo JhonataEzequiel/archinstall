@@ -285,7 +285,12 @@ case $choiceSS in
     1)
         curl -sS https://starship.rs/install.sh | sh
         sudo cp -r fastfetch ~/.config/
-        sudo cp .bashrc ~/.bashrc
+        case $choiceTPKG in
+            1)
+                sudo cp .betterbash ~/.bashrc
+            *)
+                sudo cp .bashrc ~/.bashrc
+        esac
         echo "Done"
         ;;
     *)
