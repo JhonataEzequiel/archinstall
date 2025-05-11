@@ -32,13 +32,21 @@ hyprland_packages=(
 )
 
 base_packages=(
-    dconf bluez bluez-utils nano git curl wget pacman-contrib
+    dconf bluez bluez-utils git curl wget pacman-contrib
     unzip unrar p7zip tar python-pip os-prober ufw zip timeshift
     fuse2
 )
 
 additional_packages=(
-    vlc libreoffice-still tealdeer fastfetch thunderbird dysk
+    vlc libreoffice-still thunderbird
+)
+
+terminal_packages=(
+    dysk tealdeer btop fastfetch bat 
+)
+
+terminal_text_editors=(
+    nano vim micro neovim
 )
 
 font_packages=(

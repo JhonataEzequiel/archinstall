@@ -98,6 +98,47 @@ case $choicePKG in
         ;;
 esac
 
+echo "Do you want some terminal packages?"
+echo "dysk tealdeer btop fastfetch bat"
+echo "1) yes"
+echo "2) no"
+read -p "Enter 1-2: " choiceTPKG
+case $choiceTPKG in
+    1)
+        install_pacman ${terminal_packages[@]}
+        ;;
+    *)
+        ;;
+esac
+
+echo "choose your terminal text editor"
+echo "1) nano"
+echo "2) vim"
+echo "3) micro"
+echo "4) neovim"
+echo "5) all of them"
+echo "6) skip it (not recommended)"
+read -p "Enter 1-6: " choiceTTE
+case $choiceTTE in
+    1)
+        install_pacman ${terminal_text_editors[0]}
+        ;;
+    2)
+        install_pacman ${terminal_text_editors[1]}
+        ;;
+    3)
+        install_pacman ${terminal_text_editors[2]}
+        ;;
+    4)
+        install_pacman ${terminal_text_editors[3]}
+        ;;
+    5)
+        install_pacman ${terminal_text_editors[@]}
+        ;;
+    *)
+        ;;
+esac
+
 echo "Installing Fonts for different Languages"
 install_pacman "${font_packages[@]}"
 echo "Finished installing fonts"
