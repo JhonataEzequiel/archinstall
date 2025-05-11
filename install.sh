@@ -272,8 +272,8 @@ case $choiceGM in
                 install_yay "${gaming_nvidia_proprietary[@]}"
                 echo "Finished installing gaming packages"
                 ;;
-            2)
-                install_yay "${gaming_nvidia_open[@]}"
+            *)
+                install_yay "${gaming[@]}"
                 echo "Finished installing gaming packages"
                 ;;
         esac

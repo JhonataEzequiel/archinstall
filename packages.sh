@@ -37,7 +37,7 @@ base_packages=(
 )
 
 additional_packages=(
-    vlc libreoffice-still tealdeer fastfetch thunderbird
+    vlc libreoffice-still tealdeer fastfetch thunderbird dysk
 )
 
 font_packages=(
@@ -74,13 +74,13 @@ extra_aur=(
 gaming_nvidia_proprietary=(
     heroic-games-launcher-bin steam lutris gamescope mangohud
     wine winetricks vkd3d lib32-nvidia-utils glfw goverlay
-    wqy-zenhei protonplus gamemode jdk21-openjdk
+    wqy-zenhei protonplus gamemode lib32-gamemode jdk21-openjdk
 )
 
-gaming_nvidia_open=(
+gaming=(
     heroic-games-launcher-bin steam lutris gamescope mangohud
     wine winetricks vkd3d glfw goverlay-bin wqy-zenhei
-    protonplus gamemode jdk21-openjdk
+    protonplus gamemode lib32-gamemode jdk21-openjdk
 )
 
 cachyos_kernels=(
