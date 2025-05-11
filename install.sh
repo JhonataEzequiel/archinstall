@@ -85,8 +85,8 @@ echo "Installing base Packages"
 install_pacman "${base_packages[@]}"
 echo "Finished installing base packages"
 
-echo "Do you wish to install additional packages that can be useful?"
-echo "vlc libreoffice-still tealdeer fastfetch thunderbird"
+echo "Install basic packages for daily use?"
+echo "vlc libreoffice-still thunderbird"
 echo "1) Yes"
 echo "2) No"
 read -p "Enter 1-2: " choicePKG
@@ -99,7 +99,7 @@ case $choicePKG in
 esac
 
 echo "Do you want some terminal packages?"
-echo "dysk tealdeer btop fastfetch bat"
+echo "dysk tealdeer btop fastfetch bat fd eza fzf zoxide ripgrep yazi wl-clipboard"
 echo "1) yes"
 echo "2) no"
 read -p "Enter 1-2: " choiceTPKG
@@ -107,6 +107,7 @@ case $choiceTPKG in
     1)
         install_pacman ${terminal_packages[@]}
         tldr --update
+        cp -r yazi ~/.config/
         ;;
     *)
         ;;
@@ -197,6 +198,14 @@ sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.ta
 sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
 sudo cp pacman.conf /etc/pacman.conf
 sudo pacman -Syu
+
+case $choiceTPKG in
+    1)
+        install_yay resvg
+        ;;
+    *)
+        ;;
+esac
 
 echo "Installing ms-fonts"
 install_yay "${ms_fonts[@]}"

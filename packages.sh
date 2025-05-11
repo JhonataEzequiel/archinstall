@@ -37,12 +37,16 @@ base_packages=(
     fuse2
 )
 
+rendering_packages=(
+    imagemagick ffmpeg poppler
+)
+
 additional_packages=(
     vlc libreoffice-still thunderbird
 )
 
 terminal_packages=(
-    dysk tealdeer btop fastfetch bat fd eza fzf zoxide ripgrep yazi
+    dysk tealdeer btop fastfetch bat fd eza fzf zoxide ripgrep yazi wl-clipboard
 )
 
 terminal_text_editors=(
@@ -52,7 +56,8 @@ terminal_text_editors=(
 font_packages=(
     noto-fonts-cjk noto-fonts adobe-source-code-pro-fonts
     noto-fonts-emoji otf-font-awesome ttf-droid ttf-fira-code
-    ttf-jetbrains-mono-nerd ttf-font-awesome
+    ttf-jetbrains-mono-nerd ttf-font-awesome ttf-cascadia-mono-nerd
+    ttf-cascadia-code-nerd
 )
 
 nvidia_proprietary=(
