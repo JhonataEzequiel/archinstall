@@ -34,6 +34,7 @@ hyprland_packages=(
 base_packages=(
     dconf bluez bluez-utils nano git curl wget pacman-contrib
     unzip unrar p7zip tar python-pip os-prober ufw zip timeshift
+    fuse2
 )
 
 additional_packages=(
