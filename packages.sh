@@ -28,13 +28,13 @@ kde_packages=(
 
 hyprland_packages=(
     xdg-desktop-portal xdg-desktop-portal-wlr sddm xdg-user-dirs
-    dolphin ark pavucontrol power-profiles-daemon
+    pavucontrol power-profiles-daemon openssh polkit polkit-qt6
 )
 
 base_packages=(
     dconf bluez bluez-utils git curl wget pacman-contrib
     unzip unrar 7zip tar python-pip os-prober ufw zip timeshift
-    fuse2
+    fuse2 openssh cronie linux-headers
 )
 
 rendering_packages=(
@@ -73,10 +73,10 @@ ms_fonts=(
 )
 
 hyprland_aur=(
-    hyprland wlogout network-manager-applet blueman hypridle
-    waybar wofi hyprpaper swaync kitty pavulcontrol hyprshot
-    xdg-desktop-portal-hyprland polkit-kde-agent qt5-wayland
-    qt6-wayland light hyprlock
+    hyprland wlogout hypridle waybar wofi hyprpaper swaync 
+    pavucontrol hyprshot xdg-desktop-portal-hyprland 
+    polkit-gnome qt5-wayland qt6-wayland light hyprlock
+    ghostty waypaper hyprpicker
 )
 
 extra_aur=(

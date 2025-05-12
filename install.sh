@@ -64,6 +64,7 @@ while true; do
         3)
             echo "Installing Hyprland and its configs"
             if install_pacman "${hyprland_packages[@]}"; then
+                sudo systemctl enable polkit
                 echo "Finished Installing base Hyprland packages"
                 break
             else
@@ -85,6 +86,17 @@ echo "Installing base Packages"
 install_pacman "${base_packages[@]}"
 echo "Finished installing base packages"
 
+echo "Do you want to install zen kernel?"
+echo -e "1) Yes \n2) No"
+read -p "Enter 1-2: " choiceZEN
+case $choiceZEN in
+    1)
+        install_pacman linux-zen linux-zen-headers
+        ;;
+    *)
+        ;;
+esac
+
 echo "Install basic packages for daily use?"
 echo "vlc libreoffice-still thunderbird"
 echo "1) Yes"
@@ -98,20 +110,26 @@ case $choicePKG in
         ;;
 esac
 
-echo "Do you want some terminal packages?"
-echo "dysk tealdeer btop fastfetch bat fd eza fzf zoxide ripgrep yazi wl-clipboard"
-echo "1) yes"
-echo "2) no"
-read -p "Enter 1-2: " choiceTPKG
-case $choiceTPKG in
-    1)
-        install_pacman ${terminal_packages[@]}
-        tldr --update
-        cp -r yazi ~/.config/
-        ;;
-    *)
-        ;;
-esac
+if [ "$choiceDE" = "3" ]; then
+    install_pacman ${terminal_packages[@]}
+    tldr --update
+    cp -r yazi ~/.config/
+else
+    echo "Do you want some terminal packages?"
+    echo "dysk tealdeer btop fastfetch bat fd eza fzf zoxide ripgrep yazi wl-clipboard"
+    echo "1) yes"
+    echo "2) no"
+    read -p "Enter 1-2: " choiceTPKG
+    case $choiceTPKG in
+        1)
+            install_pacman "${terminal_packages[@]}"
+            tldr --update
+            cp -r yazi ~/.config/
+            ;;
+        *)
+            ;;
+    esac
+fi
 
 echo "choose your terminal text editor"
 echo "1) nano"
@@ -156,7 +174,14 @@ if lspci | grep -i nvidia &> /dev/null; then
         1)
             echo "Installing proprietary drivers"
             install_pacman "${nvidia_proprietary[@]}"
-            echo "Installed proprietary drivers"
+            sudo mkdir -p /etc/modprobe.d
+            echo "options nvidia_drm modeset=1" | sudo tee /etc/modprobe.d/nvidia.conf
+            sudo sed -i 's/MODULES=(btrfs)/MODULES=(btrfs nvidia nvidia_modeset nvidia_drm nvidia_uvm)/' /etc/mkinitcpio.conf
+            sudo mkinitcpio -P
+            case $choiceDE in
+                3)
+                    echo -e "env = LIBVA_DRIVER_NAME,nvidia \nenv = __GLX_VENDOR_LIBRARY_NAME,nvidia" >> hypr/hyprland.conf
+            esac
             ;;
         2)
             echo "Installing open drivers"
@@ -210,19 +235,6 @@ esac
 echo "Installing ms-fonts"
 install_yay "${ms_fonts[@]}"
 
-case $choiceDE in
-    3)
-        install_yay "${hyprland_aur[@]}"
-        cp -r kitty ~/.config/
-        cp -r hypr ~/.config/
-        cp -r waybar ~/.config/
-        cp -r wofi ~/.config/
-        sudo usermod -aG video $USER
-        ;;
-    *)
-        ;;
-esac
-
 echo "Do you wish to add some extra packages? (Utility, editors, etc)"
 echo "1) Yes"
 echo "2) No"
@@ -250,23 +262,34 @@ if [[ "${browsers[choiceBR-1]}" != "none" ]]; then
     echo "${browsers[choiceBR-1]} installed."
 fi
 
-echo "Choose a Terminal (only kitty for hyprland is configured by default)"
+echo "Choose a Terminal"
 terminals=("gnome-console" "ptyxis" "konsole" "alacritty" "ghostty" "kitty" "none")
 for i in "${!terminals[@]}"; do
     echo "$((i+1))) ${terminals[i]}"
 done
+
 read -p "Enter 1-${#terminals[@]}: " choiceTE
+
+# Validate terminal choice
+if ! [[ "$choiceTE" =~ ^[1-7]$ ]]; then
+    echo "Invalid selection. Skipping terminal installation."
+    choiceTE=7  # set to "none"
+fi
+
+terminal_choice="${terminals[$((choiceTE - 1))]}"
+
 case $choiceDE in
     3)
+        # Assuming Hyprland-specific setup
         ;;
     *)
         case $choiceTE in
             1|2|3|6)
-                install_pacman "${terminals[choiceTE-1]}"
+                install_pacman "$terminal_choice"
                 ;;
             4|5)
-                install_yay "${terminals[choiceTE-1]}"
-                if [[ "${terminals[choiceTE-1]}" == "ghostty" ]]; then
+                install_yay "$terminal_choice"
+                if [[ "$terminal_choice" == "ghostty" ]]; then
                     echo "Do you want my ghostty customization?"
                     echo "1) Yes"
                     echo "2) No"
@@ -284,6 +307,22 @@ case $choiceDE in
                 echo "Skipping terminal emulator installation"
                 ;;
         esac
+esac
+
+case $choiceDE in
+    3)
+        install_yay "${hyprland_aur[@]}"
+        if [[ "$terminal_choice" == "kitty" ]]; then
+            mkdir -p ~/.config/kitty/
+            echo "background_opacity 0.5" >> ~/.config/kitty/kitty.conf
+        fi
+        cp -r hypr ~/.config/
+        cp -r waybar ~/.config/
+        cp -r wofi ~/.config/
+        sudo usermod -aG video "$USER"
+        ;;
+    *)
+        ;;
 esac
 
 echo "Do you wish to install a more beautiful bash?"
