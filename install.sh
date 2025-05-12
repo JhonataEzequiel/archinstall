@@ -163,38 +163,6 @@ echo "Installing Fonts for different Languages"
 install_pacman "${font_packages[@]}"
 echo "Finished installing fonts"
 
-if lspci | grep -i nvidia &> /dev/null; then
-    echo "NVIDIA hardware detected."
-    echo "NVIDIA driver options:"
-    echo "1) Proprietary: Better performance, closed-source."
-    echo "2) Open: Open-source, may have lower performance."
-    echo "3) No: Skip NVIDIA drivers."
-    read -p "Enter 1, 2, or 3: " choiceNV
-    case $choiceNV in
-        1)
-            echo "Installing proprietary drivers"
-            install_pacman "${nvidia_proprietary[@]}"
-            sudo mkdir -p /etc/modprobe.d
-            echo "options nvidia_drm modeset=1" | sudo tee /etc/modprobe.d/nvidia.conf
-            sudo sed -i 's/MODULES=(btrfs)/MODULES=(btrfs nvidia nvidia_modeset nvidia_drm nvidia_uvm)/' /etc/mkinitcpio.conf
-            sudo mkinitcpio -P
-            case $choiceDE in
-                3)
-                    echo -e "env = LIBVA_DRIVER_NAME,nvidia \nenv = __GLX_VENDOR_LIBRARY_NAME,nvidia" >> hypr/hyprland.conf
-            esac
-            ;;
-        2)
-            echo "Installing open drivers"
-            install_pacman "${nvidia_open[@]}"
-            ;;
-        *)
-            ;;
-    esac
-else
-    echo "No NVIDIA hardware detected. Skipping NVIDIA driver installation."
-    choiceNV=3
-fi
-
 echo "Enabling Bluetooth, paccache, and timeshift"
 sudo systemctl enable --now bluetooth.service
 sudo systemctl enable paccache.timer
@@ -336,8 +304,10 @@ case $choiceSS in
         case $choiceTPKG in
             1)
                 sudo cp .betterbash ~/.bashrc
+                ;;
             *)
                 sudo cp .bashrc ~/.bashrc
+                ;;
         esac
         echo "Done"
         ;;
@@ -413,6 +383,42 @@ esac
 
 echo "Updating grub"
 install_pacman update-grub
+
+if lspci | grep -i nvidia &> /dev/null; then
+    echo "NVIDIA hardware detected."
+    echo "NVIDIA driver options:"
+    echo "1) Proprietary: Better performance, closed-source."
+    echo "2) Open: Open-source, may have lower performance."
+    echo "3) No: Skip NVIDIA drivers."
+    read -p "Enter 1, 2, or 3: " choiceNV
+    case $choiceNV in
+        1)
+            echo "Installing proprietary drivers"
+            install_pacman "${nvidia_proprietary[@]}"
+            sudo mkdir -p /etc/modprobe.d
+            echo "options nvidia_drm modeset=1" | sudo tee /etc/modprobe.d/nvidia.conf
+            sudo sed -i 's/MODULES=(btrfs)/MODULES=(btrfs nvidia nvidia_modeset nvidia_drm nvidia_uvm)/' /etc/mkinitcpio.conf
+            if pacman -Qs grub > /dev/null; then
+                sudo sed -i 's/^\(GRUB_CMDLINE_LINUX_DEFAULT="[^"]*\)/\1 nvidia-drm.modeset=1/' /etc/default/grub
+            fi
+            sudo mkinitcpio -P
+            case $choiceDE in
+                3)
+                    echo -e "env = LIBVA_DRIVER_NAME,nvidia \nenv = __GLX_VENDOR_LIBRARY_NAME,nvidia" >> ~/.config/hypr/hyprland.conf
+            esac
+            ;;
+        2)
+            echo "Installing open drivers"
+            install_pacman "${nvidia_open[@]}"
+            ;;
+        *)
+            ;;
+    esac
+else
+    echo "No NVIDIA hardware detected. Skipping NVIDIA driver installation."
+    choiceNV=3
+fi
+
 sudo update-grub
 
 echo "Adding flatpak support"

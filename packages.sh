@@ -28,7 +28,7 @@ kde_packages=(
 
 hyprland_packages=(
     xdg-desktop-portal xdg-desktop-portal-wlr sddm xdg-user-dirs
-    pavucontrol power-profiles-daemon openssh polkit polkit-qt6
+    pavucontrol power-profiles-daemon openssh polkit polkit-qt6 nautilus
 )
 
 base_packages=(
