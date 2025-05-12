@@ -114,6 +114,7 @@ if [ "$choiceDE" = "3" ]; then
     install_pacman ${terminal_packages[@]}
     tldr --update
     cp -r yazi ~/.config/
+    choiceTPKG=1
 else
     echo "Do you want some terminal packages?"
     echo "dysk tealdeer btop fastfetch bat fd eza fzf zoxide ripgrep yazi wl-clipboard"
