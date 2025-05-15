@@ -86,7 +86,19 @@ echo "Installing base Packages"
 install_pacman "${base_packages[@]}"
 echo "Finished installing base packages"
 
+echo "Do you want to install video codecs and rendering packages?"
+echo -e "1) Yes \n2) No"
+read -p "Enter 1-2: " choiceREND
+case $choiceREND in
+    1)
+        install_pacman "${rendering_packages[@]}"
+        ;;
+    *)
+        ;;
+esac
+
 echo "Do you want to install zen kernel?"
+echo "WARNING: If your boot partition is small <2G, remove the main kernel with sudo pacman -S linux linux-headers"
 echo -e "1) Yes \n2) No"
 read -p "Enter 1-2: " choiceZEN
 case $choiceZEN in

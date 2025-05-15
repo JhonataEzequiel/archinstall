@@ -14,7 +14,7 @@ gnome_packages=(
     baobab gnome-shell gnome-control-center gnome-settings-daemon
     gnome-session gnome-tweaks gnome-calculator gnome-disk-utility
     gnome-online-accounts gvfs-google gvfs loupe gnome-menus
-    gnome-software decibels mission-center
+    gnome-software decibels mission-center showtime
 )
 
 kde_packages=(
@@ -38,7 +38,8 @@ base_packages=(
 )
 
 rendering_packages=(
-    imagemagick ffmpeg poppler
+    imagemagick ffmpeg poppler gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav
+    x264 x265 libvpx aom dav1d rav1e svt-av1 libfdk-aac faad2 lame libmad opus flac mkvtoolnix-cli
 )
 
 additional_packages=(
