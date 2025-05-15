@@ -222,7 +222,7 @@ echo "2) No"
 read -p "Enter 1-2: " choiceAUR
 case $choiceAUR in
     1)
-        install_yay "${extra_aur[@]}"
+        install_yay "${extra[@]}"
         ;;
     *)
         ;;
@@ -331,8 +331,7 @@ esac
 
 case $choiceDE in
     1)
-        echo "Installing extension manager for gnome"
-        install_yay extension-manager
+        install_yay extension-manager gapless
         gsettings set org.gnome.mutter check-alive-timeout 0
         ;;
     *)

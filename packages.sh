@@ -14,7 +14,7 @@ gnome_packages=(
     baobab gnome-shell gnome-control-center gnome-settings-daemon
     gnome-session gnome-tweaks gnome-calculator gnome-disk-utility
     gnome-online-accounts gvfs-google gvfs loupe gnome-menus
-    gnome-software decibels mission-center showtime
+    gnome-software decibels mission-center showtime fragments raider
 )
 
 kde_packages=(
@@ -23,7 +23,7 @@ kde_packages=(
     xdg-desktop-portal-kde kcalc ark partitionmanager systemsettings
     plasma-workspace plasma-systemmonitor kde-gtk-config bluedevil
     discover filelight kdeplasma-addons okular gwenview sddm-kcm
-    dolphin-plugins elisa power-profiles-daemon
+    dolphin-plugins elisa power-profiles-daemon qbittorrent
 )
 
 hyprland_packages=(
@@ -80,21 +80,21 @@ hyprland_aur=(
     ghostty waypaper hyprpicker
 )
 
-extra_aur=(
+extra=(
     proton-vpn-gtk-app upscayl-desktop-git stremio parsec-bin
     obsidian pokemon-colorscripts-git vscodium gimp kdenlive
-    qbittorrent audacity obs-studio vesktop
+    audacity obs-studio vesktop
 )
 
 gaming_nvidia_proprietary=(
     heroic-games-launcher-bin steam lutris gamescope mangohud
-    wine winetricks vkd3d lib32-nvidia-utils glfw goverlay
+    wine winetricks vkd3d lib32-nvidia-utils glfw mangojuice
     wqy-zenhei protonplus gamemode lib32-gamemode jdk21-openjdk
 )
 
 gaming=(
     heroic-games-launcher-bin steam lutris gamescope mangohud
-    wine winetricks vkd3d glfw goverlay-bin wqy-zenhei
+    wine winetricks vkd3d glfw mangojuice wqy-zenhei
     protonplus gamemode lib32-gamemode jdk21-openjdk
 )
 
@@ -129,7 +129,7 @@ emulators_flatpak_complete=(
 
 flatpak_packages=(
     info.febvre.Komikku it.mijorus.gearlever com.github.ADBeveridge.Raider
-    com.usebottles.bottles com.github.tchx84.Flatseal
+    com.usebottles.bottles com.github.tchx84.Flatseal io.github.vikdevelop.SaveDesktop
 )
 
 # Functions for package installation
