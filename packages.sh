@@ -14,7 +14,7 @@ gnome_packages=(
     baobab gnome-shell gnome-control-center gnome-settings-daemon
     gnome-session gnome-tweaks gnome-calculator gnome-disk-utility
     gnome-online-accounts gvfs-google gvfs loupe gnome-menus
-    gnome-software decibels mission-center showtime fragments raider
+    gnome-software decibels mission-center showtime fragments
 )
 
 kde_packages=(
@@ -83,7 +83,8 @@ hyprland_aur=(
 extra=(
     proton-vpn-gtk-app upscayl-desktop-git stremio parsec-bin
     obsidian pokemon-colorscripts-git vscodium gimp kdenlive
-    audacity obs-studio vesktop
+    audacity obs-studio vesktop komikku raider bottles gearlever
+    flatseal
 )
 
 gaming_nvidia_proprietary=(
@@ -101,6 +102,10 @@ gaming=(
 cachyos_kernels=(
     linux-cachyos linux-cachyos-headers bpf chwd scx-manager
     scx-scheds
+)
+
+gnome_extra=(
+    extension-manager gapless refine
 )
 
 emulators_aur=(
@@ -127,10 +132,6 @@ emulators_flatpak_complete=(
     net.rpcs3.RPCS3 com.snes9x.Snes9x net.shadps4.shadPS4 net.kuribo64.melonDS
 )
 
-flatpak_packages=(
-    info.febvre.Komikku it.mijorus.gearlever com.github.ADBeveridge.Raider
-    com.usebottles.bottles com.github.tchx84.Flatseal io.github.vikdevelop.SaveDesktop
-)
 
 # Functions for package installation
 install_pacman() {

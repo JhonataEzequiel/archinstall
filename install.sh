@@ -331,7 +331,7 @@ esac
 
 case $choiceDE in
     1)
-        install_yay extension-manager gapless
+        install_yay "${gnome_extra[@]}"
         gsettings set org.gnome.mutter check-alive-timeout 0
         ;;
     *)
@@ -393,7 +393,6 @@ case $choiceCA in
         ;;
 esac
 
-echo "Updating grub"
 install_pacman update-grub
 
 if lspci | grep -i nvidia &> /dev/null; then
@@ -417,6 +416,9 @@ if lspci | grep -i nvidia &> /dev/null; then
             case $choiceDE in
                 3)
                     echo -e "env = LIBVA_DRIVER_NAME,nvidia \nenv = __GLX_VENDOR_LIBRARY_NAME,nvidia" >> ~/.config/hypr/hyprland.conf
+                    ;;
+                *)
+                    ;;
             esac
             ;;
         2)
@@ -460,17 +462,6 @@ case $choiceEM in
         ;;
 esac
 
-echo "Do you want to install some good flatpak packages?"
-echo "1) Yes"
-echo "2) No"
-read -p "Enter 1-2: " choiceFP
-case $choiceFP in
-    1)
-        install_flatpak "${flatpak_packages[@]}"
-        ;;
-    *)
-        ;;
-esac
 
 if systemctl is-enabled gdm &> /dev/null || systemctl is-enabled sddm &> /dev/null; then
     echo "A display manager is already enabled. Skipping."
