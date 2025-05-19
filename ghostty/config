@@ -2,3 +2,5 @@ theme=NvimDark
 font-size=12
 background-opacity=0.7
 font-family=CaskaydiaCove Nerd Font
+window-height = 26
+window-width = 86
