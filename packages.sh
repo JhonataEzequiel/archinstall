@@ -15,6 +15,7 @@ gnome_packages=(
     gnome-session gnome-tweaks gnome-calculator gnome-disk-utility
     gnome-online-accounts gvfs-google gvfs loupe gnome-menus
     gnome-software decibels mission-center showtime fragments
+    gnome-themes-extra
 )
 
 kde_packages=(
@@ -84,7 +85,7 @@ extra=(
     proton-vpn-gtk-app upscayl-desktop-git stremio parsec-bin
     obsidian pokemon-colorscripts-git vscodium gimp kdenlive
     audacity obs-studio vesktop komikku raider bottles gearlever
-    flatseal motrix
+    flatseal
 )
 
 gaming_nvidia_proprietary=(
