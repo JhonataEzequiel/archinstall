@@ -102,7 +102,7 @@ gaming=(
 
 cachyos_kernels=(
     linux-cachyos linux-cachyos-headers bpf chwd scx-manager
-    scx-scheds
+    scx-scheds cachyos-settings
 )
 
 gnome_extra=(
@@ -117,7 +117,7 @@ emulators_aur=(
 )
 
 emulators_mixed_aur=(
-    melonds-git shadps4-git vita3k-git mesen2-git
+    melonds-git shadps4-git vita3k-git
 )
 
 emulators_flatpak=(
