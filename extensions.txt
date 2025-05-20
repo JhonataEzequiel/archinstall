@@ -42,3 +42,4 @@ arch-update@RaphaelRochet
 openmeteoweather@deezhizyu.github.io
 bilingual-app-search@pwa.lu
 gnome-fuzzy-app-search@gnome-shell-extensions.Czarlie.gitlab.com
+executor@raujonas.github.io
