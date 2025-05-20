@@ -113,10 +113,11 @@ emulators_aur=(
     melonds-git azahar shadps4-git mgba-qt-git rpcs3-git
     pcsx2-git duckstation-git ryujinx-canary cemu-git
     dolphin-emu-git kega-fusion ppsspp-git vita3k-git
+    mesen2-git
 )
 
 emulators_mixed_aur=(
-    melonds-git shadps4-git vita3k-git
+    melonds-git shadps4-git vita3k-git mesen2-git
 )
 
 emulators_flatpak=(
