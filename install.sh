@@ -409,6 +409,9 @@ if lspci | grep -i nvidia &> /dev/null; then
             sudo mkdir -p /etc/modprobe.d
             echo "options nvidia_drm modeset=1" | sudo tee /etc/modprobe.d/nvidia.conf
             sudo sed -i 's/MODULES=(btrfs)/MODULES=(btrfs nvidia nvidia_modeset nvidia_drm nvidia_uvm)/' /etc/mkinitcpio.conf
+            sudo pacman -R xf86-video-nouveau vulkan-nouveau
+            echo -e "GBM_BACKEND=nvidia-drm\n__GLX_VENDOR_LIBRARY_NAME=nvidia\nLIBVA_DRIVER_NAME=nvidia\nNVIDIA_PRIME_RENDER_OFFLOAD=1" | sudo tee -a /etc/environment
+            sudo sed -i '/exit 0/i /usr/bin/prime-run' /etc/gdm/Init/Default
             if pacman -Qs grub > /dev/null; then
                 sudo sed -i 's/^\(GRUB_CMDLINE_LINUX_DEFAULT="[^"]*\)/\1 nvidia-drm.modeset=1/' /etc/default/grub
             fi
