@@ -1,0 +1,4 @@
+alias temperature='LC_ALL=C printf "CPU: %.1f\nGPU: %s\n" "$(sensors | rg "^Core" | awk "{sum += \$3} END {if (NR > 0) print sum/NR}" | tr -d "+°C")" "$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader)"'
+echo "RAM: " && free -g | awk '/^Mem.:/ {print $3 "GB/" $2 "GB"}'
+echo "CPU TEMP: " && sensors | rg '^Core' | awk '{sum += $3} END {if (NR > 0) print sum/NR}' | tr -d '+°C' && echo "°C "
+echo 'GPU TEMP: ' && nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader && echo "°C"
