@@ -85,7 +85,7 @@ extra=(
     proton-vpn-gtk-app upscayl-desktop-git stremio parsec-bin
     obsidian pokemon-colorscripts-git vscodium gimp kdenlive
     audacity obs-studio vesktop komikku raider bottles gearlever
-    flatseal
+    flatseal switcheroo
 )
 
 gaming_nvidia_proprietary=(
