@@ -381,6 +381,7 @@ case $choiceCA in
         case $choiceCK in
             1)
                 install_yay "${cachyos_kernels[@]}"
+                yay -R linux linux-headers
                 echo "Custom kernel added"
                 ;;
             *)
@@ -412,18 +413,20 @@ if lspci | grep -i nvidia &> /dev/null; then
             echo "Remove the nouveau packages for increased compatibility"
             sudo pacman -R xf86-video-nouveau vulkan-nouveau
             echo -e "GBM_BACKEND=nvidia-drm\n__GLX_VENDOR_LIBRARY_NAME=nvidia\nLIBVA_DRIVER_NAME=nvidia\nNVIDIA_PRIME_RENDER_OFFLOAD=1" | sudo tee -a /etc/environment
-            sudo sed -i '/exit 0/i /usr/bin/prime-run' /etc/gdm/Init/Default
             if pacman -Qs grub > /dev/null; then
                 sudo sed -i 's/^\(GRUB_CMDLINE_LINUX_DEFAULT="[^"]*\)/\1 nvidia-drm.modeset=1/' /etc/default/grub
             fi
-            sudo mkinitcpio -P
             case $choiceDE in
+                1)
+                    sudo sed -i '/exit 0/i /usr/bin/prime-run' /etc/gdm/Init/Default
+                    ;;
                 3)
                     echo -e "env = LIBVA_DRIVER_NAME,nvidia \nenv = __GLX_VENDOR_LIBRARY_NAME,nvidia" >> ~/.config/hypr/hyprland.conf
                     ;;
                 *)
                     ;;
             esac
+            sudo mkinitcpio -P
             ;;
         2)
             echo "Installing open drivers"
@@ -470,7 +473,18 @@ esac
 if systemctl is-enabled gdm &> /dev/null || systemctl is-enabled sddm &> /dev/null; then
     echo "A display manager is already enabled. Skipping."
 else
-    sudo systemctl enable "${choiceDE == 1 ? gdm : sddm}"
+    case "$choiceDE" in
+        1)
+            sudo systemctl enable gdm
+            ;;
+        2|3)
+            sudo systemctl enable sddm
+            ;;
+        *)
+            echo "Error: Invalid choiceDE value: $choiceDE. Please set to 1 (GNOME), 2 (KDE), or 3 (Hyprland)."
+            exit 1
+            ;;
+    esac
 fi
 
 echo "Installation complete. Reboot required to apply changes."
