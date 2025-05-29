@@ -15,7 +15,7 @@ gnome_packages=(
     gnome-session gnome-tweaks gnome-calculator gnome-disk-utility
     gnome-online-accounts gvfs-google gvfs loupe gnome-menus
     gnome-software decibels mission-center showtime fragments
-    gnome-themes-extra
+    gnome-themes-extra pavucontrol
 )
 
 kde_packages=(
