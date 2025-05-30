@@ -338,7 +338,7 @@ case $choiceDE in
         ;;
 esac
 
-echo "Do you want to install gaming packages?"
+echo "Do you want to install gaming packages and apply shader booster (credits to psygreg)?"
 echo "1) Yes"
 echo "2) No"
 read -p "Enter 1-2: " choiceGM
@@ -347,6 +347,10 @@ case $choiceGM in
         case $choiceNV in
             1)
                 install_yay "${gaming_nvidia_proprietary[@]}"
+                wget https://github.com/psygreg/shader-booster/releases/latest/download/patcher.sh
+                chmod +x patcher.sh
+                ./patcher.sh
+                rm patcher.sh
                 echo "Finished installing gaming packages"
                 ;;
             *)
@@ -394,7 +398,9 @@ case $choiceCA in
         ;;
 esac
 
-install_pacman update-grub
+if pacman -Qs grub > /dev/null; then
+    install_pacman update-grub
+fi
 
 if lspci | grep -i nvidia &> /dev/null; then
     echo "NVIDIA hardware detected."
@@ -440,7 +446,12 @@ else
     choiceNV=3
 fi
 
-sudo update-grub
+if pacman -Qs grub > /dev/null; then
+    install_yay grub-btrfs inotify-tools
+    sudo systemctl enable --now grub-btrfsd
+    sudo grub-mkconfig
+    sudo update-grub
+fi
 
 echo "Adding flatpak support"
 install_pacman flatpak
