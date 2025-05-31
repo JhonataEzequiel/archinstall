@@ -484,9 +484,15 @@ esac
 if systemctl is-enabled gdm &> /dev/null || systemctl is-enabled sddm &> /dev/null; then
     echo "A display manager is already enabled. Skipping."
 else
-    case "$choiceDE" in
+    case $choiceDE in
         1)
             sudo systemctl enable gdm
+            case $choiceCK in
+                1)
+                    sudo -u gdm dbus-launch gsettings set org.gnome.login-screen logo ''
+                    ;;
+                *)
+                    ;;
             ;;
         2|3)
             sudo systemctl enable sddm
