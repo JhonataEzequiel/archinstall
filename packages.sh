@@ -82,7 +82,7 @@ hyprland_aur=(
 )
 
 extra=(
-    proton-vpn-gtk-app upscayl-desktop-git stremio parsec-bin
+    upscayl-desktop-git stremio parsec-bin
     obsidian pokemon-colorscripts-git vscodium gimp kdenlive
     audacity obs-studio vesktop komikku raider bottles gearlever
     flatseal switcheroo
