@@ -95,12 +95,14 @@ gaming_nvidia_proprietary=(
     heroic-games-launcher-bin steam lutris gamescope mangohud
     wine winetricks vkd3d lib32-nvidia-utils glfw mangojuice
     wqy-zenhei protonplus gamemode lib32-gamemode jdk21-openjdk
+    steam-native-runtime
 )
 
 gaming=(
     heroic-games-launcher-bin steam lutris gamescope mangohud
     wine winetricks vkd3d glfw mangojuice wqy-zenhei
     protonplus gamemode lib32-gamemode jdk21-openjdk
+    steam-native-runtime
 )
 
 cachyos_kernel=(
