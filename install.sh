@@ -412,7 +412,12 @@ if lspci | grep -i nvidia &> /dev/null; then
     case $choiceNV in
         1)
             echo "Installing proprietary drivers"
-            install_pacman "${nvidia_proprietary[@]}"
+            case $choiceCK in
+            	1)
+        	        install_pacman linux-cachyos-nvidia
+                *)
+                    install_pacman "${nvidia_proprietary[@]}"
+            esac
             sudo mkdir -p /etc/modprobe.d
             echo "options nvidia_drm modeset=1" | sudo tee /etc/modprobe.d/nvidia.conf
             sudo sed -i 's/MODULES=(btrfs)/MODULES=(btrfs nvidia nvidia_modeset nvidia_drm nvidia_uvm)/' /etc/mkinitcpio.conf
@@ -436,7 +441,12 @@ if lspci | grep -i nvidia &> /dev/null; then
             ;;
         2)
             echo "Installing open drivers"
-            install_pacman "${nvidia_open[@]}"
+            case $choiceCK in
+            	1)
+        	        install_pacman linux-cachyos-nvidia-open
+                *)
+                    install_pacman "${nvidia_open[@]}"
+            esac
             ;;
         *)
             ;;
