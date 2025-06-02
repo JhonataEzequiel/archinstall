@@ -35,7 +35,7 @@ hyprland_packages=(
 base_packages=(
     dconf bluez bluez-utils git curl wget pacman-contrib
     unzip unrar 7zip tar python-pip os-prober ufw zip timeshift
-    fuse2 openssh cronie linux-headers
+    fuse2 openssh cronie linux-headers ntfs-3g
 )
 
 rendering_packages=(
@@ -85,7 +85,7 @@ extra=(
     upscayl-desktop-git stremio parsec-bin
     obsidian pokemon-colorscripts-git vscodium gimp kdenlive
     audacity obs-studio vesktop komikku raider bottles gearlever
-    flatseal switcheroo
+    flatseal switcheroo spotify-launcher
 )
 
 gaming_nvidia_proprietary=(
