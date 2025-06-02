@@ -379,17 +379,30 @@ case $choiceCA in
 
         echo "Repos added"
         echo "Do you wish to add cachyos custom Kernels?"
-        echo "1) Yes"
-        echo "2) No"
+        echo "1) Yes - Cachyos Kernel"
+        echo "2) Yes - Cachyos Bore Kernel (better optmized)"
+        echo "3) Yes, both"
+        echo "4) No"
         read -p "Enter 1-2: " choiceCK
         case $choiceCK in
             1)
-                install_yay "${cachyos_kernels[@]}"
-                yay -R linux linux-headers
+                install_yay "${cachyos_kernel[@]}"
                 echo "Custom kernel added"
                 ;;
+            2)
+                install_yay "${cachyos_bore_kernel[@]}"
+                echo "Bore kernel added"
+                ;;
+            3)
+                install_yay "${cachyos_kernel[@]}"
+                install_yay "${cachyos_bore_kernel[@]}"
+                echo "Bore and custom kernel added"
+                ;;
+            4)
+                echo "Skipping custom kernel installation"
+                ;;
             *)
-                echo "Skipped custom kernel"
+                install_yay "${cachyos_base[@]}"
                 ;;
         esac
         ;;
@@ -415,7 +428,15 @@ if lspci | grep -i nvidia &> /dev/null; then
             case $choiceCK in
             	1)
         	        install_pacman linux-cachyos-nvidia
-                *)
+                    ;;
+                2)
+                    install_pacman linux-cachyos-bore-nvidia
+                    ;;
+                3)
+                    install_pacman linux-cachyos-nvidia
+                    install_pacman linux-cachyos-bore-nvidia
+                    ;;
+                4)
                     install_pacman "${nvidia_proprietary[@]}"
             esac
             sudo mkdir -p /etc/modprobe.d
@@ -425,7 +446,7 @@ if lspci | grep -i nvidia &> /dev/null; then
             sudo pacman -R xf86-video-nouveau vulkan-nouveau
             echo -e "GBM_BACKEND=nvidia-drm\n__GLX_VENDOR_LIBRARY_NAME=nvidia\nLIBVA_DRIVER_NAME=nvidia\nNVIDIA_PRIME_RENDER_OFFLOAD=1" | sudo tee -a /etc/environment
             if pacman -Qs grub > /dev/null; then
-                sudo sed -i 's/^\(GRUB_CMDLINE_LINUX_DEFAULT="[^"]*\)/\1 nvidia-drm.modeset=1/' /etc/default/grub
+                sudo cp grub/grubnvidia /etc/default/grub
             fi
             case $choiceDE in
                 1)
@@ -444,8 +465,17 @@ if lspci | grep -i nvidia &> /dev/null; then
             case $choiceCK in
             	1)
         	        install_pacman linux-cachyos-nvidia-open
+                    ;;
+                2)
+                    install_pacman linux-cachyos-bore-nvidia-open
+                    ;;
+                3)
+                    install_pacman linux-cachyos-bore-nvidia-open
+                    install_pacman linux-cachyos-nvidia-open
+                    ;;
                 *)
                     install_pacman "${nvidia_open[@]}"
+                    ;;
             esac
             ;;
         *)
@@ -457,6 +487,7 @@ else
 fi
 
 if pacman -Qs grub > /dev/null; then
+    sudo cp grub/grub /etc/default/grub
     install_yay grub-btrfs inotify-tools
     sudo systemctl enable --now grub-btrfsd
     sudo grub-mkconfig

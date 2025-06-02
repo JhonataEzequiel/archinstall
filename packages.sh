@@ -103,8 +103,16 @@ gaming=(
     protonplus gamemode lib32-gamemode jdk21-openjdk
 )
 
-cachyos_kernels=(
-    linux-cachyos linux-cachyos-headers bpf chwd scx-manager
+cachyos_kernel=(
+    linux-cachyos linux-cachyos-headers 
+)
+
+cachyos_bore_kernel=(
+    linux-cachyos-bore linux-cachyos-bore-headers
+)
+
+cachyos_base=(
+    bpf chwd scx-manager
     scx-scheds cachyos-settings
 )
 
