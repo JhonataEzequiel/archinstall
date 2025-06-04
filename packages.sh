@@ -76,7 +76,7 @@ ms_fonts=(
 
 hyprland_aur=(
     hyprland wlogout hypridle waybar wofi hyprpaper swaync 
-    pavucontrol hyprshot xdg-desktop-portal-hyprland 
+    hyprshot xdg-desktop-portal-hyprland 
     polkit-gnome qt5-wayland qt6-wayland light hyprlock
     ghostty waypaper hyprpicker
 )
