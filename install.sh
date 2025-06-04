@@ -387,22 +387,22 @@ case $choiceCA in
         case $choiceCK in
             1)
                 install_yay "${cachyos_kernel[@]}"
+                install_yay "${cachyos_base[@]}"
                 echo "Custom kernel added"
                 ;;
             2)
                 install_yay "${cachyos_bore_kernel[@]}"
+                install_yay "${cachyos_base[@]}"
                 echo "Bore kernel added"
                 ;;
             3)
                 install_yay "${cachyos_kernel[@]}"
                 install_yay "${cachyos_bore_kernel[@]}"
+                install_yay "${cachyos_base[@]}"
                 echo "Bore and custom kernel added"
                 ;;
-            4)
-                echo "Skipping custom kernel installation"
-                ;;
             *)
-                install_yay "${cachyos_base[@]}"
+                echo "Skipping custom kernel installation"
                 ;;
         esac
         ;;
@@ -438,6 +438,7 @@ if lspci | grep -i nvidia &> /dev/null; then
                     ;;
                 4)
                     install_pacman "${nvidia_proprietary[@]}"
+                    ;;
             esac
             sudo mkdir -p /etc/modprobe.d
             echo "options nvidia_drm modeset=1" | sudo tee /etc/modprobe.d/nvidia.conf

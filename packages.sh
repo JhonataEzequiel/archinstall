@@ -28,14 +28,14 @@ kde_packages=(
 )
 
 hyprland_packages=(
-    xdg-desktop-portal xdg-desktop-portal-wlr sddm xdg-user-dirs
-    pavucontrol power-profiles-daemon openssh polkit polkit-qt6 nautilus
+    xdg-desktop-portal xdg-desktop-portal-wlr ly xdg-user-dirs
+    pavucontrol power-profiles-daemon polkit polkit-qt6 nautilus
 )
 
 base_packages=(
     dconf bluez bluez-utils git curl wget pacman-contrib
     unzip unrar 7zip tar python-pip os-prober ufw zip timeshift
-    fuse2 openssh cronie linux-headers ntfs-3g
+    fuse2 openssh cronie ntfs-3g
 )
 
 rendering_packages=(
