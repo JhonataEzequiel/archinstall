@@ -90,9 +90,7 @@ extra=(
     obsidian pokemon-colorscripts-git vscodium gimp kdenlive
     audacity vesktop komikku raider bottles gearlever
     flatseal switcheroo spotify-launcher 
-    obs-studio-stable obs-plugin-looking-glass-git lib32-obs-vkcapture-git 
-    obs-gstreamer obs-streamfx-unstable obs-vkcapture-git obs-vaapi obs-rtspserver
-    octopi
+    obs-studio
 )
 
 gaming_nvidia_proprietary=(
