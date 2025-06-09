@@ -14,7 +14,7 @@ gnome_packages=(
     baobab gnome-shell gnome-control-center gnome-settings-daemon
     gnome-session gnome-tweaks gnome-calculator gnome-disk-utility
     gnome-online-accounts gvfs-google gvfs loupe gnome-menus
-    gnome-software decibels mission-center showtime fragments
+    gnome-software decibels mission-center showtime qbittorrent
     gnome-themes-extra pavucontrol
 )
 

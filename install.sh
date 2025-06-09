@@ -427,13 +427,13 @@ if lspci | grep -i nvidia &> /dev/null; then
             echo "Installing proprietary drivers"
             case $choiceCK in
             	1)
-        	        install_pacman linux-cachyos-nvidia
+        	        install_pacman linux-cachyos-nvidia nvidia-prime
                     ;;
                 2)
-                    install_pacman linux-cachyos-bore-nvidia
+                    install_pacman linux-cachyos-bore-nvidia nvidia-prime
                     ;;
                 3)
-                    install_pacman linux-cachyos-nvidia
+                    install_pacman linux-cachyos-nvidia nvidia-prime
                     install_pacman linux-cachyos-bore-nvidia
                     ;;
                 4)
@@ -447,7 +447,7 @@ if lspci | grep -i nvidia &> /dev/null; then
             sudo pacman -R xf86-video-nouveau vulkan-nouveau
             echo -e "GBM_BACKEND=nvidia-drm\n__GLX_VENDOR_LIBRARY_NAME=nvidia\nLIBVA_DRIVER_NAME=nvidia\nNVIDIA_PRIME_RENDER_OFFLOAD=1" | sudo tee -a /etc/environment
             if pacman -Qs grub > /dev/null; then
-                sudo cp grub/grubnvidia /etc/default/grub
+                sudo cp /grub/grubnvidia /etc/default/grub
             fi
             case $choiceDE in
                 1)
@@ -488,7 +488,13 @@ else
 fi
 
 if pacman -Qs grub > /dev/null; then
-    sudo cp grub/grub /etc/default/grub
+    case $choiceNV in
+        1)
+            ;;
+        *)
+            sudo cp grub/grub /etc/default/grub
+            ;;
+    esac
     install_yay grub-btrfs inotify-tools
     sudo systemctl enable --now grub-btrfsd
     sudo grub-mkconfig
@@ -535,6 +541,7 @@ else
                     ;;
                 *)
                     ;;
+            esac 
             ;;
         2|3)
             sudo systemctl enable sddm
