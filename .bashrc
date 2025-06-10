@@ -62,7 +62,7 @@ gitall() {
 # aliases
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
-alias update-system="yay -Syu && flatpak update"
+alias update-system="yay -Syyu && flatpak update"
 alias clear-packages='sudo pacman -Rns $(sudo pacman -Qtdq)'
 alias speedup-mirrors="sudo reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist"
 alias test-nvidia="prime-run glxinfo | grep 'OpenGL renderer'"
