@@ -101,11 +101,7 @@ font_packages=(
     noto-fonts-cjk noto-fonts adobe-source-code-pro-fonts
     noto-fonts-emoji otf-font-awesome ttf-droid ttf-fira-code
     ttf-jetbrains-mono-nerd ttf-font-awesome ttf-cascadia-mono-nerd
-    ttf-cascadia-code-nerd
-)
-
-ms_fonts=(
-    ttf-ms-fonts ttf-tahoma ttf-vista-fonts
+    ttf-cascadia-code-nerd ttf-ms-fonts ttf-tahoma ttf-vista-fonts
 )
 
 hyprland_aur=(

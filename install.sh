@@ -154,10 +154,6 @@ case $choiceTTE in
         ;;
 esac
 
-echo "Installing Fonts for different Languages"
-install_pacman "${font_packages[@]}"
-echo "Finished installing fonts"
-
 echo "Enabling Bluetooth, paccache, and timeshift"
 sudo systemctl enable --now bluetooth.service
 sudo systemctl enable paccache.timer
@@ -195,8 +191,10 @@ case $choiceTPKG in
         ;;
 esac
 
-echo "Installing ms-fonts"
-install_yay "${ms_fonts[@]}"
+
+echo "Installing Fonts for different Languages and microsoft fonts"
+install_pacman "${font_packages[@]}"
+echo "Finished installing fonts"
 
 echo "Do you wish to add some extra packages? (Utility, editors, etc)"
 echo "1) Yes"
