@@ -191,7 +191,6 @@ case $choiceTPKG in
         ;;
 esac
 
-
 echo "Installing Fonts for different Languages and microsoft fonts"
 install_pacman "${font_packages[@]}"
 echo "Finished installing fonts"
