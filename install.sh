@@ -104,19 +104,6 @@ case $choiceZEN in
         ;;
 esac
 
-echo "Install basic packages for daily use?"
-echo "vlc libreoffice-still thunderbird"
-echo "1) Yes"
-echo "2) No"
-read -p "Enter 1-2: " choicePKG
-case $choicePKG in
-    1)
-        install_pacman "${additional_packages[@]}"
-        ;;
-    *)
-        ;;
-esac
-
 if [ "$choiceDE" = "3" ]; then
     install_pacman ${terminal_packages[@]}
     tldr --update

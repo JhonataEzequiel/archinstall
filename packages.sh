@@ -89,10 +89,6 @@ rendering_packages=(
     x264 x265 libvpx aom dav1d rav1e svt-av1 libfdk-aac faad2 lame libmad opus flac mkvtoolnix-cli
 )
 
-additional_packages=(
-    vlc libreoffice-still thunderbird
-)
-
 terminal_packages=(
     dysk tealdeer btop fastfetch bat fd eza fzf zoxide ripgrep yazi wl-clipboard
 )
@@ -128,7 +124,7 @@ extra=(
     obsidian pokemon-colorscripts-git gimp kdenlive
     audacity komikku raider bottles gearlever
     flatseal switcheroo spotify-launcher 
-    obs-studio discord
+    obs-studio discord vlc libreoffice-still thunderbird
 )
 
 gaming_nvidia_proprietary=(
