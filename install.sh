@@ -413,6 +413,14 @@ case $choiceGM in
                 ;;
             *)
                 install_yay "${gaming[@]}"
+                case $choiceCA in
+                    1)
+                        install_yay "${proton_packages[@]}"
+                        ;;
+                    *)
+                        install_yay ${proton_packages[0]}
+                        ;;
+                esac
                 echo "Finished installing gaming packages"
                 ;;
         esac
