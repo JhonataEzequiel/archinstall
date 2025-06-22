@@ -94,7 +94,6 @@ case $choiceREND in
 esac
 
 echo "Do you want to install zen kernel?"
-echo "WARNING: If your boot partition is small <2G, remove the main kernel with sudo pacman -S linux linux-headers"
 echo -e "1) Yes \n2) No"
 read -p "Enter 1-2: " choiceZEN
 case $choiceZEN in
@@ -333,32 +332,6 @@ case $choiceDE in
         ;;
 esac
 
-echo "Do you want to install gaming packages and apply shader booster (credits to psygreg)?"
-echo "1) Yes"
-echo "2) No"
-read -p "Enter 1-2: " choiceGM
-case $choiceGM in
-    1)
-        case $choiceNV in
-            1)
-                install_yay "${gaming_nvidia_proprietary[@]}"
-                wget https://github.com/psygreg/shader-booster/releases/latest/download/patcher.sh
-                chmod +x patcher.sh
-                ./patcher.sh
-                rm patcher.sh
-                echo "Finished installing gaming packages"
-                ;;
-            *)
-                install_yay "${gaming[@]}"
-                echo "Finished installing gaming packages"
-                ;;
-        esac
-        ;;
-    *)
-        echo "Skipped gaming packages"
-        ;;
-esac
-
 echo "Do you wish to add cachyos repos?"
 echo "1) Yes"
 echo "2) No"
@@ -409,11 +382,45 @@ esac
 install_video_drivers
 
 if pacman -Qs grub > /dev/null; then
-    install_yay grub-btrfs inotify-tools update-grub
+    install_yay "${grub_packages[@]}"
     sudo systemctl enable --now grub-btrfsd
     sudo grub-mkconfig
     sudo update-grub
 fi
+
+echo "Do you want to install gaming packages and apply shader booster (credits to psygreg)?"
+echo "1) Yes"
+echo "2) No"
+read -p "Enter 1-2: " choiceGM
+case $choiceGM in
+    1)
+        case $choiceNV in
+            1)
+                install_yay "${gaming_nvidia_proprietary[@]}"
+                wget https://github.com/psygreg/shader-booster/releases/latest/download/patcher.sh
+                chmod +x patcher.sh
+                ./patcher.sh
+                rm patcher.sh
+                case $choiceCA in
+                    1)
+                        install_yay "${proton_packages[@]}"
+                        ;;
+                    *)
+                        install_yay ${proton_packages[0]}
+                        ;;
+                esac
+                echo "Finished installing gaming packages"
+                ;;
+            *)
+                install_yay "${gaming[@]}"
+                echo "Finished installing gaming packages"
+                ;;
+        esac
+        ;;
+    *)
+        echo "Skipped gaming packages"
+        ;;
+esac
 
 echo "Adding flatpak support"
 install_pacman flatpak

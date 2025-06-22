@@ -60,7 +60,7 @@ gnome_packages=(
     gnome-session gnome-tweaks gnome-calculator gnome-disk-utility
     gnome-online-accounts gvfs-google gvfs loupe gnome-menus
     gnome-software decibels mission-center showtime qbittorrent
-    gnome-themes-extra pavucontrol
+    gnome-themes-extra pavucontrol gnome-keyring
 )
 
 kde_packages=(
@@ -80,8 +80,8 @@ hyprland_packages=(
 
 base_packages=(
     dconf bluez bluez-utils git curl wget pacman-contrib
-    unzip unrar 7zip tar python-pip os-prober ufw zip timeshift
-    fuse2 openssh cronie ntfs-3g
+    unzip unrar 7zip tar python-pip ufw zip timeshift
+    fuse2 openssh cronie ntfs-3g linux-headers
 )
 
 rendering_packages=(
@@ -132,16 +132,16 @@ extra=(
 )
 
 gaming_nvidia_proprietary=(
-    heroic-games-launcher-bin steam lutris gamescope mangohud
-    wine winetricks vkd3d lib32-nvidia-utils glfw mangojuice
-    wqy-zenhei protonplus gamemode lib32-gamemode jdk21-openjdk
+    heroic-games-launcher-bin lutris gamescope mangohud
+    wine vkd3d lib32-nvidia-utils glfw mangojuice
+    wqy-zenhei gamemode lib32-gamemode jdk21-openjdk
     steam-native-runtime
 )
 
 gaming=(
-    heroic-games-launcher-bin steam lutris gamescope mangohud
-    wine winetricks vkd3d glfw mangojuice wqy-zenhei
-    protonplus gamemode lib32-gamemode jdk21-openjdk
+    heroic-games-launcher-bin lutris gamescope mangohud
+    wine vkd3d glfw mangojuice wqy-zenhei
+    gamemode lib32-gamemode jdk21-openjdk
     steam-native-runtime
 )
 
@@ -160,6 +160,14 @@ cachyos_base=(
 
 gnome_extra=(
     extension-manager gapless refine
+)
+
+grub_packages=(
+    grub-btrfs os-prober inotify-tools update-grub
+)
+
+proton_packages=(
+    proton-ge-custom-bin proton-cachyos
 )
 
 emulators_aur=(
@@ -282,6 +290,9 @@ install_video_drivers() {
         esac
     else
         echo "No NVIDIA hardware detected. Skipping NVIDIA driver installation."
+        if pacman -Qs grub > /dev/null; then
+            sudo cp /grub/grub /etc/default/grub
+        fi
         choiceNV=3
     fi
 
