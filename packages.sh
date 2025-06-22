@@ -229,7 +229,7 @@ install_video_drivers() {
         echo "NVIDIA driver options:"
         echo "1) Proprietary: Better performance, closed-source."
         echo "2) Open: Open-source, may have lower performance."
-        echo "3) Minimal: Install only basic NVIDIA support (recommended for hybrid systems)."
+        echo "3) Minimal: Install only basic NVIDIA support."
         read -p "Enter 1, 2, or 3: " choiceNV
 
         case $choiceNV in
@@ -249,8 +249,6 @@ install_video_drivers() {
                 sudo mkdir -p /etc/modprobe.d
                 echo "options nvidia_drm modeset=1" | sudo tee /etc/modprobe.d/nvidia.conf
                 sudo sed -i 's/MODULES=(btrfs)/MODULES=(btrfs nvidia nvidia_modeset nvidia_drm nvidia_uvm)/' /etc/mkinitcpio.conf
-                echo "Removing nouveau packages for compatibility"
-                sudo pacman -R --noconfirm xf86-video-nouveau vulkan-nouveau libva-mesa-driver || true
                 echo -e "GBM_BACKEND=nvidia-drm\n__GLX_VENDOR_LIBRARY_NAME=nvidia\nLIBVA_DRIVER_NAME=nvidia\nNVIDIA_PRIME_RENDER_OFFLOAD=1" | sudo tee -a /etc/environment
                 if pacman -Qs grub > /dev/null; then
                     sudo cp /grub/grubnvidia /etc/default/grub
