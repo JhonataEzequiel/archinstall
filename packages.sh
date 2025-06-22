@@ -151,7 +151,7 @@ cachyos_base=(
 )
 
 gnome_extra=(
-    extension-manager gapless refine
+    extension-manager gapless
 )
 
 grub_packages=(
