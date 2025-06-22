@@ -409,7 +409,7 @@ esac
 install_video_drivers
 
 if pacman -Qs grub > /dev/null; then
-    install_yay grub-btrfs inotify-tools
+    install_yay grub-btrfs inotify-tools update-grub
     sudo systemctl enable --now grub-btrfsd
     sudo grub-mkconfig
     sudo update-grub
