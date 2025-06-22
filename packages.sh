@@ -1,11 +1,40 @@
 #!/bin/bash
 
 # Package lists stored in arrays for easier maintenance
-video_drivers=(
-    intel-media-driver libva-intel-driver libva-mesa-driver mesa
-    vulkan-intel vulkan-nouveau vulkan-radeon xf86-video-amdgpu
-    xf86-video-ati xf86-video-nouveau xf86-video-vmware
-    xorg-server xorg-xinit mesa-utils
+
+# Base drivers required for all setups
+base_drivers=(
+    mesa
+    xorg-server
+    xorg-xinit
+    mesa-utils
+)
+
+# Intel-specific drivers
+intel_drivers=(
+    intel-media-driver
+    libva-intel-driver
+    vulkan-intel
+)
+
+# AMD-specific drivers
+amd_drivers=(
+    libva-mesa-driver
+    vulkan-radeon
+    xf86-video-amdgpu
+    xf86-video-ati
+)
+
+# NVIDIA-specific drivers (open-source)
+nvidia_drivers=(
+    libva-mesa-driver
+    vulkan-nouveau
+    xf86-video-nouveau
+)
+
+# VMware-specific drivers (for virtual machines)
+vmware_drivers=(
+    xf86-video-vmware
 )
 
 gnome_packages=(
@@ -161,4 +190,40 @@ install_yay() {
 
 install_flatpak() {
     flatpak install flathub "$@"
+}
+
+install_video_drivers() {
+    # Install base drivers
+    echo "Installing base video drivers"
+    install_pacman "${base_drivers[@]}"
+
+    # Detect GPU(s) using lspci
+    if ! command -v lspci &> /dev/null; then
+        echo "lspci not found, installing pciutils"
+        install_pacman pciutils
+    fi
+
+    # Check for Intel GPU
+    if lspci | grep -iE "VGA|3D|Display" | grep -i intel &> /dev/null; then
+        echo "Detected Intel GPU, installing Intel drivers"
+        install_pacman "${intel_drivers[@]}"
+    fi
+
+    # Check for AMD GPU
+    if lspci | grep -iE "VGA|3D|Display" | grep -i amd &> /dev/null; then
+        echo "Detected AMD GPU, installing AMD drivers"
+        install_pacman "${amd_drivers[@]}"
+    fi
+
+    # Check for NVIDIA GPU
+    if lspci | grep -iE "VGA|3D|Display" | grep -i nvidia &> /dev/null; then
+        echo "Detected NVIDIA GPU, installing open-source NVIDIA drivers"
+        install_pacman "${nvidia_drivers[@]}"
+    fi
+
+    # Check if running in VMware
+    if lspci | grep -i vmware &> /dev/null; then
+        echo "Detected VMware environment, installing VMware drivers"
+        install_pacman "${vmware_drivers[@]}"
+    fi
 }

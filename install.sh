@@ -27,9 +27,7 @@ echo "Mirrorlist updated successfully."
 
 sudo pacman -Syy
 
-# Main Drivers
-echo "Installing open-source video drivers"
-install_pacman "${video_drivers[@]}"
+install_video_drivers
 
 # Choosing DE
 while true; do
