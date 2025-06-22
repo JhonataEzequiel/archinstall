@@ -125,10 +125,10 @@ hyprland_aur=(
 
 extra=(
     upscayl-desktop-git stremio parsec-bin
-    obsidian pokemon-colorscripts-git vscodium gimp kdenlive
-    audacity vesktop komikku raider bottles gearlever
+    obsidian pokemon-colorscripts-git gimp kdenlive
+    audacity komikku raider bottles gearlever
     flatseal switcheroo spotify-launcher 
-    obs-studio
+    obs-studio discord
 )
 
 gaming_nvidia_proprietary=(
