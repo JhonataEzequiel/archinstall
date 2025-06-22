@@ -27,8 +27,6 @@ echo "Mirrorlist updated successfully."
 
 sudo pacman -Syy
 
-install_video_drivers
-
 # Choosing DE
 while true; do
     echo "Choose your Desktop Environment:"
@@ -259,7 +257,6 @@ terminal_choice="${terminals[$((choiceTE - 1))]}"
 
 case $choiceDE in
     3)
-        # Assuming Hyprland-specific setup
         ;;
     *)
         case $choiceTE in
@@ -409,90 +406,9 @@ case $choiceCA in
         ;;
 esac
 
-if pacman -Qs grub > /dev/null; then
-    install_pacman update-grub
-fi
-
-if lspci | grep -i nvidia &> /dev/null; then
-    echo "NVIDIA hardware detected."
-    echo "NVIDIA driver options:"
-    echo "1) Proprietary: Better performance, closed-source."
-    echo "2) Open: Open-source, may have lower performance."
-    echo "3) No: Skip NVIDIA drivers."
-    read -p "Enter 1, 2, or 3: " choiceNV
-    case $choiceNV in
-        1)
-            echo "Installing proprietary drivers"
-            case $choiceCK in
-            	1)
-        	        install_pacman linux-cachyos-nvidia nvidia-prime
-                    ;;
-                2)
-                    install_pacman linux-cachyos-bore-nvidia nvidia-prime
-                    ;;
-                3)
-                    install_pacman linux-cachyos-nvidia nvidia-prime
-                    install_pacman linux-cachyos-bore-nvidia
-                    ;;
-                4)
-                    install_pacman "${nvidia_proprietary[@]}"
-                    ;;
-            esac
-            sudo mkdir -p /etc/modprobe.d
-            echo "options nvidia_drm modeset=1" | sudo tee /etc/modprobe.d/nvidia.conf
-            sudo sed -i 's/MODULES=(btrfs)/MODULES=(btrfs nvidia nvidia_modeset nvidia_drm nvidia_uvm)/' /etc/mkinitcpio.conf
-            echo "Remove the nouveau packages for increased compatibility"
-            sudo pacman -R xf86-video-nouveau vulkan-nouveau
-            echo -e "GBM_BACKEND=nvidia-drm\n__GLX_VENDOR_LIBRARY_NAME=nvidia\nLIBVA_DRIVER_NAME=nvidia\nNVIDIA_PRIME_RENDER_OFFLOAD=1" | sudo tee -a /etc/environment
-            if pacman -Qs grub > /dev/null; then
-                sudo cp /grub/grubnvidia /etc/default/grub
-            fi
-            case $choiceDE in
-                1)
-                    sudo sed -i '/exit 0/i /usr/bin/prime-run' /etc/gdm/Init/Default
-                    ;;
-                3)
-                    echo -e "env = LIBVA_DRIVER_NAME,nvidia \nenv = __GLX_VENDOR_LIBRARY_NAME,nvidia" >> ~/.config/hypr/hyprland.conf
-                    ;;
-                *)
-                    ;;
-            esac
-            sudo mkinitcpio -P
-            ;;
-        2)
-            echo "Installing open drivers"
-            case $choiceCK in
-            	1)
-        	        install_pacman linux-cachyos-nvidia-open
-                    ;;
-                2)
-                    install_pacman linux-cachyos-bore-nvidia-open
-                    ;;
-                3)
-                    install_pacman linux-cachyos-bore-nvidia-open
-                    install_pacman linux-cachyos-nvidia-open
-                    ;;
-                *)
-                    install_pacman "${nvidia_open[@]}"
-                    ;;
-            esac
-            ;;
-        *)
-            ;;
-    esac
-else
-    echo "No NVIDIA hardware detected. Skipping NVIDIA driver installation."
-    choiceNV=3
-fi
+install_video_drivers
 
 if pacman -Qs grub > /dev/null; then
-    case $choiceNV in
-        1)
-            ;;
-        *)
-            sudo cp grub/grub /etc/default/grub
-            ;;
-    esac
     install_yay grub-btrfs inotify-tools
     sudo systemctl enable --now grub-btrfsd
     sudo grub-mkconfig
@@ -525,7 +441,6 @@ case $choiceEM in
         echo "Skipped Emulators"
         ;;
 esac
-
 
 if systemctl is-enabled gdm &> /dev/null || systemctl is-enabled sddm &> /dev/null; then
     echo "A display manager is already enabled. Skipping."
