@@ -1,6 +1,7 @@
 #!/bin/bash
 
 source packages.sh
+source header.sh
 
 # Check if running on Arch Linux
 if [[ ! -f /etc/arch-release ]]; then
@@ -22,20 +23,23 @@ if ! command -v reflector &> /dev/null; then
     echo "Installing reflector..."
     install_pacman reflector
 fi
-sudo reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist
-echo "Mirrorlist updated successfully."
+#sudo reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist
+#echo "Mirrorlist updated successfully."
 
 sudo pacman -Syy
+set_variables
 
 # Choosing DE
 while true; do
-    echo "Choose your Desktop Environment:"
-    echo "1) GNOME"
-    echo "2) KDE Plasma"
-    echo "3) Hyprland"
-    echo "4) Exit the Script"
-    read -p "Enter 1, 2, 3 or 4: " choiceDE
-
+    if [ "$mode" = "1"]; then
+        echo "Choose your Desktop Environment:"
+        echo "1) GNOME"
+        echo "2) KDE Plasma"
+        echo "3) Hyprland"
+        echo "4) Exit the Script"
+        read -p "Enter 1, 2, 3 or 4: " choiceDE
+    fi
+        
     case $choiceDE in
         1)
             echo "Installing GNOME and its base packages..."
@@ -82,9 +86,12 @@ echo "Installing base Packages"
 install_pacman "${base_packages[@]}"
 echo "Finished installing base packages"
 
-echo "Do you want to install video codecs and rendering packages?"
-echo -e "1) Yes \n2) No"
-read -p "Enter 1-2: " choiceREND
+if [ "$mode" = "1"]; then
+    echo "Do you want to install video codecs and rendering packages?"
+    echo -e "1) Yes \n2) No"
+    read -p "Enter 1-2: " choiceREND
+fi
+
 case $choiceREND in
     1)
         install_pacman "${rendering_packages[@]}"
@@ -93,47 +100,52 @@ case $choiceREND in
         ;;
 esac
 
-echo "Do you want to install zen kernel?"
-echo -e "1) Yes \n2) No"
-read -p "Enter 1-2: " choiceZEN
-case $choiceZEN in
-    1)
-        install_pacman linux-zen linux-zen-headers
-        ;;
-    *)
-        ;;
-esac
+if [ "$mode" = "1"]; then
+    echo "Do you want to install zen kernel?"
+    echo -e "1) Yes \n2) No"
+    read -p "Enter 1-2: " choiceZEN
+    case $choiceZEN in
+        1)
+            install_pacman linux-zen linux-zen-headers
+            ;;
+        *)
+            ;;
+    esac
+    ;;
+fi
 
 if [ "$choiceDE" = "3" ]; then
-    install_pacman ${terminal_packages[@]}
-    tldr --update
-    cp -r yazi ~/.config/
     choiceTPKG=1
-else
+fi
+
+if [ "$mode" = "1"]; then
     echo "Do you want some terminal packages?"
     echo "dysk tealdeer btop fastfetch bat fd eza fzf zoxide ripgrep yazi wl-clipboard"
     echo "1) yes"
     echo "2) no"
     read -p "Enter 1-2: " choiceTPKG
-    case $choiceTPKG in
-        1)
-            install_pacman "${terminal_packages[@]}"
-            tldr --update
-            cp -r yazi ~/.config/
-            ;;
-        *)
-            ;;
-    esac
 fi
 
-echo "choose your terminal text editor"
-echo "1) nano"
-echo "2) vim"
-echo "3) micro"
-echo "4) neovim"
-echo "5) all of them"
-echo "6) skip it (not recommended)"
-read -p "Enter 1-6: " choiceTTE
+case $choiceTPKG in
+    1)
+        install_pacman "${terminal_packages[@]}"
+        tldr --update
+        cp -r yazi ~/.config/
+        ;;
+    *)
+        ;;
+esac
+
+if [ "$mode" = "1"]; then
+    echo "choose your terminal text editor"
+    echo "1) nano"
+    echo "2) vim"
+    echo "3) micro"
+    echo "4) neovim"
+    echo "5) all of them"
+    echo "6) skip it (not recommended)"
+    read -p "Enter 1-6: " choiceTTE
+fi
 case $choiceTTE in
     1)
         install_pacman ${terminal_text_editors[0]}
@@ -181,7 +193,7 @@ sudo pacman-key --lsign-key 3056513887B78AEB
 sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst'
 sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
 sudo cp pacman.conf /etc/pacman.conf
-sudo pacman -Syu
+sudo pacman -Syu --noconfirm
 
 case $choiceTPKG in
     1)
@@ -195,10 +207,12 @@ echo "Installing Fonts for different Languages and microsoft fonts"
 install_pacman "${font_packages[@]}"
 echo "Finished installing fonts"
 
-echo "Do you wish to add some extra packages? (Utility, editors, etc)"
-echo "1) Yes"
-echo "2) No"
-read -p "Enter 1-2: " choiceAUR
+if [ "$mode" = "1"]; then
+    echo "Do you wish to add some extra packages? (Utility, editors, etc)"
+    echo "1) Yes"
+    echo "2) No"
+    read -p "Enter 1-2: " choiceAUR
+fi
 case $choiceAUR in
     1)
         install_yay "${extra[@]}"
@@ -207,12 +221,15 @@ case $choiceAUR in
         ;;
 esac
 
-echo "Select a browser"
-browsers=("firefox" "brave" "zen-browser-bin" "vivaldi" "chrome" "floorp" "librewolf" "chromium" "firedragon" "waterfox" "none")
-for i in "${!browsers[@]}"; do
-    echo "$((i+1))) ${browsers[i]}"
-done
-read -p "Enter 1-${#browsers[@]}: " choiceBR
+if [ "$mode" = "1"]; then
+    echo "Select a browser"
+    browsers=("firefox" "brave" "zen-browser-bin" "vivaldi" "chrome" "floorp" "librewolf" "chromium" "firedragon" "waterfox" "none")
+    for i in "${!browsers[@]}"; do
+        echo "$((i+1))) ${browsers[i]}"
+    done
+    read -p "Enter 1-${#browsers[@]}: " choiceBR
+fi
+
 if [[ "${browsers[choiceBR-1]}" != "none" ]]; then
     if [[ "${browsers[choiceBR-1]}" == "firefox" || "${browsers[choiceBR-1]}" == "vivaldi" ]]; then
         install_pacman "${browsers[choiceBR-1]}"
@@ -222,13 +239,14 @@ if [[ "${browsers[choiceBR-1]}" != "none" ]]; then
     echo "${browsers[choiceBR-1]} installed."
 fi
 
-echo "Choose a Terminal"
-terminals=("gnome-console" "ptyxis" "konsole" "alacritty" "ghostty" "kitty" "none")
-for i in "${!terminals[@]}"; do
-    echo "$((i+1))) ${terminals[i]}"
-done
-
-read -p "Enter 1-${#terminals[@]}: " choiceTE
+if [ "$mode" = "1"]; then
+    echo "Choose a Terminal"
+    terminals=("gnome-console" "ptyxis" "konsole" "alacritty" "ghostty" "kitty" "none")
+    for i in "${!terminals[@]}"; do
+        echo "$((i+1))) ${terminals[i]}"
+    done
+    read -p "Enter 1-${#terminals[@]}: " choiceTE
+fi
 
 # Validate terminal choice
 if ! [[ "$choiceTE" =~ ^[1-7]$ ]]; then
@@ -283,29 +301,30 @@ case $choiceDE in
     *)
         ;;
 esac
-
-echo "Do you wish to install a more beautiful bash?"
-echo "1) Yes"
-echo "2) No"
-read -p "Enter 1 or 2: " choiceSS
-case $choiceSS in
-    1)
-        curl -sS https://starship.rs/install.sh | sh
-        sudo cp -r fastfetch ~/.config/
-        case $choiceTPKG in
-            1)
-                sudo cp .betterbash ~/.bashrc
-                ;;
-            *)
-                sudo cp .bashrc ~/.bashrc
-                ;;
-        esac
-        echo "Done"
-        ;;
-    *)
-        echo "Skipping bashrc and starship setup"
-        ;;
-esac
+if [ "$mode" = "1"]; then
+    echo "Do you wish to install a more beautiful bash?"
+    echo "1) Yes"
+    echo "2) No"
+    read -p "Enter 1 or 2: " choiceSS
+    case $choiceSS in
+        1)
+            curl -sS https://starship.rs/install.sh | sh
+            sudo cp -r fastfetch ~/.config/
+            case $choiceTPKG in
+                1)
+                    sudo cp .betterbash ~/.bashrc
+                    ;;
+                *)
+                    sudo cp .bashrc ~/.bashrc
+                    ;;
+            esac
+            echo "Done"
+            ;;
+        *)
+            echo "Skipping bashrc and starship setup"
+            ;;
+    esac
+fi
 
 case $choiceDE in
     1)
@@ -315,53 +334,54 @@ case $choiceDE in
     *)
         ;;
 esac
+if [ "$mode" = "1"]; then
+    echo "Do you wish to add cachyos repos?"
+    echo "1) Yes"
+    echo "2) No"
+    read -p "Enter 1-2: " choiceCA
+    case $choiceCA in
+        1)
+            curl https://mirror.cachyos.org/cachyos-repo.tar.xz -o cachyos-repo.tar.xz
+            tar xvf cachyos-repo.tar.xz
+            cd cachyos-repo
+            sudo ./cachyos-repo.sh
+            cd ..
+            rm -rf cachyos-repo cachyos-repo.tar.xz
 
-echo "Do you wish to add cachyos repos?"
-echo "1) Yes"
-echo "2) No"
-read -p "Enter 1-2: " choiceCA
-case $choiceCA in
-    1)
-        curl https://mirror.cachyos.org/cachyos-repo.tar.xz -o cachyos-repo.tar.xz
-        tar xvf cachyos-repo.tar.xz
-        cd cachyos-repo
-        sudo ./cachyos-repo.sh
-        cd ..
-        rm -rf cachyos-repo cachyos-repo.tar.xz
-
-        echo "Repos added"
-        echo "Do you wish to add cachyos custom Kernels?"
-        echo "1) Yes - Cachyos Kernel"
-        echo "2) Yes - Cachyos Bore Kernel (better optmized)"
-        echo "3) Yes, both"
-        echo "4) No"
-        read -p "Enter 1-2: " choiceCK
-        case $choiceCK in
-            1)
-                install_yay "${cachyos_kernel[@]}"
-                install_yay "${cachyos_base[@]}"
-                echo "Custom kernel added"
-                ;;
-            2)
-                install_yay "${cachyos_bore_kernel[@]}"
-                install_yay "${cachyos_base[@]}"
-                echo "Bore kernel added"
-                ;;
-            3)
-                install_yay "${cachyos_kernel[@]}"
-                install_yay "${cachyos_bore_kernel[@]}"
-                install_yay "${cachyos_base[@]}"
-                echo "Bore and custom kernel added"
-                ;;
-            *)
-                echo "Skipping custom kernel installation"
-                ;;
-        esac
-        ;;
-    *)
-        echo "Skipping Cachyos repos"
-        ;;
-esac
+            echo "Repos added"
+            echo "Do you wish to add cachyos custom Kernels?"
+            echo "1) Yes - Cachyos Kernel"
+            echo "2) Yes - Cachyos Bore Kernel (better optmized)"
+            echo "3) Yes, both"
+            echo "4) No"
+            read -p "Enter 1-2: " choiceCK
+            case $choiceCK in
+                1)
+                    install_yay "${cachyos_kernel[@]}"
+                    install_yay "${cachyos_base[@]}"
+                    echo "Custom kernel added"
+                    ;;
+                2)
+                    install_yay "${cachyos_bore_kernel[@]}"
+                    install_yay "${cachyos_base[@]}"
+                    echo "Bore kernel added"
+                    ;;
+                3)
+                    install_yay "${cachyos_kernel[@]}"
+                    install_yay "${cachyos_bore_kernel[@]}"
+                    install_yay "${cachyos_base[@]}"
+                    echo "Bore and custom kernel added"
+                    ;;
+                *)
+                    echo "Skipping custom kernel installation"
+                    ;;
+            esac
+            ;;
+        *)
+            echo "Skipping Cachyos repos"
+            ;;
+    esac
+fi
 
 install_video_drivers
 
@@ -372,10 +392,13 @@ if pacman -Qs grub > /dev/null; then
     sudo update-grub
 fi
 
-echo "Do you want to install gaming packages and apply shader booster (credits to psygreg)?"
-echo "1) Yes"
-echo "2) No"
-read -p "Enter 1-2: " choiceGM
+if [ "$mode" = "1"]; then
+    echo "Do you want to install gaming packages and apply shader booster (credits to psygreg)?"
+    echo "1) Yes"
+    echo "2) No"
+    read -p "Enter 1-2: " choiceGM
+fi
+
 case $choiceGM in
     1)
         case $choiceNV in
@@ -417,12 +440,14 @@ esac
 echo "Adding flatpak support"
 install_pacman flatpak
 
-echo "Do you want to install video game emulators?"
-echo "1) Yes, via flatpak"
-echo "2) Yes, via AUR packages"
-echo "3) Yes, mix them up for better packages and updates (recommended)"
-echo "4) No"
-read -p "Enter 1-4: " choiceEM
+if [ "$mode" = "1"]; then
+    echo "Do you want to install video game emulators?"
+    echo "1) Yes, via flatpak"
+    echo "2) Yes, via AUR packages"
+    echo "3) Yes, mix them up for better packages and updates (recommended)"
+    echo "4) No"
+    read -p "Enter 1-4: " choiceEM
+fi
 case $choiceEM in
     1)
         install_flatpak "${emulators_flatpak_complete[@]}"
