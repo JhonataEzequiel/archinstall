@@ -31,7 +31,7 @@ set_variables
 
 # Choosing DE
 while true; do
-    if [ "$mode" = "1"]; then
+    if [ "$mode" = "1" ]; then
         echo "Choose your Desktop Environment:"
         echo "1) GNOME"
         echo "2) KDE Plasma"
@@ -86,7 +86,7 @@ echo "Installing base Packages"
 install_pacman "${base_packages[@]}"
 echo "Finished installing base packages"
 
-if [ "$mode" = "1"]; then
+if [ "$mode" = "1" ]; then
     echo "Do you want to install video codecs and rendering packages?"
     echo -e "1) Yes \n2) No"
     read -p "Enter 1-2: " choiceREND
@@ -100,7 +100,7 @@ case $choiceREND in
         ;;
 esac
 
-if [ "$mode" = "1"]; then
+if [ "$mode" = "1" ]; then
     echo "Do you want to install zen kernel?"
     echo -e "1) Yes \n2) No"
     read -p "Enter 1-2: " choiceZEN
@@ -111,14 +111,13 @@ if [ "$mode" = "1"]; then
         *)
             ;;
     esac
-    ;;
 fi
 
 if [ "$choiceDE" = "3" ]; then
     choiceTPKG=1
 fi
 
-if [ "$mode" = "1"]; then
+if [ "$mode" = "1" ]; then
     echo "Do you want some terminal packages?"
     echo "dysk tealdeer btop fastfetch bat fd eza fzf zoxide ripgrep yazi wl-clipboard"
     echo "1) yes"
@@ -136,7 +135,7 @@ case $choiceTPKG in
         ;;
 esac
 
-if [ "$mode" = "1"]; then
+if [ "$mode" = "1" ]; then
     echo "choose your terminal text editor"
     echo "1) nano"
     echo "2) vim"
@@ -187,13 +186,17 @@ if [[ ! -f pacman.conf ]]; then
     touch /etc/pacman.conf
 fi
 
-echo "Installing chaotic-aur"
-sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
-sudo pacman-key --lsign-key 3056513887B78AEB
-sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst'
-sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
-sudo cp pacman.conf /etc/pacman.conf
-sudo pacman -Syu --noconfirm
+if pacman -Qs chaotic-keyring > /dev/null && pacman -Qs chaotic-mirrorlist > /dev/null && grep -q '^\[chaotic-aur\]' /etc/pacman.conf; then
+    echo "Chaotic AUR is already installed and configured."
+else
+    echo "Installing chaotic-aur"
+    sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
+    sudo pacman-key --lsign-key 3056513887B78AEB
+    sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst'
+    sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
+    sudo cp pacman.conf /etc/pacman.conf
+    sudo pacman -Syu --noconfirm
+fi
 
 case $choiceTPKG in
     1)
@@ -207,7 +210,7 @@ echo "Installing Fonts for different Languages and microsoft fonts"
 install_pacman "${font_packages[@]}"
 echo "Finished installing fonts"
 
-if [ "$mode" = "1"]; then
+if [ "$mode" = "1" ]; then
     echo "Do you wish to add some extra packages? (Utility, editors, etc)"
     echo "1) Yes"
     echo "2) No"
@@ -221,7 +224,7 @@ case $choiceAUR in
         ;;
 esac
 
-if [ "$mode" = "1"]; then
+if [ "$mode" = "1" ]; then
     echo "Select a browser"
     browsers=("firefox" "brave" "zen-browser-bin" "vivaldi" "chrome" "floorp" "librewolf" "chromium" "firedragon" "waterfox" "none")
     for i in "${!browsers[@]}"; do
@@ -239,7 +242,7 @@ if [[ "${browsers[choiceBR-1]}" != "none" ]]; then
     echo "${browsers[choiceBR-1]} installed."
 fi
 
-if [ "$mode" = "1"]; then
+if [ "$mode" = "1" ]; then
     echo "Choose a Terminal"
     terminals=("gnome-console" "ptyxis" "konsole" "alacritty" "ghostty" "kitty" "none")
     for i in "${!terminals[@]}"; do
@@ -301,7 +304,7 @@ case $choiceDE in
     *)
         ;;
 esac
-if [ "$mode" = "1"]; then
+if [ "$mode" = "1" ]; then
     echo "Do you wish to install a more beautiful bash?"
     echo "1) Yes"
     echo "2) No"
@@ -334,7 +337,7 @@ case $choiceDE in
     *)
         ;;
 esac
-if [ "$mode" = "1"]; then
+if [ "$mode" = "1" ]; then
     echo "Do you wish to add cachyos repos?"
     echo "1) Yes"
     echo "2) No"
@@ -392,7 +395,7 @@ if pacman -Qs grub > /dev/null; then
     sudo update-grub
 fi
 
-if [ "$mode" = "1"]; then
+if [ "$mode" = "1" ]; then
     echo "Do you want to install gaming packages and apply shader booster (credits to psygreg)?"
     echo "1) Yes"
     echo "2) No"
@@ -440,7 +443,7 @@ esac
 echo "Adding flatpak support"
 install_pacman flatpak
 
-if [ "$mode" = "1"]; then
+if [ "$mode" = "1" ]; then
     echo "Do you want to install video game emulators?"
     echo "1) Yes, via flatpak"
     echo "2) Yes, via AUR packages"

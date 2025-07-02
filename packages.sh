@@ -225,14 +225,14 @@ install_video_drivers() {
 
     # Check for NVIDIA GPU
     if lspci | grep -iE "VGA|3D|Display" | grep -i nvidia &> /dev/null; then
-        if [ "$mode" = "1"]; then
+        if [ "$mode" = "1" ]; then
             echo "Detected NVIDIA GPU."
             echo "NVIDIA driver options:"
             echo "1) Proprietary: Better performance, closed-source."
             echo "2) Open: Open-source, may have lower performance."
             echo "3) Minimal: Install only basic NVIDIA support."
             read -p "Enter 1, 2, or 3: " choiceNV
-        elif
+        else
             choiceNV=1
         fi
 
