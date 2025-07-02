@@ -189,15 +189,15 @@ emulators_flatpak_complete=(
 
 # Functions for package installation
 install_pacman() {
-    sudo pacman -S --needed "$@"
+    sudo pacman -S --needed --noconfirm "$@"
 }
 
 install_yay() {
-    yay -S --needed "$@"
+    yay -S --needed --noconfirm "$@"
 }
 
 install_flatpak() {
-    flatpak install flathub "$@"
+    flatpak install -y --noninteractive flathub "$@"
 }
 
 install_video_drivers() {
