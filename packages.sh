@@ -70,7 +70,7 @@ kde_packages=(
     plasma-workspace plasma-systemmonitor kde-gtk-config bluedevil
     discover filelight kdeplasma-addons okular gwenview sddm-kcm
     dolphin-plugins elisa power-profiles-daemon qbittorrent
-    plasma-wayland-protocols
+    plasma-wayland-protocols haruna
 )
 
 hyprland_packages=(
