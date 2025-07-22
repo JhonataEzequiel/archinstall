@@ -23,8 +23,9 @@ if ! command -v reflector &> /dev/null; then
     echo "Installing reflector..."
     install_pacman reflector
 fi
-#sudo reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist
-#echo "Mirrorlist updated successfully."
+
+sudo reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist
+echo "Mirrorlist updated successfully."
 
 sudo pacman -Syy
 set_variables
@@ -168,7 +169,7 @@ esac
 echo "Enabling Bluetooth, paccache, and timeshift"
 sudo systemctl enable --now bluetooth.service
 sudo systemctl enable paccache.timer
-systemctl enable --now cronie.service
+sudo systemctl enable --now cronie.service
 
 if command -v yay &> /dev/null; then
     echo "yay is already installed."
@@ -388,13 +389,6 @@ fi
 
 install_video_drivers
 
-if pacman -Qs grub > /dev/null; then
-    install_yay "${grub_packages[@]}"
-    sudo systemctl enable --now grub-btrfsd
-    sudo grub-mkconfig
-    sudo update-grub
-fi
-
 if [ "$mode" = "1" ]; then
     echo "Do you want to install gaming packages and apply shader booster (credits to psygreg)?"
     echo "1) Yes"
@@ -492,6 +486,14 @@ else
             ;;
     esac
 fi
+
+if pacman -Qs grub > /dev/null; then
+    install_yay "${grub_packages[@]}"
+fi
+
+sudo systemctl enable --now grub-btrfsd
+sudo grub-mkconfig
+sudo update-grub
 
 echo "Installation complete. Reboot required to apply changes."
 read -p "Reboot now? (y/N): " reboot_choice
