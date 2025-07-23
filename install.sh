@@ -85,6 +85,7 @@ done
 
 echo "Installing base Packages"
 install_pacman "${base_packages[@]}"
+ibus-daemon -drx
 echo "Finished installing base packages"
 
 if [ "$mode" = "1" ]; then
