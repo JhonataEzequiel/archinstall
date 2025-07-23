@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Package lists stored in arrays for easier maintenance
-
-# Base drivers required for all setups
 base_drivers=(
     mesa
     xorg-server
@@ -10,14 +7,12 @@ base_drivers=(
     mesa-utils
 )
 
-# Intel-specific drivers
 intel_drivers=(
     intel-media-driver
     libva-intel-driver
     vulkan-intel
 )
 
-# AMD-specific drivers
 amd_drivers=(
     libva-mesa-driver
     vulkan-radeon
@@ -25,12 +20,10 @@ amd_drivers=(
     xf86-video-ati
 )
 
-# NVIDIA-specific drivers (minimal to avoid conflicts)
 nvidia_drivers=(
     libva-mesa-driver
 )
 
-# NVIDIA proprietary drivers
 nvidia_proprietary=(
     egl-gbm
     egl-x11
@@ -39,7 +32,6 @@ nvidia_proprietary=(
     nvidia-prime
 )
 
-# NVIDIA open-source drivers
 nvidia_open=(
     egl-gbm
     egl-x11
@@ -48,7 +40,6 @@ nvidia_open=(
     nvidia-prime
 )
 
-# VMware-specific drivers (for virtual machines)
 vmware_drivers=(
     xf86-video-vmware
 )
