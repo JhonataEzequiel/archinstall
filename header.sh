@@ -25,7 +25,7 @@ set_variables(){
     choiceBR=1
     choiceSS=1
     choiceCA=2
-    choiceCK=2
+    choiceCK=0
 
     case $mode in
         2)
