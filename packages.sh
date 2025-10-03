@@ -143,7 +143,7 @@ cachyos_base=(
 )
 
 gnome_extra=(
-    extension-manager gapless
+    extension-manager gapless gradia
 )
 
 grub_packages=(
