@@ -246,9 +246,7 @@ install_video_drivers() {
                 echo "options nvidia_drm modeset=1" | sudo tee /etc/modprobe.d/nvidia.conf
                 sudo sed -i 's/MODULES=(btrfs)/MODULES=(btrfs nvidia nvidia_modeset nvidia_drm nvidia_uvm)/' /etc/mkinitcpio.conf
                 echo -e "GBM_BACKEND=nvidia-drm\n__GLX_VENDOR_LIBRARY_NAME=nvidia\nLIBVA_DRIVER_NAME=nvidia\nNVIDIA_PRIME_RENDER_OFFLOAD=1" | sudo tee -a /etc/environment
-                if pacman -Qs grub > /dev/null; then
-                    sudo cp grub/grubnvidia /etc/default/grub
-                fi
+                sudo cp grub/grubnvidia /etc/default/grub
                 # DE-specific configurations
                 if [[ "$choiceDE" == "1" ]]; then
                     sudo sed -i '/exit 0/i /usr/bin/prime-run' /etc/gdm/Init/Default
@@ -278,9 +276,7 @@ install_video_drivers() {
         esac
     else
         echo "No NVIDIA hardware detected. Skipping NVIDIA driver installation."
-        if pacman -Qs grub > /dev/null; then
-            sudo cp /grub/grub /etc/default/grub
-        fi
+        sudo cp /grub/grub /etc/default/grub
         choiceNV=3
     fi
 
