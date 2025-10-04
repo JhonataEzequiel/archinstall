@@ -496,6 +496,8 @@ sudo systemctl enable --now grub-btrfsd
 sudo grub-mkconfig
 sudo update-grub
 
+sudo systemctl enable --now ufw.service
+
 echo "Installation complete. Reboot required to apply changes."
 read -p "Reboot now? (y/N): " reboot_choice
 if [[ "$reboot_choice" =~ ^[Yy]$ ]]; then
