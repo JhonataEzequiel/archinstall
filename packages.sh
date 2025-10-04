@@ -66,7 +66,7 @@ kde_packages=(
 
 hyprland_packages=(
     xdg-desktop-portal xdg-desktop-portal-wlr ly xdg-user-dirs
-    pavucontrol power-profiles-daemon polkit polkit-qt6 nautilus ly
+    pavucontrol power-profiles-daemon polkit polkit-qt6 dolphin ly
 )
 
 base_packages=(
