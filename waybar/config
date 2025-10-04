@@ -1,10 +1,10 @@
 {
-    "height": 32,
-    "spacing": 4,
+    "height": 36,
+    "spacing": 6,
     "modules-left": [
         "hyprland/workspaces",
         "wlr/taskbar",
-        "hyprland/window",
+        "hyprland/window"
     ],
     "modules-center": [
         "clock",
@@ -12,6 +12,7 @@
     ],
     "modules-right": [
         "tray",
+        "custom/wallpaper",
         "pulseaudio",
         "cpu",
         "memory",
@@ -26,13 +27,13 @@
         "persistent": true,
         "format": "{icon}",
         "format-icons": {
-            "urgent": "",
-            "active": "",
-            "default": ""
+            "urgent": "",
+            "active": "",
+            "default": ""
         }
     },
     "cpu": {
-        "format": "CPU {usage}% ",
+        "format": "CPU {usage}% ",
         "tooltip-format": "CPU: {usage}%",
         "interval": 5,
         "states": {
@@ -41,7 +42,7 @@
         }
     },
     "memory": {
-        "format": "Mem {used:0.1f}G ",
+        "format": "Mem {used:0.1f}G ",
         "tooltip-format": "Memory: {used:0.1f}G / {total:0.1f}G",
         "interval": 5,
         "states": {
@@ -57,27 +58,26 @@
         "return-type": "text"
     },
     "pulseaudio": {
-        // "scroll-step": 1, // %, can be a float
         "format": "{volume}% {icon} {format_source}",
         "format-bluetooth": "{volume}% {icon} {format_source}",
-        "format-bluetooth-muted": " {icon} {format_source}",
-        "format-muted": " {format_source}",
+        "format-bluetooth-muted": "婢 {icon} {format_source}",
+        "format-muted": "婢 {format_source}",
         "format-source": "{volume}% ",
         "format-source-muted": "",
         "format-icons": {
             "headphone": "",
-            "hands-free": "",
-            "headset": "",
+            "hands-free": "",
+            "headset": "",
             "phone": "",
             "portable": "",
-            "car": "",
+            "car": "",
             "default": ["", "", ""]
         },
         "on-click": "pavucontrol"
     },
     "backlight": {
         "format": "{percent}% {icon}",
-        "format-icons": ["", ""],
+        "format-icons": ["", ""],
         "on-scroll-up": "light -A 5",
         "on-scroll-down": "light -U 5"
     },
@@ -88,43 +88,39 @@
             "mode": "month",
             "weeks-pos": "right",
             "format": {
-                "months": "<span color='#f5c2e7'><b>{}</b></span>",
+                "months": "<span color='#cba6f7'><b>{}</b></span>",
                 "days": "<span color='#cdd6f4'>{}</span>",
-                "weeks": "<span color='#94e2d5'>{}</span>",
+                "weeks": "<span color='#89dceb'>{}</span>",
                 "today": "<span color='#f38ba8'><b>{}</b></span>"
             }
         }
     },
     "power-profiles-daemon": {
-      "format": "{icon}",
-      "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
-      "tooltip": true,
-      "format-icons": {
-        "default": "",
-        "performance": "",
-        "balanced": "",
-        "power-saver": ""
-      }
+        "format": "{icon}",
+        "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+        "tooltip": true,
+        "format-icons": {
+            "default": "",
+            "performance": "",
+            "balanced": "",
+            "power-saver": ""
+        }
     },
     "battery": {
         "states": {
-            //"full": 100,
-            //"good": 95,
             "warning": 30,
             "critical": 15
         },
         "format": "{icon} {capacity}%",
-        "format-charging": "  {capacity}%",
-        "format-plugged": "  {capacity}%",
-        "format-alt": "{icon}  {time}",
-        // "format-good": "", // An empty format will hide the module
-        // "format-full": "",
-        "format-icons": [" ", " ", " ", " ", " "]
+        "format-charging": "󱐋 {capacity}%",
+        "format-plugged": "󰂄 {capacity}%",
+        "format-alt": "{icon} {time}",
+        "format-icons": ["󰂎", "󰁺", "󰁼", "󰁾", "󰁹"]
     },
     "wlr/taskbar": {
         "format": "{icon}",
         "format-active": "{icon} *",
-        "icon-size": 18,
+        "icon-size": 20,
         "tooltip-format": "{title} ({app_id})",
         "on-click": "activate",
         "on-click-middle": "close",
@@ -139,11 +135,15 @@
         }
     },
     "custom/wlogout": {
-        "format": "⏻",
+        "format": "󰐥",
         "tooltip": false,
         "on-click": "wlogout"
     },
+    "custom/wallpaper": {
+        "format": "󰸉 ",
+        "on-click": "/home/shimarin/.config/hypr/scripts/wallpapers.sh"
+    },
     "tray": {
-        "spacing" : 10
+        "spacing": 12
     }
 }

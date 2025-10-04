@@ -1,8 +1,9 @@
 /* Global Styles */
 * {
-    font-family: JetBrainsMono Nerd Font, sans-serif;
-    font-size: 14px;
-    color: #ffffff; /* White text/icons for high contrast */
+    font-family: 'Inter', 'FontAwesome', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #d3d3d3; /* Neutral light gray for text/icons */
     margin: 0;
     padding: 0;
     border: none;
@@ -10,9 +11,11 @@
 
 /* Waybar Container */
 #waybar {
-background: rgba(0, 0, 0, 0.5); /* Neutral semi-transparent dark overlay */
-margin: 4px 8px; /* Margin to avoid screen edges */
-transition: all 0.3s ease; /* Smooth transitions */
+background: linear-gradient(135deg, rgba(40, 40, 40, 0.8), rgba(60, 60, 60, 0.7)); /* Neutral grayscale gradient */
+margin: 6px 10px;
+border-radius: 12px;
+box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+transition: all 0.3s ease-in-out;
 }
 
 /* Modules General Styling */
@@ -28,12 +31,13 @@ transition: all 0.3s ease; /* Smooth transitions */
 #backlight,
 #battery,
 #power-profiles,
-#custom-wlogout {
-padding: 0 8px;
+#custom-wlogout,
+#custom-wallpaper {
+padding: 0 10px;
 margin: 0 4px;
-background: rgba(255, 255, 255, 0.1); /* Subtle white overlay */
-border-radius: 4px; /* Minimal rounded corners */
-transition: background 0.2s ease;
+background: rgba(255, 255, 255, 0.05); /* Subtle glass effect */
+border-radius: 8px;
+transition: all 0.2s ease;
 }
 
 /* Hover Effects */
@@ -45,56 +49,135 @@ transition: background 0.2s ease;
 #backlight:hover,
 #battery:hover,
 #power-profiles:hover,
-#custom-wlogout:hover {
-background: rgba(255, 255, 255, 0.2); /* Brighter on hover */
-box-shadow: 0 0 6px rgba(255, 255, 255, 0.2); /* Subtle glow */
+#custom-wlogout:hover,
+#custom-wallpaper:hover {
+background: rgba(255, 255, 255, 0.15); /* Brighter glass on hover */
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); /* Enhanced shadow for hover */
 }
 
 /* Workspaces */
 #workspaces button {
-padding: 0 6px;
-margin: 0 2px;
-color: #cdd6f4; /* Light lavender */
+padding: 0 8px;
+margin: 0 3px;
+color: #b0b0b0; /* Neutral gray */
+transition: all 0.2s ease;
 }
 
 #workspaces button.active {
-color: #f5c2e7; /* Pink for active workspace */
-background: rgba(245, 194, 231, 0.2); /* Subtle pink overlay */
-border-radius: 4px;
+color: #f5f5f5; /* Bright neutral white */
+background: linear-gradient(45deg, rgba(200, 200, 200, 0.3), rgba(220, 220, 220, 0.2));
+border-radius: 6px;
 }
 
 #workspaces button.urgent {
-color: #f38ba8; /* Red for urgent */
-animation: blink 1s infinite;
+color: #ff6e6e; /* Bright red for urgency */
+animation: pulse 1.5s infinite;
 }
 
 /* Taskbar */
 #taskbar button {
-padding: 0 6px;
-margin: 0 2px;
+padding: 0 8px;
+margin: 0 3px;
+color: #c0c0c0; /* Neutral light gray */
 }
 
 #taskbar button.active {
-color: #89b4fa; /* Light blue for active task */
-background: rgba(137, 180, 250, 0.2); /* Subtle blue overlay */
+color: #e0e0e0; /* Brighter neutral gray */
+background: rgba(200, 200, 200, 0.3);
+border-radius: 6px;
 }
 
 /* Window */
 #window {
-color: #a6e3a1; /* Mint green for window title */
-font-weight: 500;
+color: #d3d3d3; /* Neutral light gray for window title */
+font-weight: 600;
 }
 
 /* Clock */
 #clock {
-color: #b4befe; /* Soft lavender */
-font-weight: bold;
-padding: 0 12px;
+color: #e0e0e0; /* Neutral light gray */
+font-weight: 700;
+padding: 0 14px;
+background: rgba(200, 200, 200, 0.1);
 }
 
 /* Weather */
 #custom-weather {
-color: #f9e2af; /* Yellow for weather */
+color: #d4d4d4; /* Neutral off-white */
+font-weight: 500;
+}
+
+/* Pulseaudio */
+#pulseaudio {
+color: #c0c0c0; /* Neutral light gray */
+}
+
+#pulseaudio.muted {
+color: #ff6e6e; /* Red for muted */
+}
+
+/* CPU */
+#cpu {
+color: #b0b0b0; /* Neutral gray */
+}
+
+#cpu.warning {
+color: #d4d4d4; /* Neutral off-white for warning */
+}
+
+#cpu.critical {
+color: #ff6e6e; /* Red for critical */
+animation: pulse 0.8s infinite;
+}
+
+/* Memory */
+#memory {
+color: #b0b0b0; /* Neutral gray */
+}
+
+#memory.warning {
+color: #d4d4d4; /* Neutral off-white for warning */
+}
+
+#memory.critical {
+color: #ff6e6e; /* Red for critical */
+animation: pulse 0.8s infinite;
+}
+
+/* Backlight */
+#backlight {
+color: #c0c0c0; /* Neutral light gray */
+}
+
+/* Battery */
+#battery {
+color: #d3d3d3; /* Neutral light gray */
+}
+
+#battery.warning {
+color: #d4d4d4; /* Neutral off-white */
+}
+
+#battery.critical {
+color: #ff6e6e; /* Red */
+animation: pulse 0.8s infinite;
+}
+
+#battery.charging,
+#battery.plugged {
+color: #a9a9a9; /* Neutral medium gray */
+}
+
+/* Power Profiles */
+#power-profiles {
+color: #e0e0e0; /* Neutral light gray */
+}
+
+/* Wlogout */
+#custom-wlogout {
+font-size: 16px;
+color: #f5f5f5; /* Neutral white */
+padding: 0 12px;
 }
 
 /* Tray */
@@ -102,90 +185,11 @@ color: #f9e2af; /* Yellow for weather */
 padding: 0 10px;
 }
 
-#tray > .passive {
-opacity: 0.6;
-}
-
-#tray > .active {
-color: #f9e2af; /* Yellow for active tray icons */
-}
-
-/* Pulseaudio */
-#pulseaudio {
-color: #94e2d5; /* Cyan for audio */
-}
-
-#pulseaudio.muted {
-color: #f38ba8; /* Red for muted */
-}
-
-/* CPU */
-#cpu {
-color: #89b4fa; /* Light blue instead of purple */
-}
-
-#cpu.warning {
-color: #fab387; /* Orange for warning */
-}
-
-#cpu.critical {
-color: #f38ba8; /* Red for critical */
-animation: blink 0.5s infinite;
-}
-
-/* Memory */
-#memory {
-color: #89b4fa; /* Light blue for memory */
-}
-
-#memory.warning {
-color: #fab387; /* Orange for warning */
-}
-
-#memory.critical {
-color: #f38ba8; /* Red for critical */
-animation: blink 0.5s infinite;
-}
-
-/* Backlight */
-#backlight {
-color: #f5c2e7; /* Pink for backlight */
-}
-
-/* Battery */
-#battery {
-color: #a6e3a1; /* Mint green for battery */
-}
-
-#battery.warning {
-color: #fab387; /* Orange for warning */
-}
-
-#battery.critical {
-color: #f38ba8; /* Red for critical */
-animation: blink 0.5s infinite;
-}
-
-#battery.charging,
-#battery.plugged {
-color: #f9e2af; /* Yellow for charging/plugged */
-}
-
-/* Power Profiles */
-#power-profiles {
-color: #d8dee9; /* Neutral gray instead of purple */
-}
-
-/* Wlogout */
-#custom-wlogout {
-font-size: 18px; /* Larger logout icon */
-color: #f5c2e7; /* Pink */
-padding: 0 10px;
-}
-
-/* Animation for Urgent/Critical States */
-@keyframes blink {
-    50% { opacity: 0.4; }
+/* Pulse Animation for Urgent/Critical States */
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
 }
 
 /* Transparency for Empty Window */
