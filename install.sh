@@ -479,7 +479,7 @@ else
             esac 
             ;;
         2|3)
-            sudo systemctl enable sddm
+            sudo systemctl enable ly
             ;;
         *)
             echo "Error: Invalid choiceDE value: $choiceDE. Please set to 1 (GNOME), 2 (KDE), or 3 (Hyprland)."

@@ -55,18 +55,18 @@ gnome_packages=(
 )
 
 kde_packages=(
-    sddm xdg-user-dirs plasma-desktop dolphin kate spectacle
+    xdg-user-dirs plasma-desktop dolphin kate spectacle
     plasma-nm plasma-pa powerdevil kscreen kinfocenter breeze-icons
     xdg-desktop-portal-kde kcalc ark partitionmanager systemsettings
     plasma-workspace plasma-systemmonitor kde-gtk-config bluedevil
-    discover filelight kdeplasma-addons okular gwenview sddm-kcm
+    discover filelight kdeplasma-addons okular gwenview ly
     dolphin-plugins elisa power-profiles-daemon qbittorrent
     plasma-wayland-protocols haruna
 )
 
 hyprland_packages=(
     xdg-desktop-portal xdg-desktop-portal-wlr ly xdg-user-dirs
-    pavucontrol power-profiles-daemon polkit polkit-qt6 nautilus
+    pavucontrol power-profiles-daemon polkit polkit-qt6 nautilus ly
 )
 
 base_packages=(
