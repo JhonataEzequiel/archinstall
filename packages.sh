@@ -40,7 +40,7 @@ nvidia_all=(
 nvidia_proprietary=(
     egl-gbm
     egl-x11
-    nvidia-dkms
+    nvidia
 )
 
 nvidia_open=(
