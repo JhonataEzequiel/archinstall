@@ -24,12 +24,23 @@ nvidia_drivers=(
     libva-mesa-driver
 )
 
+nvidia_all=(
+    nvidia-utils
+    nvidia-prime
+    nvidia-settings 
+    lib32-nvidia-utils 
+    lib32-opencl-nvidia 
+    opencl-nvidia 
+    libvdpau 
+    libxnvctrl
+    vulkan-icd-loader 
+    lib32-vulkan-icd-loader
+)
+
 nvidia_proprietary=(
     egl-gbm
     egl-x11
     nvidia-dkms
-    nvidia-utils
-    nvidia-prime
 )
 
 nvidia_open=(
@@ -240,6 +251,7 @@ install_video_drivers() {
                     install_pacman linux-cachyos-nvidia linux-cachyos-bore-nvidia nvidia-prime
                 else
                     install_pacman "${nvidia_proprietary[@]}"
+                    install_pacman "${nvidia_all[@]}"
                 fi
                 # Configure proprietary NVIDIA settings
                 sudo mkdir -p /etc/modprobe.d
