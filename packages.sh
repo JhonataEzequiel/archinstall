@@ -56,7 +56,7 @@ vmware_drivers=(
 )
 
 gnome_packages=(
-    gdm xdg-user-dirs-gtk power-profiles-daemon nautilus
+    gdm xdg-user-dirs-gtk nautilus
     gnome-text-editor papers adwaita-icon-theme xdg-desktop-portal-gnome
     baobab gnome-shell gnome-control-center gnome-settings-daemon
     gnome-session gnome-tweaks gnome-calculator gnome-disk-utility
@@ -71,13 +71,13 @@ kde_packages=(
     xdg-desktop-portal-kde kcalc ark partitionmanager systemsettings
     plasma-workspace plasma-systemmonitor kde-gtk-config bluedevil
     discover filelight kdeplasma-addons okular gwenview ly
-    dolphin-plugins elisa power-profiles-daemon qbittorrent
+    dolphin-plugins elisa qbittorrent
     plasma-wayland-protocols haruna kwalletmanager
 )
 
 hyprland_packages=(
     xdg-desktop-portal xdg-desktop-portal-wlr ly xdg-user-dirs
-    pavucontrol power-profiles-daemon polkit polkit-qt6 dolphin ly
+    pavucontrol polkit polkit-qt6 dolphin ly
 )
 
 base_packages=(
