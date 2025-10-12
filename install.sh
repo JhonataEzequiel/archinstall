@@ -430,6 +430,9 @@ case $choiceGM in
                 echo "Finished installing gaming packages"
                 ;;
         sudo usermod -aG gamemode $USER
+        sudo mkdir /usr/share/gamemode/
+        sudo cp gamemode/gamemode.ini /usr/share/gamemode/.
+        systemctl --user enable --now gamemoded
         esac
         ;;
     *)
