@@ -399,6 +399,7 @@ fi
 
 case $choiceGM in
     1)
+        echo "vm.max_map_count = 2147483642" | sudo tee /etc/sysctl.d/80-gamecompatibility.conf
         case $choiceNV in
             1)
                 install_yay "${gaming_nvidia_proprietary[@]}"
