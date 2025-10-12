@@ -55,6 +55,11 @@ vmware_drivers=(
     xf86-video-vmware
 )
 
+audio=(
+    pipewire pipewire-pulse pipewire-alsa pipewire-jack lib32-pipewire 
+    pipewire-audio pipewire-v4l2 wireplumber
+)
+
 gnome_packages=(
     gdm xdg-user-dirs-gtk nautilus
     gnome-text-editor papers adwaita-icon-theme xdg-desktop-portal-gnome

@@ -88,6 +88,11 @@ install_pacman "${base_packages[@]}"
 ibus-daemon -drx
 echo "Finished installing base packages"
 
+echo "Installing pipewire"
+install_pacman "${audio[@]}"
+systemctl --user enable --now pipewire
+systemctl --user enable --now wireplumber
+
 if [ "$mode" = "1" ]; then
     echo "Do you want to install video codecs and rendering packages?"
     echo -e "1) Yes \n2) No"
