@@ -429,6 +429,7 @@ case $choiceGM in
                 esac
                 echo "Finished installing gaming packages"
                 ;;
+        sudo usermod -aG gamemode $USER
         esac
         ;;
     *)
