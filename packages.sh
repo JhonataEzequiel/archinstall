@@ -130,14 +130,14 @@ gaming_nvidia_proprietary=(
     heroic-games-launcher-bin lutris gamescope mangohud
     wine vkd3d lib32-nvidia-utils glfw mangojuice
     wqy-zenhei gamemode lib32-gamemode jdk21-openjdk
-    steam-native-runtime
+    steam-native-runtime corectrl
 )
 
 gaming=(
     heroic-games-launcher-bin lutris gamescope mangohud
     wine vkd3d glfw mangojuice wqy-zenhei
     gamemode lib32-gamemode jdk21-openjdk
-    steam-native-runtime
+    steam-native-runtime corectrl
 )
 
 cachyos_kernel=(
