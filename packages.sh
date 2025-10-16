@@ -76,10 +76,6 @@ amd_drivers=(
     xf86-video-ati
 )
 
-nvidia_drivers=(
-    libva-mesa-driver
-)
-
 nvidia_common_utils=(
     nvidia-utils
     nvidia-prime
@@ -91,17 +87,15 @@ nvidia_common_utils=(
     libxnvctrl
     vulkan-icd-loader 
     lib32-vulkan-icd-loader
+    egl-gbm
+    egl-x11
 )
 
 nvidia_proprietary=(
-    egl-gbm
-    egl-x11
     nvidia-dkms
 )
 
 nvidia_open=(
-    egl-gbm
-    egl-x11
     nvidia-open-dkms
 )
 
