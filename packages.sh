@@ -108,7 +108,7 @@ hyprland_aur=(
     hyprshot xdg-desktop-portal-hyprland 
     polkit-gnome qt5-wayland qt6-wayland light hyprlock
     ghostty waypaper hyprpicker
-    aylurs-gtk-shell-git wireplumber libgtop btop 
+    aylurs-gtk-shell-git libgtop 
     dart-sass wl-clipboard brightnessctl swww python upower
     gvfs gtksourceview3 libsoup3 grimblast-git wf-recorder-git hyprpicker 
     matugen-bin python-gpustat hyprsunset-git ags-hyprpanel-git
