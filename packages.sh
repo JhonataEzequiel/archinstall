@@ -76,6 +76,14 @@ amd_drivers=(
     xf86-video-ati
 )
 
+nvidia_proprietary=(
+    nvidia-dkms
+)
+
+nvidia_open=(
+    nvidia-open-dkms
+)
+
 nvidia_common_utils=(
     nvidia-utils
     nvidia-prime
@@ -89,14 +97,6 @@ nvidia_common_utils=(
     lib32-vulkan-icd-loader
     egl-gbm
     egl-x11
-)
-
-nvidia_proprietary=(
-    nvidia-dkms
-)
-
-nvidia_open=(
-    nvidia-open-dkms
 )
 
 vmware_drivers=(

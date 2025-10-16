@@ -382,7 +382,7 @@ install_video_drivers(){
             echo "NVIDIA driver options:"
             echo "1) Proprietary: Better performance, closed-source."
             echo "2) Open: Open-source, may have lower performance."
-            read -p "Enter 1, 2, or 3: " choiceNV
+            read -p "Enter 1 or 2: " choiceNV
         else
             choiceNV=1
         fi
