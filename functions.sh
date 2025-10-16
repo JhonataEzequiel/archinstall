@@ -252,19 +252,19 @@ terminal_setup(){
     fi
     case $choiceTTE in
         1)
-            install_pacman ${terminal_text_editors[0]}
+            install_pacman "${terminal_text_editors[0]}"
             ;;
         2)
-            install_pacman ${terminal_text_editors[1]}
+            install_pacman "${terminal_text_editors[1]}"
             ;;
         3)
-            install_pacman ${terminal_text_editors[2]}
+            install_pacman "${terminal_text_editors[2]}"
             ;;
         4)
-            install_pacman ${terminal_text_editors[3]}
+            install_pacman "${terminal_text_editors[3]}"
             ;;
         5)
-            install_pacman ${terminal_text_editors[@]}
+            install_pacman "${terminal_text_editors[@]}"
             ;;
         *)
             ;;
@@ -434,7 +434,7 @@ nvidia_setup(){
     echo "options nvidia_drm modeset=1" | sudo tee /etc/modprobe.d/nvidia.conf > /dev/null
     echo "Wrote /etc/modprobe.d/nvidia.conf (options nvidia_drm modeset=1)."
 
-    if [[ -n "$IS_HYBRID" == true ]]; then
+    if [[ -n "$IS_HYBRID" ]]; then
         if grep -qE '^MODULES=.*\bnvidia\b' /etc/mkinitcpio.conf; then
             echo "NVIDIA modules already present in MODULES, skipping modification."
         else
