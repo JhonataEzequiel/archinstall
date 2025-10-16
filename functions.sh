@@ -584,7 +584,7 @@ extra_setup(){
     esac
 }
 
-grup_setup(){
+grub_setup(){
     if pacman -Qs grub > /dev/null; then
         install_yay "${grub_packages[@]}"
     fi
