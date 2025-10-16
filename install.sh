@@ -2,7 +2,7 @@
 set -e
 
 source packages.sh
-source header.sh
+source functions.sh
 
 check_prerequisites
 update_mirrors
