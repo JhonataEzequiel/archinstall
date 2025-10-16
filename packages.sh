@@ -189,115 +189,14 @@ install_flatpak() {
     flatpak install -y --noninteractive flathub "$@"
 }
 
-install_video_drivers(){
-    # Install base drivers
-    echo "Installing base video drivers"
-    install_pacman "${base_drivers[@]}"
-
-    # Detect GPU(s) using lspci
-    if ! command -v lspci &> /dev/null; then
-        echo "lspci not found, installing pciutils"
-        install_pacman pciutils
-    fi
-
-    GPU_INFO=$(lspci | grep -iE "VGA|3D|Display" || true)
-    HAS_INTEL=$(echo "$GPU_INFO" | grep -i intel || true)
-    HAS_AMD=$(echo "$GPU_INFO" | grep -i amd || true)
-    HAS_NVIDIA=$(echo "$GPU_INFO" | grep -i nvidia || true)
-    IS_HYBRID=false
-    if [[ -n "$HAS_NVIDIA" && ( -n "$HAS_INTEL" || -n "$HAS_AMD" ) ]]; then
-        IS_HYBRID=true
-        echo "Hybrid GPU system detected (NVIDIA + Intel/AMD)."
-    fi
-
-    # --- Intel drivers ---
-    if [[ -n "$HAS_INTEL" ]]; then
-        echo "Detected Intel GPU, installing Intel drivers..."
-        install_pacman "${intel_drivers[@]}"
-    fi
-
-    # --- AMD drivers ---
-    if [[ -n "$HAS_AMD" ]]; then
-        echo "Detected AMD GPU, installing AMD drivers..."
-        install_pacman "${amd_drivers[@]}"
-    fi
-    if [[ -n "$HAS_NVIDIA" ]]; then
-        if [ "$mode" = "1" ]; then
-            echo "Detected NVIDIA GPU."
-            echo "NVIDIA driver options:"
-            echo "1) Proprietary: Better performance, closed-source."
-            echo "2) Open: Open-source, may have lower performance."
-            echo "3) Minimal: Install only basic NVIDIA support."
-            read -p "Enter 1, 2, or 3: " choiceNV
-        else
-            choiceNV=1
-        fi
-        case $choiceNV in
-            1)
-                echo "Installing proprietary NVIDIA drivers"
-                install_pacman "${nvidia_proprietary[@]}"
-                install_pacman "${nvidia_common_utils[@]}"
-                nvidia_setup
-                ;;
-            2)
-                echo "Installing open-source NVIDIA drivers"
-                install_pacman "${nvidia_open[@]}"
-                install_pacman "${nvidia_common_utils[@]}"
-                install_pacman xf86-video-nouveau vulkan-nouveau
-                nvidia_setup
-                ;;
-            *)
-                echo "Installing minimal NVIDIA support"
-                install_pacman "${nvidia_drivers[@]}"
-                install_pacman "${nvidia_common_utils[@]}"
-                install_pacman xf86-video-nouveau vulkan-nouveau
-                nvidia_setup
-                ;;
-        esac
-    else
-        echo "No NVIDIA hardware detected. Skipping NVIDIA driver installation."
-        sudo cp /grub/grub /etc/default/grub
-        choiceNV=3
-    fi
-    # Check if running in VMware
-    if lspci | grep -i vmware &> /dev/null; then
-        echo "Detected VMware environment, installing VMware drivers"
-        install_pacman "${vmware_drivers[@]}"
-    fi
-
-    # Export choiceNV for use in install.sh
-    export choiceNV
+remove_pacman(){
+    sudo pacman -R --noconfirm "$@"
 }
 
-nvidia_setup(){
-    sudo mkdir -p /etc/modprobe.d
-    echo "options nvidia_drm modeset=1" | sudo tee /etc/modprobe.d/nvidia.conf > /dev/null
-    echo "Wrote /etc/modprobe.d/nvidia.conf (options nvidia_drm modeset=1)."
+remove_yay(){
+    yay -R --noconfirm "$@"
+}
 
-    if [[ -n "$IS_HYBRID" == true ]]; then
-        if grep -qE '^MODULES=.*\bnvidia\b' /etc/mkinitcpio.conf; then
-            echo "NVIDIA modules already present in MODULES, skipping modification."
-        else
-            sudo sed -i '/^MODULES=/ s/)/ nvidia nvidia_modeset nvidia_uvm nvidia_drm)/' /etc/mkinitcpio.conf
-        fi
-    fi
-
-    echo "Setting NVIDIA-related environment variables for Wayland..."
-    echo -e "GBM_BACKEND=nvidia-drm\n__GLX_VENDOR_LIBRARY_NAME=nvidia\nLIBVA_DRIVER_NAME=nvidia\nNVIDIA_PRIME_RENDER_OFFLOAD=1" | sudo tee -a /etc/environment
-    sudo cp grub/grubnvidia /etc/default/grub
-    # DE-specific configurations
-    if [[ "$choiceDE" == "1" ]]; then
-        sudo sed -i '/exit 0/i /usr/bin/prime-run' /etc/gdm/Init/Default
-    elif [[ "$choiceDE" == "3" ]]; then
-        mkdir -p "${HOME}/.config/hypr"
-        # Append env entries only if not already present
-        HYPRCONF="${HOME}/.config/hypr/hyprland.conf"
-        touch "$HYPRCONF"
-        grep -q '^env = GBM_BACKEND,nvidia-drm' "$HYPRCONF" || echo 'env = GBM_BACKEND,nvidia-drm' >> "$HYPRCONF"
-        grep -q '^env = LIBVA_DRIVER_NAME,nvidia' "$HYPRCONF" || echo 'env = LIBVA_DRIVER_NAME,nvidia' >> "$HYPRCONF"
-        grep -q '^env = __GLX_VENDOR_LIBRARY_NAME,nvidia' "$HYPRCONF" || echo 'env = __GLX_VENDOR_LIBRARY_NAME,nvidia' >> "$HYPRCONF"
-        # WLR_NO_HARDWARE_CURSORS=1 is sometimes recommended for NVIDIA+Wayland (Hyprland)
-        grep -q '^env = WLR_NO_HARDWARE_CURSORS,1' "$HYPRCONF" || echo 'env = WLR_NO_HARDWARE_CURSORS,1' >> "$HYPRCONF"
-    fi
-    sudo mkinitcpio -P
+remove_flatpak(){
+    flatpak remove -y --noninteractive flathub "$@"
 }
