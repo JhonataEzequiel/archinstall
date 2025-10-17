@@ -332,7 +332,7 @@ terminal_setup(){
         read -p "Enter 1 or 2: " choiceSS
         case $choiceSS in
             1)
-                curl -sS https://starship.rs/install.sh | sh
+                curl -sS https://starship.rs/install.sh | sh -- --y
                 sudo cp -r fastfetch ~/.config/
                 case $choiceTPKG in
                     1)
