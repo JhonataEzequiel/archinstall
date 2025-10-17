@@ -63,7 +63,7 @@ gitall() {
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias update-system="yay -Syyu --noconfirm && flatpak update -y --noninteractive"
-alias clear-packages='flatpak remove --unused && yay -Rns $(yay -Qtdq)'
+alias clear-packages='flatpak remove --unused && yay -Rns --noconfirm $(yay -Qtdq)'
 alias speedup-mirrors="sudo reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist"
 alias test-nvidia="prime-run glxinfo | grep 'OpenGL renderer'"
 alias show-ip-wifi="ip address | grep wlp8s0 | grep inet | awk '{print $2}' | cut -d'/' -f1"
