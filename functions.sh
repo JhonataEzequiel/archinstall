@@ -702,7 +702,7 @@ grub_theme_selection(){
     fi
     case $choiceGRUB in
         1)
-            git clone --depth=1 https://github.com/uiriansan/LainGrubTheme && cd LainGrubTheme && ./install.sh
+            git clone --depth=1 https://github.com/uiriansan/LainGrubTheme && cd LainGrubTheme && ./install.sh && ./patch_entries.sh
             cd ..
             rm -rf LainGrubTheme
             ;;
