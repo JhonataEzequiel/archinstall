@@ -2,6 +2,7 @@
 
 ## Required Packages and Steps
 - you are in a tty environment (at least)
+- btrfs partioned disk (UEFI)
 - git
 
 ## Installation Instructions

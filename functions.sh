@@ -38,6 +38,7 @@ set_variables(){
     echo "4) KDE w/gaming packages and emulators"
     echo "5) KDE without/gaming packages and emulators"
     echo "6) Exit"
+    echo "Hyprland is currently unavailable in automatic mode because I'm still working on it"
     read -p "Enter 1-6: " mode
 
     if [[ ! "$mode" =~ ^[1-6]$ ]]; then
@@ -46,11 +47,10 @@ set_variables(){
     fi
 
     choiceTE=1
-    choiceREND=1
     choiceTPKG=1
-    choiceTTE=5
+    choiceTTE=1
     choiceAUR=1
-    choiceBR=1
+    choiceBR=3
     choiceSS=1
 
     case $mode in
@@ -58,21 +58,25 @@ set_variables(){
             choiceDE=1
             choiceGM=1
             choiceEM=3
+            choiceTE=5
             ;;
         3)
             choiceDE=1
             choiceGM=2
             choiceEM=4
+            choiceTE=5
             ;;
         4)
             choiceDE=2
             choiceGM=1
             choiceEM=3
+            choiceTE=3
             ;;
         5)
             choiceDE=2
             choiceGM=2
             choiceEM=4
+            choiceTE=3
             ;;
         6)
             exit 1
@@ -80,7 +84,7 @@ set_variables(){
         *)
             ;;
     esac
-    export mode choiceDE choiceTE choiceGM choiceEM choiceREND choiceTPKG choiceTTE choiceAUR choiceBR choiceSS 
+    export mode choiceDE choiceTE choiceGM choiceEM choiceTPKG choiceTTE choiceAUR choiceBR choiceSS 
 }
 
 bluetooth_setup() {
@@ -165,24 +169,12 @@ choose_de(){
 install_basic_features(){
     install_pacman "${base_packages[@]}"
     ibus-daemon -drx
+
     install_pacman "${audio[@]}"
     systemctl --user enable --now pipewire
     systemctl --user enable --now wireplumber
 
-    if [ "$mode" = "1" ]; then
-        echo "Do you want to install video codecs and rendering packages?"
-        echo -e "1) Yes \n2) No"
-        read -p "Enter 1-2: " choiceREND
-        choiceREND=${choiceREND:-1}
-    fi
-
-    case $choiceREND in
-        1)
-            install_pacman "${rendering_packages[@]}"
-            ;;
-        *)
-            ;;
-    esac
+    install_pacman "${rendering_packages[@]}"
     
     sudo systemctl enable paccache.timer
     sudo systemctl enable --now cronie.service
@@ -219,6 +211,61 @@ aur_setup(){
     fi
 }
 
+terminal_text_editors_setup(){
+    if [ "$mode" = "1" ]; then
+        echo "Choose one or more Terminal text editors (enter numbers separated by spaces, e.g., '1 3 4')"
+        terminal_text_editors=("nano" "vim" "micro" "neovim" "none")
+        for i in "${!terminal_text_editors[@]}"; do
+            echo "$((i+1))) ${terminal_text_editors[i]}"
+        done
+        read -p "Enter numbers (1-${#terminal_text_editors[@]}): " -a choicesTE  # Read multiple inputs into an array
+
+        # Check if "none" (option 5) is selected
+        none_selected=false
+        for choice in "${choicesTE[@]}"; do
+            if [ "$choice" -eq 5 ]; then
+                none_selected=true
+                break
+            fi
+        done
+
+        if $none_selected; then
+            echo "Skipping text editor installation (none selected)."
+        else
+            # Process each selected editor
+            for choice in "${choicesTE[@]}"; do
+                # Validate input
+                if [ "$choice" -ge 1 ] && [ "$choice" -le "${#terminal_text_editors[@]}" ]; then
+                    editor="${terminal_text_editors[$((choice-1))]}"
+                    if [ "$editor" != "none" ]; then
+                        echo "Installing $editor..."
+                        sudo pacman -S --noconfirm "$editor"  # Install using pacman
+                    fi
+                else
+                    echo "Invalid choice: $choice. Skipping."
+                fi
+            done
+        fi
+    else
+        case $choiceTTE in
+            1)
+                install_pacman nano
+                ;;
+            2)
+                install_pacman vim
+                ;;
+            3)
+                install_pacman micro
+                ;;
+            4)
+                install_pacman neovim
+                ;;
+            *)
+                ;;
+        esac
+    fi
+}
+
 terminal_setup(){
     if [ "$choiceDE" = "3" ]; then
         choiceTPKG=1
@@ -237,47 +284,12 @@ terminal_setup(){
             install_pacman "${terminal_packages[@]}"
             tldr --update
             cp -r yazi ~/.config/
-            ;;
-        *)
-            ;;
-    esac
-
-    if [ "$mode" = "1" ]; then
-        echo "choose your terminal text editor"
-        echo "1) nano"
-        echo "2) vim"
-        echo "3) micro"
-        echo "4) neovim"
-        echo "5) all of them"
-        echo "6) skip it (not recommended)"
-        read -p "Enter 1-6: " choiceTTE
-    fi
-    case $choiceTTE in
-        1)
-            install_pacman "${terminal_text_editors[0]}"
-            ;;
-        2)
-            install_pacman "${terminal_text_editors[1]}"
-            ;;
-        3)
-            install_pacman "${terminal_text_editors[2]}"
-            ;;
-        4)
-            install_pacman "${terminal_text_editors[3]}"
-            ;;
-        5)
-            install_pacman "${terminal_text_editors[@]}"
-            ;;
-        *)
-            ;;
-    esac
-    case $choiceTPKG in
-        1)
             install_yay resvg
             ;;
         *)
             ;;
     esac
+
     if [ "$mode" = "1" ]; then
         echo "Choose a Terminal"
         terminals=("gnome-console" "ptyxis" "konsole" "alacritty" "ghostty" "kitty" "none")
@@ -305,11 +317,19 @@ terminal_setup(){
                     ;;
                 4|5)
                     install_yay "$terminal_choice"
-                    if [[ "$terminal_choice" == "ghostty" ]]; then
+                    if [[ "$terminal_choice" == "ghostty" && "$mode" = "1" ]]; then
                         echo "Do you want my ghostty customization?"
                         echo "1) Yes"
                         echo "2) No"
                         read -p "Enter 1-2: " choiceGH
+                        case $choiceGH in
+                            1)
+                                cp -r ghostty ~/.config/
+                                ;;
+                            *)
+                                ;;
+                        esac
+                    elif [[ "$terminal_choice" == "ghostty" && "$mode" !- "1" ]]; then
                         case $choiceGH in
                             1)
                                 cp -r ghostty ~/.config/
@@ -330,6 +350,25 @@ terminal_setup(){
         echo "1) Yes"
         echo "2) No"
         read -p "Enter 1 or 2: " choiceSS
+        case $choiceSS in
+            1)
+                curl -sS https://starship.rs/install.sh | sh -- --y
+                sudo cp -r fastfetch ~/.config/
+                case $choiceTPKG in
+                    1)
+                        sudo cp .betterbash ~/.bashrc
+                        ;;
+                    *)
+                        sudo cp .bashrc ~/.bashrc
+                        ;;
+                esac
+                echo "Done"
+                ;;
+            *)
+                echo "Skipping bashrc and starship setup"
+                ;;
+        esac
+    else
         case $choiceSS in
             1)
                 curl -sS https://starship.rs/install.sh | sh -- --y
@@ -513,14 +552,13 @@ gaming_setup(){
 
 zen_kernel_setup(){
     if [ "$mode" = "1" ]; then
-        echo "Do you want to install zen kernel? It will remove the basic kernel because the boot partition needs to be at least 2GB to use both"
+        echo "Do you want to install zen kernel? (REQUIRES AT LEAST 2GB FOR THE BOOT PARTITION, IF YOU DON'T WANT TO REMOVE THE NORMAL KERNEL FIRST)"
         echo -e "1) Yes \n2) No"
         read -p "Enter 1-2: " choiceZEN
         choiceZEN=${choiceZEN:-2}
         case $choiceZEN in
             1)
                 install_pacman linux-zen linux-zen-headers
-                remove_pacman linux linux-headers
                 ;;
             *)
                 ;;
@@ -557,11 +595,7 @@ extra_setup(){
     fi
 
     if [[ "${browsers[choiceBR-1]}" != "none" ]]; then
-        if [[ "${browsers[choiceBR-1]}" == "firefox" || "${browsers[choiceBR-1]}" == "vivaldi" ]]; then
-            install_pacman "${browsers[choiceBR-1]}"
-        else
-            install_yay "${browsers[choiceBR-1]}"
-        fi
+        install_yay "${browsers[choiceBR-1]}"
         echo "${browsers[choiceBR-1]} installed."
     fi
 
@@ -592,12 +626,63 @@ hyprland_setup(){
     esac
 }
 
-grub_setup(){
-    if pacman -Qs grub > /dev/null; then
-        install_yay "${grub_packages[@]}"
+grub_setup() {
+    # Check for other bootloaders
+    other_bootloaders=()
+    
+    if pacman -Qs systemd-boot > /dev/null; then
+        other_bootloaders+=("systemd-boot")
     fi
 
-    sudo systemctl enable --now grub-btrfsd
-    sudo grub-mkconfig
+    if pacman -Qs limine > /dev/null; then
+        other_bootloaders+=("limine")
+    fi
+
+    if pacman -Qs grub > /dev/null; then
+        echo "GRUB is already installed. Updating GRUB packages..."
+        install_yay "${grub_packages[@]}"
+    else
+        echo "Installing GRUB and related packages..."
+        install_yay "${grub_packages[@]}"
+        
+        # Install GRUB to the EFI System Partition (ESP)
+        sudo grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB --recheck
+        
+        # Enable Btrfs snapshot support for GRUB
+        sudo systemctl enable --now grub-btrfsd
+    fi
+
+    # Generate GRUB configuration
+    sudo grub-mkconfig -o /boot/grub/grub.cfg
     sudo update-grub
+
+    # Set GRUB as the default boot entry
+    if command -v efibootmgr >/dev/null; then
+        grub_entry=$(efibootmgr | grep -i "GRUB" | head -n 1 | awk '{print $1}' | sed 's/Boot//;s/*//')
+        if [ -n "$grub_entry" ]; then
+            echo "Setting GRUB as default boot entry..."
+            sudo efibootmgr -o "$grub_entry"
+    fi
+
+    # Remove other bootloaders if present
+    if [ ${#other_bootloaders[@]} -gt 0 ]; then
+        for bootloader in "${other_bootloaders[@]}"; do
+            case "$bootloader" in
+                "systemd-boot")
+                    sudo bootctl remove
+                    remove_pacman systemd-boot
+                    sudo rm -rf /boot/loader /boot/loader.efi
+                    ;;
+                "limine")
+                    # Limine doesn't have a native uninstall command; remove manually
+                    limine_entry=$(efibootmgr | grep -i "Limine" | head -n 1 | awk '{print $1}' | sed 's/Boot//;s/*//')
+                    if [ -n "$limine_entry" ]; then
+                        sudo efibootmgr -B -b "$limine_entry"
+                    fi
+                    sudo rm -rf /boot/limine /boot/limine.cfg
+                    remove_yay limine
+                    ;;
+            esac
+        done
+    fi
 }
