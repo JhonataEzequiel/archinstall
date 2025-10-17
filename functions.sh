@@ -149,6 +149,7 @@ choose_de(){
         case $choiceDE in
             1)
                 sudo systemctl enable gdm
+                ;;
             2|3)
                 sudo systemctl enable ly
                 ;;
