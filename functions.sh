@@ -568,6 +568,7 @@ extra_setup(){
         *)
             ;;
     esac
+    hyprland_setup
 }
 
 hyprland_setup(){
