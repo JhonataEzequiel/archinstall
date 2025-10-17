@@ -468,11 +468,11 @@ gaming_setup(){
                     install_yay "${gaming[@]}"
                     echo "Finished installing gaming packages"
                     ;;
+            esac
             sudo usermod -aG gamemode $USER
             sudo mkdir /usr/share/gamemode/
             sudo cp gamemode/gamemode.ini /usr/share/gamemode/.
             systemctl --user enable --now gamemoded
-            esac
             ;;
         *)
             echo "Skipped gaming packages"
