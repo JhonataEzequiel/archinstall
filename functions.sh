@@ -544,7 +544,7 @@ extra_setup(){
 
     if [ "$mode" = "1" ]; then
         echo "Select a browser"
-        browsers=("firefox" "brave" "zen-browser-bin" "vivaldi" "chrome" "floorp" "librewolf" "chromium" "firedragon" "waterfox" "none")
+        browsers=("firefox" "brave" "zen-browser-bin" "vivaldi" "chrome" "floorp" "librewolf" "chromium" "firedragon" "waterfox" "qutebrowser" "none")
         for i in "${!browsers[@]}"; do
             echo "$((i+1))) ${browsers[i]}"
         done
@@ -568,7 +568,6 @@ extra_setup(){
         *)
             ;;
     esac
-    hyprland_setup
 }
 
 hyprland_setup(){

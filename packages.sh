@@ -38,7 +38,7 @@ hyprland_packages=(
     xdg-desktop-portal xdg-desktop-portal-hyprland xdg-user-dirs-gtk
     pavucontrol polkit hyprpolkitagent ly hyprland wofi hyprpaper
     hypridle hyprlock hyprpicker hyprshot cliphist network-manager-applet
-    swaync brightnessctl
+    swaync brightnessctl waybar
 )
 
 #hyprland_aur=(

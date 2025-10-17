@@ -15,6 +15,7 @@ install_video_drivers
 gaming_setup
 zen_kernel_setup
 extra_setup
+hyprland_setup
 grub_setup
 
 echo "Installation complete. Reboot required to apply changes."
