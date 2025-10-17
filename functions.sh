@@ -566,10 +566,12 @@ extra_setup(){
         *)
             ;;
     esac
+}
 
+hyprland_setup(){
     case $choiceDE in
         3)
-            install_yay "${hyprland_aur[@]}"
+            #install_yay "${hyprland_aur[@]}"
             if [[ "$terminal_choice" == "kitty" ]]; then
                 mkdir -p ~/.config/kitty/
                 echo "background_opacity 0.5" >> ~/.config/kitty/kitty.conf

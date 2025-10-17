@@ -4,6 +4,7 @@ base_packages=(
     dconf bluez bluez-utils git curl wget pacman-contrib
     unzip unrar 7zip tar python-pip ufw zip timeshift
     fuse2 openssh cronie ntfs-3g linux-headers ibus flatpak
+    python
 )
 
 audio=(
@@ -18,7 +19,9 @@ gnome_packages=(
     gnome-session gnome-tweaks gnome-calculator gnome-disk-utility
     gnome-online-accounts gvfs-google gvfs loupe gnome-menus
     gnome-software decibels mission-center showtime qbittorrent
-    gnome-themes-extra pavucontrol gnome-keyring
+    gnome-themes-extra pavucontrol gnome-keyring gvfs-goa
+    gvfs-afc gvfs-mtp gvfs-nfs gvfs-smb gvfs-wsdd gvfs-dnssd
+    gvfs-gphoto2 gvfs-onedrive
 )
 
 kde_packages=(
@@ -32,9 +35,20 @@ kde_packages=(
 )
 
 hyprland_packages=(
-    xdg-desktop-portal xdg-desktop-portal-wlr xdg-user-dirs
-    pavucontrol polkit polkit-qt6 dolphin ly
+    xdg-desktop-portal xdg-desktop-portal-hyprland xdg-user-dirs-gtk
+    pavucontrol polkit hyprpolkitagent ly hyprland wofi hyprpaper
+    hypridle hyprlock hyprpicker hyprshot cliphist network-manager-applet
+    swaync brightnessctl
 )
+
+#hyprland_aur=(
+#    wlogout 
+#    qt5-wayland qt6-wayland light 
+#    waypaper libgtop 
+#    dart-sass brightnessctl swww upower
+#    gvfs gtksourceview3 libsoup3 grimblast-git wf-recorder-git 
+#    matugen-bin python-gpustat hyprsunset-git 
+#)
 
 rendering_packages=(
     imagemagick ffmpeg poppler gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav
@@ -101,17 +115,6 @@ nvidia_common_utils=(
 
 vmware_drivers=(
     xf86-video-vmware
-)
-
-hyprland_aur=(
-    hyprland wlogout hypridle wofi hyprpaper swaync 
-    hyprshot xdg-desktop-portal-hyprland 
-    polkit-gnome qt5-wayland qt6-wayland light hyprlock
-    ghostty waypaper hyprpicker
-    aylurs-gtk-shell-git libgtop 
-    dart-sass wl-clipboard brightnessctl swww python upower
-    gvfs gtksourceview3 libsoup3 grimblast-git wf-recorder-git hyprpicker 
-    matugen-bin python-gpustat hyprsunset-git ags-hyprpanel-git
 )
 
 extra=(
