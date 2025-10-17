@@ -458,6 +458,10 @@ gaming_setup(){
             echo "vm.max_map_count = 2147483642" | sudo tee /etc/sysctl.d/80-gamecompatibility.conf
             wget https://github.com/psygreg/shader-booster/releases/latest/download/patcher.sh
             chmod +x patcher.sh
+            sed -i 's|whiptail --title "Shader Booster" --msgbox "No valid shell found." 8 78|echo "Shader Booster: No valid shell found."|g' patcher.sh
+            sed -i 's|whiptail --title "Shader Booster" --msgbox "Success! Reboot to apply." 8 78|echo "Shader Booster: Success! Reboot to apply."|g' patcher.sh
+            sed -i 's|whiptail --title "Shader Booster" --msgbox "No compatible GPU found to patch." 8 78|echo "Shader Booster: No compatible GPU found to patch."|g' patcher.sh
+            sed -i 's|whiptail --title "Shader Booster" --msgbox "System already patched." 8 78|echo "Shader Booster: System already patched."|g' patcher.sh
             ./patcher.sh
             rm patcher.sh
             case $choiceNV in
