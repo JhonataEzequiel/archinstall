@@ -401,7 +401,7 @@ install_video_drivers(){
         esac
         nvidia_setup
     else
-        sudo cp /grub/grub /etc/default/grub
+        sudo cp grub/grub /etc/default/grub
         choiceNV=3
     fi
     # Check if running in VMware
