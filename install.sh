@@ -17,6 +17,7 @@ zen_kernel_setup
 extra_setup
 hyprland_setup
 grub_setup
+grub_theme_selection
 
 echo "Installation complete. Reboot required to apply changes."
 read -p "Reboot now? (y/N): " reboot_choice
