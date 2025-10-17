@@ -191,17 +191,18 @@ install_basic_features(){
 
 aur_setup(){
     if command -v yay &> /dev/null; then
-        echo "yay is already installed."
+    echo "yay is already installed."
     else
         echo "Installing yay as an AUR helper"
         install_pacman base-devel
         git clone https://aur.archlinux.org/yay.git
         cd yay
-        makepkg -si
+        makepkg -si --noconfirm
         cd ..
         rm -rf yay
     fi
-    if [[ ! -f pacman.conf ]]; then
+
+    if [[ ! -f /etc/pacman.conf ]]; then
         touch /etc/pacman.conf
     fi
 
@@ -211,8 +212,8 @@ aur_setup(){
         echo "Installing chaotic-aur"
         sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
         sudo pacman-key --lsign-key 3056513887B78AEB
-        sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst'
-        sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
+        sudo pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst'  # Add --noconfirm
+        sudo pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'  # Add --noconfirm
         sudo cp pacman.conf /etc/pacman.conf
         sudo pacman -Syu --noconfirm
     fi
@@ -419,7 +420,7 @@ nvidia_setup(){
 
     if [[ -n "$IS_HYBRID" ]]; then
         if grep -qE '^MODULES=.*\bnvidia\b' /etc/mkinitcpio.conf; then
-            echo "Installing Hybrid Config"
+            echo "Skipping Hybrid Config"
         else
             sudo sed -i '/^MODULES=/ s/)/ nvidia nvidia_modeset nvidia_uvm nvidia_drm)/' /etc/mkinitcpio.conf
         fi
