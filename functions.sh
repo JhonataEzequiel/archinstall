@@ -419,7 +419,7 @@ nvidia_setup(){
 
     if [[ -n "$IS_HYBRID" ]]; then
         if grep -qE '^MODULES=.*\bnvidia\b' /etc/mkinitcpio.conf; then
-        fi
+            echo "Installing Hybrid Config"
         else
             sudo sed -i '/^MODULES=/ s/)/ nvidia nvidia_modeset nvidia_uvm nvidia_drm)/' /etc/mkinitcpio.conf
         fi
