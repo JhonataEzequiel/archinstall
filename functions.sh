@@ -52,6 +52,7 @@ set_variables(){
     choiceAUR=1
     choiceBR=3
     choiceSS=1
+    choiceGRUB=4
 
     case $mode in
         2)
@@ -84,7 +85,7 @@ set_variables(){
         *)
             ;;
     esac
-    export mode choiceDE choiceTE choiceGM choiceEM choiceTPKG choiceTTE choiceAUR choiceBR choiceSS 
+    export mode choiceDE choiceTE choiceGM choiceEM choiceTPKG choiceTTE choiceAUR choiceBR choiceSS choiceGRUB
 }
 
 bluetooth_setup() {
@@ -626,10 +627,10 @@ hyprland_setup(){
     esac
 }
 
-grub_setup() {
+grub_setup(){
     # Check for other bootloaders
     other_bootloaders=()
-    
+
     if pacman -Qs systemd-boot > /dev/null; then
         other_bootloaders+=("systemd-boot")
     fi
@@ -685,4 +686,68 @@ grub_setup() {
             esac
         done
     fi
+}
+
+grub_theme_selection(){
+    if [[ "$mode" = "1" ]]; then
+        echo "Want theme do you want for grub?"
+        echo "1) Lain Theme (Made for 1080p displays) (credits: https://github.com/uiriansan)"
+        echo "2) Tela (credits: https://github.com/vinceliuice/grub2-themes.git)"
+        echo "3) Stylish (credits: https://github.com/vinceliuice/grub2-themes.git)"
+        echo "4) Vimix (credits: https://github.com/vinceliuice/grub2-themes.git)"
+        echo "5) WhiteSur (credits: https://github.com/vinceliuice/grub2-themes.git)"
+        echo "6) Fallout (credits: https://github.com/shvchk/fallout-grub-theme)"
+        echo "7) No"
+        read -p "Enter 1-5: " choiceGRUB
+    fi
+    case $choiceGRUB in
+        1)
+            git clone --depth=1 https://github.com/uiriansan/LainGrubTheme && cd LainGrubTheme && ./install.sh
+            cd ..
+            rm -rf LainGrubTheme
+            ;;
+        2|3|4|5)
+            git clone https://github.com/vinceliuice/grub2-themes.git
+            cd grub2-themes
+            chmod +x install.sh
+            RESOLUTION="1080p"
+            if [[ "$mode" = "1" ]]; then
+                echo "What's your display resolution?"
+                resolution=("1080p" "2k" "4k" "ultrawide" "ultrawide2k" "Custom" "none")
+                for i in "${!resolution[@]}"; do
+                    echo "$((i+1))) ${resolution[i]}"
+                done
+                read -p "Enter 1-${#resolution[@]} (or press Enter for 1080p): " resolution_choice
+                if [[ -n "$resolution_choice" && "$resolution_choice" -ge 1 && "$resolution_choice" -le "${#resolution[@]}" ]]; then
+                    RESOLUTION="${resolution[$((resolution_choice-1))]}"
+                fi
+            fi
+            case $choiceGRUB in
+                2)
+                    sudo ./install.sh -t tela -s "$RESOLUTION"
+                    ;;
+                3)
+                    sudo ./install.sh -t stylish -s "$RESOLUTION"
+                    ;;
+                4)
+                    sudo ./install.sh -t vimix -s "$RESOLUTION"
+                    ;;
+                5)
+                    sudo ./install.sh -t whitesur -s "$RESOLUTION"
+                    ;;
+            esac
+            cd ..
+            rm -rf grub2-themes
+            ;;
+        6)
+            git clone https://github.com/shvchk/fallout-grub-theme.git
+            cd fallout-grub-theme
+            chmod +x install.sh
+            ./install.sh
+            cd ..
+            rm -rf fallout-grub-theme
+            ;;
+        *)
+            ;;
+    esac
 }
