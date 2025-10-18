@@ -8,7 +8,7 @@ fastfetch
 # Functions
 extract() {
     local delete="n" confirm="y"
-    while [ "$1" = "--delete" ] || [ "$1" = "--no-confirm" ]; do
+    while [ "$1" = "--delete" ] || [ "$1" = "--noconfirm" ]; do
         if [ "$1" = "--delete" ]; then
             delete="y"
         elif [ "$1" = "--no-confirm" ]; then
@@ -63,13 +63,13 @@ gitall() {
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias update-system="yay -Syyu --noconfirm && flatpak update -y --noninteractive"
-alias clear-packages='flatpak remove --unused && yay -Rns --noconfirm $(yay -Qtdq)'
+alias clear-packages='orphans=$(yay -Qtdq); if [ -n "$orphans" ]; then yay -Rns --noconfirm "$orphans"; else echo "No packages to clear."; fi && flatpak remove --unused -y --noninteractive'
 alias speedup-mirrors="sudo reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist"
 alias test-nvidia="prime-run glxinfo | grep 'OpenGL renderer'"
-alias show-ip-wifi="ip address | grep wlp8s0 | grep inet | awk '{print $2}' | cut -d'/' -f1"
-alias show-ip="ip address | grep eth0 | grep inet | awk '{print $2}' | cut -d'/' -f1"
+alias show-ip="ip -4 addr show | grep inet | awk '{print \$2}' | cut -d'/' -f1"
+alias show-ip-wifi="ip -4 addr show | grep inet | grep -E 'wlan|wlp' | awk '{print \$2}' | cut -d'/' -f1"
 alias logoff="gnome-session-quit --no-prompt"
-alias clear-cache="sudo pacman -Scc && yay -Sc && flatpak remove --unused"
+alias clear-cache="sudo pacman -Scc --noconfirm && yay -Sc --noconfirm"
 alias gs='git status'
 alias ga='git add .'
 alias gc='git commit -m'
