@@ -74,7 +74,7 @@ function y() {
 	fi
 	rm -f -- "$tmp"
 }
-export EDITOR='nano' # change to your prefered one
+export EDITOR='micro' # change to your prefered one
 
 # aliases
 alias ls='eza --icons'
