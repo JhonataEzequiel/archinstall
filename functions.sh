@@ -130,6 +130,7 @@ choose_de(){
                 ;;
             3)
                 echo "Installing Hyprland and its configs"
+                remove_pacman pipewire-jack
                 if install_pacman "${hyprland_packages[@]}"; then
                     sudo systemctl enable polkit
                     echo "Finished Installing base Hyprland packages"
