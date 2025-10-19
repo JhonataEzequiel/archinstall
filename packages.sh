@@ -141,7 +141,7 @@ gaming=(
 )
 
 gnome_extra=(
-    extension-manager gapless gradia
+    extension-manager gapless gradia numix-folders-git numix-circle-icon-theme-git
 )
 
 grub_packages=(
