@@ -18,10 +18,10 @@ gnome_packages=(
     baobab gnome-shell gnome-control-center gnome-settings-daemon
     gnome-session gnome-tweaks gnome-calculator gnome-disk-utility
     gnome-online-accounts gvfs-google gvfs loupe gnome-menus
-    gnome-software decibels mission-center showtime qbittorrent
+    decibels mission-center showtime qbittorrent
     gnome-themes-extra pavucontrol gnome-keyring gvfs-goa
     gvfs-afc gvfs-mtp gvfs-nfs gvfs-smb gvfs-wsdd gvfs-dnssd
-    gvfs-gphoto2 gvfs-onedrive
+    gvfs-gphoto2 gvfs-onedrive gnome-software
 )
 
 kde_packages=(
@@ -141,7 +141,7 @@ gaming=(
 )
 
 gnome_extra=(
-    extension-manager gapless gradia numix-folders-git numix-circle-icon-theme-git
+    extension-manager gapless gradia numix-folders-git numix-circle-icon-theme-git bazaar-git
 )
 
 grub_packages=(

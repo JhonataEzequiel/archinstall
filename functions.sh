@@ -583,7 +583,7 @@ extra_setup(){
             install_yay "${extra[@]}"
             case $choiceDE in
                 1)
-                    install_yay "${gnome_extra[@]}"
+                    install_yay "${gnome_extra[@]}" && remove_yay gnome-software
                     gsettings set org.gnome.mutter check-alive-timeout 0
                     ;;
                 *)
