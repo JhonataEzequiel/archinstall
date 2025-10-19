@@ -330,7 +330,7 @@ terminal_setup(){
                             *)
                                 ;;
                         esac
-                    elif [[ "$terminal_choice" == "ghostty" && "$mode" !- "1" ]]; then
+                    elif [[ "$terminal_choice" == "ghostty" && "$mode" != "1" ]]; then
                         case $choiceGH in
                             1)
                                 cp -r ghostty ~/.config/
