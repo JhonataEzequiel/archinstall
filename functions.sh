@@ -468,6 +468,9 @@ nvidia_setup(){
 
     echo -e "GBM_BACKEND=nvidia-drm\n__GLX_VENDOR_LIBRARY_NAME=nvidia\nLIBVA_DRIVER_NAME=nvidia\nNVIDIA_PRIME_RENDER_OFFLOAD=1" | sudo tee -a /etc/environment
     sudo cp grub/grubnvidia /etc/default/grub
+
+    sudo nvidia-xconfig --cool-bits=28
+
     # DE-specific configurations
     if [[ "$choiceDE" == "1" ]]; then
         sudo sed -i '/exit 0/i /usr/bin/prime-run' /etc/gdm/Init/Default
@@ -516,6 +519,19 @@ gaming_setup(){
             esac
             sudo usermod -aG gamemode $USER
             sudo mkdir /usr/share/gamemode/
+            choiceGAMEMODE="2"
+            if [[ "$mode" == "1" ]]; then
+                echo "Do you want my gamemode.ini config? Suitable for a laptop with an intel igpu and a nvidia gpu"
+                echo "1) Yes\n2)No"
+                read -p "Enter 1-2: " choiceGAMEMODE
+            fi
+            case $choiceGAMEMODE in
+                1)
+                    sudo cp -r gamemode/gamemode_my_settings.ini /usr/share/gamemode/gamemode.ini
+                    ;;
+                *)
+                    ;;
+            esac 
             sudo cp gamemode/gamemode.ini /usr/share/gamemode/.
             systemctl --user enable --now gamemoded
             case $choiceDE in
