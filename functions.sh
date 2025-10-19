@@ -581,6 +581,14 @@ extra_setup(){
     case $choiceAUR in
         1)
             install_yay "${extra[@]}"
+            case $choiceDE in
+                1)
+                    install_yay "${gnome_extra[@]}"
+                    gsettings set org.gnome.mutter check-alive-timeout 0
+                    ;;
+                *)
+                    ;;
+            esac
             ;;
         *)
             ;;
@@ -599,15 +607,6 @@ extra_setup(){
         install_yay "${browsers[choiceBR-1]}"
         echo "${browsers[choiceBR-1]} installed."
     fi
-
-    case $choiceDE in
-        1)
-            install_yay "${gnome_extra[@]}"
-            gsettings set org.gnome.mutter check-alive-timeout 0
-            ;;
-        *)
-            ;;
-    esac
 }
 
 hyprland_setup(){
