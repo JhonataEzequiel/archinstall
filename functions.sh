@@ -518,6 +518,13 @@ gaming_setup(){
             sudo mkdir /usr/share/gamemode/
             sudo cp gamemode/gamemode.ini /usr/share/gamemode/.
             systemctl --user enable --now gamemoded
+            case $choiceDE in
+                1)
+                    cd gamemode/ && sed -i '$ s/^#//' gamemode.ini && sed -i "$(wc -l < gamemode.ini | xargs -I {} expr {} - 1) s/^#//" gamemode.ini && cd ..
+                    ;;
+                *)
+                    ;;
+            esac
             ;;
         *)
             echo "Skipped gaming packages"
