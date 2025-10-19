@@ -651,63 +651,64 @@ hyprland_setup(){
 
 grub_setup(){
     # Check for other bootloaders
-    other_bootloaders=()
+    #other_bootloaders=()
 
-    if pacman -Qs systemd-boot > /dev/null; then
-        other_bootloaders+=("systemd-boot")
-    fi
+    #if pacman -Qs systemd-boot > /dev/null; then
+        #other_bootloaders+=("systemd-boot")
+   # fi
 
-    if pacman -Qs limine > /dev/null; then
-        other_bootloaders+=("limine")
-    fi
+   # if pacman -Qs limine > /dev/null; then
+        #other_bootloaders+=("limine")
+   # fi
 
     if pacman -Qs grub > /dev/null; then
         echo "GRUB is already installed. Updating GRUB packages..."
         install_yay "${grub_packages[@]}"
-    else
-        echo "Installing GRUB and related packages..."
-        install_yay "${grub_packages[@]}"
+    fi
+    #else
+        #echo "Installing GRUB and related packages..."
+        #install_yay "${grub_packages[@]}"
         
         # Install GRUB to the EFI System Partition (ESP)
-        sudo grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB --recheck
+        #sudo grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB --recheck
         
         # Enable Btrfs snapshot support for GRUB
-        sudo systemctl enable --now grub-btrfsd
-    fi
+        #sudo systemctl enable --now grub-btrfsd
+    #fi
 
     # Generate GRUB configuration
-    sudo grub-mkconfig -o /boot/grub/grub.cfg
+    #sudo grub-mkconfig -o /boot/grub/grub.cfg
     sudo update-grub
 
     # Set GRUB as the default boot entry
-    if command -v efibootmgr >/dev/null; then
-        grub_entry=$(efibootmgr | grep -i "GRUB" | head -n 1 | awk '{print $1}' | sed 's/Boot//;s/*//')
-        if [ -n "$grub_entry" ]; then
-            echo "Setting GRUB as default boot entry..."
-            sudo efibootmgr -o "$grub_entry"
-    fi
+    #if command -v efibootmgr >/dev/null; then
+        #grub_entry=$(efibootmgr | grep -i "GRUB" | head -n 1 | awk '{print $1}' | sed 's/Boot//;s/*//')
+       # if [ -n "$grub_entry" ]; then
+            #echo "Setting GRUB as default boot entry..."
+           # sudo efibootmgr -o "$grub_entry"
+  #  fi
 
     # Remove other bootloaders if present
-    if [ ${#other_bootloaders[@]} -gt 0 ]; then
-        for bootloader in "${other_bootloaders[@]}"; do
-            case "$bootloader" in
-                "systemd-boot")
-                    sudo bootctl remove
-                    remove_pacman systemd-boot
-                    sudo rm -rf /boot/loader /boot/loader.efi
-                    ;;
-                "limine")
+   # if [ ${#other_bootloaders[@]} -gt 0 ]; then
+        #for bootloader in "${other_bootloaders[@]}"; do
+            #case "$bootloader" in
+               # "systemd-boot")
+                   # sudo bootctl remove
+                   # remove_pacman systemd-boot
+                  #  sudo rm -rf /boot/loader /boot/loader.efi
+                    #;;
+               # "limine")
                     # Limine doesn't have a native uninstall command; remove manually
-                    limine_entry=$(efibootmgr | grep -i "Limine" | head -n 1 | awk '{print $1}' | sed 's/Boot//;s/*//')
-                    if [ -n "$limine_entry" ]; then
-                        sudo efibootmgr -B -b "$limine_entry"
-                    fi
-                    sudo rm -rf /boot/limine /boot/limine.cfg
-                    remove_yay limine
-                    ;;
-            esac
-        done
-    fi
+                   # limine_entry=$(efibootmgr | grep -i "Limine" | head -n 1 | awk '{print $1}' | sed 's/Boot//;s/*//')
+                   # if [ -n "$limine_entry" ]; then
+                       # sudo efibootmgr -B -b "$limine_entry"
+                  #  fi
+                  #  sudo rm -rf /boot/limine /boot/limine.cfg
+                  #  remove_yay limine
+                  #  ;;
+           # esac
+       # done
+    #fi
 }
 
 grub_theme_selection(){
