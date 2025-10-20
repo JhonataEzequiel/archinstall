@@ -347,7 +347,13 @@ terminal_setup(){
         case $choiceSS in
             1)
                 curl -sS https://starship.rs/install.sh | sh
-                sudo cp -r fastfetch ~/.config/
+                case $choiceTE in
+                    5|6)
+                        sudo cp -r fastfetch ~/.config/
+                        ;;
+                    *)
+                        ;;
+                esac
                 case $choiceTPKG in
                     1)
                         sudo cp .betterbash ~/.bashrc
