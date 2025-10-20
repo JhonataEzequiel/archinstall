@@ -8,7 +8,7 @@ base_packages=(
 )
 
 audio=(
-    pipewire pipewire-pulse pipewire-alsa pipewire-jack lib32-pipewire 
+    pipewire pipewire-pulse pipewire-alsa lib32-pipewire 
     pipewire-audio pipewire-v4l2 wireplumber
 )
 
@@ -40,15 +40,6 @@ hyprland_packages=(
     hypridle hyprlock hyprpicker hyprshot cliphist network-manager-applet
     swaync brightnessctl waybar
 )
-
-#hyprland_aur=(
-#    wlogout 
-#    qt5-wayland qt6-wayland light 
-#    waypaper libgtop 
-#    dart-sass brightnessctl swww upower
-#    gvfs gtksourceview3 libsoup3 grimblast-git wf-recorder-git 
-#    matugen-bin python-gpustat hyprsunset-git 
-#)
 
 rendering_packages=(
     imagemagick ffmpeg poppler gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav

@@ -319,19 +319,11 @@ terminal_setup(){
                     ;;
                 4|5)
                     install_yay "$terminal_choice"
-                    if [[ "$terminal_choice" == "ghostty" && "$mode" = "1" ]]; then
+                    if [[ "$terminal_choice" == "ghostty"]]; then
                         echo "Do you want my ghostty customization?"
                         echo "1) Yes"
                         echo "2) No"
                         read -p "Enter 1-2: " choiceGH
-                        case $choiceGH in
-                            1)
-                                cp -r ghostty ~/.config/
-                                ;;
-                            *)
-                                ;;
-                        esac
-                    elif [[ "$terminal_choice" == "ghostty" && "$mode" != "1" ]]; then
                         case $choiceGH in
                             1)
                                 cp -r ghostty ~/.config/
@@ -354,7 +346,7 @@ terminal_setup(){
         read -p "Enter 1 or 2: " choiceSS
         case $choiceSS in
             1)
-                curl -sS https://starship.rs/install.sh | sh -- --y
+                curl -sS https://starship.rs/install.sh | sh
                 sudo cp -r fastfetch ~/.config/
                 case $choiceTPKG in
                     1)
@@ -678,7 +670,7 @@ grub_setup(){
     #fi
 
     # Generate GRUB configuration
-    #sudo grub-mkconfig -o /boot/grub/grub.cfg
+    sudo grub-mkconfig -o /boot/grub/grub.cfg
     sudo update-grub
 
     # Set GRUB as the default boot entry
