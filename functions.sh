@@ -293,7 +293,7 @@ terminal_setup(){
     esac
 
     if [ "$mode" = "1" ]; then
-        echo "Choose a Terminal"
+        echo "Choose a Terminal (fastfetch custom config available only for kitty and ghostty)"
         terminals=("gnome-console" "ptyxis" "konsole" "alacritty" "ghostty" "kitty" "none")
         for i in "${!terminals[@]}"; do
             echo "$((i+1))) ${terminals[i]}"
