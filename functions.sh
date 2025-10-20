@@ -529,6 +529,7 @@ gaming_setup(){
             systemctl --user enable --now gamemoded
             case $choiceDE in
                 1)
+                    cp -r gamemode/scripts/disable_gnome_extensions.sh ~/.config/gamemode/
                     cd gamemode/ && sed -i '$ s/^#//' gamemode.ini && sed -i "$(wc -l < gamemode.ini | xargs -I {} expr {} - 1) s/^#//" gamemode.ini && cd ..
                     ;;
                 *)
