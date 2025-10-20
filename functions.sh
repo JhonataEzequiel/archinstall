@@ -512,10 +512,10 @@ gaming_setup(){
             esac
             sudo usermod -aG gamemode $USER
             sudo mkdir /usr/share/gamemode/
-            choiceGAMEMODE="2"
+            choiceGAMEMODE=2
             if [[ "$mode" == "1" ]]; then
                 echo "Do you want my gamemode.ini config? Suitable for a laptop with an intel igpu and a nvidia gpu"
-                echo "1) Yes\n2)No"
+                echo "1) Yes\n 2)No"
                 read -p "Enter 1-2: " choiceGAMEMODE
             fi
             case $choiceGAMEMODE in
@@ -529,7 +529,8 @@ gaming_setup(){
             systemctl --user enable --now gamemoded
             case $choiceDE in
                 1)
-                    cp -r gamemode/scripts/disable_gnome_extensions.sh ~/.config/gamemode/
+                    cp -r gamemode/scripts/disable_gnome_extensions.sh ~/.config/gamemode/scripts/
+                    chmod +x ~/.config/gamemode/scripts/disable_gnome_extensions.sh
                     cd gamemode/ && sed -i '$ s/^#//' gamemode.ini && sed -i "$(wc -l < gamemode.ini | xargs -I {} expr {} - 1) s/^#//" gamemode.ini && cd ..
                     ;;
                 *)
