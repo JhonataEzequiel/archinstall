@@ -337,6 +337,7 @@ terminal_setup(){
                     echo "Skipping terminal emulator installation"
                     ;;
             esac
+            ;;
     esac
 
     if [ "$mode" = "1" ]; then
