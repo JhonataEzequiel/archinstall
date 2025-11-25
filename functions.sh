@@ -319,19 +319,22 @@ terminal_setup(){
                     ;;
                 4|5)
                     install_yay "$terminal_choice"
-                    if [[ "$terminal_choice" == "ghostty"]]; then
-                        echo "Do you want my ghostty customization?"
-                        echo "1) Yes"
-                        echo "2) No"
-                        read -p "Enter 1-2: " choiceGH
-                        case $choiceGH in
-                            1)
-                                cp -r ghostty ~/.config/
-                                ;;
-                            *)
-                                ;;
-                        esac
-                    fi
+                    case $terminal_choice in
+                        "ghostty")
+                            echo "Do you want my ghostty customization?"
+                            echo "1) Yes"
+                            echo "2) No"
+                            read -p "Enter 1-2: " choiceGH
+                            case $choiceGH in
+                                1)
+                                    cp -r ghostty ~/.config/
+                                    ;;
+                                *)
+                                    ;;
+                            esac
+                            ;;
+                        *)
+                            ;;
                     ;;
                 *)
                     echo "Skipping terminal emulator installation"
