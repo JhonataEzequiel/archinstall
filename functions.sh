@@ -336,6 +336,7 @@ terminal_setup(){
                         *)
                             ;;
                     esac
+                    ;;
                 *)
                     echo "Skipping terminal emulator installation"
                     ;;
