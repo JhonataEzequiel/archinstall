@@ -54,6 +54,7 @@ set_variables(){
     choiceSS=1
     choiceGRUB=4
     choiceCAO=2
+    choiceWI=1
 
     case $mode in
         2)
@@ -86,7 +87,7 @@ set_variables(){
         *)
             ;;
     esac
-    export mode choiceDE choiceTE choiceGM choiceEM choiceTPKG choiceTTE choiceAUR choiceBR choiceSS choiceGRUB choiceCAO
+    export mode choiceDE choiceTE choiceGM choiceEM choiceTPKG choiceTTE choiceAUR choiceBR choiceSS choiceGRUB choiceCAO choiceWI
 }
 
 bluetooth_setup() {
@@ -376,6 +377,21 @@ terminal_setup(){
                 ;;
         esac
     fi
+}
+
+wine_setup(){
+    if [ "$mode" = "1" ]; then
+        echo "Do you want to add wine support, with all the dependencies for everything?"
+        echo "1) Yes\n2) No"
+        read -p "Enter 1 or 2: " choiceWI
+    fi
+    case $choiceWI in
+        1)
+            install_yay wine_and_dependencies
+            ;;
+        *)
+            ;;
+    esac
 }
 
 cachyos_setup(){

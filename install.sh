@@ -12,6 +12,7 @@ install_basic_features
 aur_setup
 terminal_text_editors_setup
 terminal_setup
+wine_setup
 cachyos_setup
 install_video_drivers
 gaming_setup
