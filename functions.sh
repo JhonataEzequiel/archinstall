@@ -53,6 +53,7 @@ set_variables(){
     choiceBR=3
     choiceSS=1
     choiceGRUB=4
+    choiceCAO=2
 
     case $mode in
         2)
@@ -85,7 +86,7 @@ set_variables(){
         *)
             ;;
     esac
-    export mode choiceDE choiceTE choiceGM choiceEM choiceTPKG choiceTTE choiceAUR choiceBR choiceSS choiceGRUB
+    export mode choiceDE choiceTE choiceGM choiceEM choiceTPKG choiceTTE choiceAUR choiceBR choiceSS choiceGRUB choiceCAO
 }
 
 bluetooth_setup() {
@@ -395,6 +396,27 @@ terminal_setup(){
     fi
 }
 
+cachyos_setup(){
+    if [ "$mode" = "1" ]; then
+        echo "Do you want to add CachyOS kernel and optmizations?"
+        echo "1) Yes\n2) No"
+        read -p "Enter 1 or 2: " choiceCAO
+    elif
+    case $choiceCAO in
+        1)
+            curl https://mirror.cachyos.org/cachyos-repo.tar.xz -o cachyos-repo.tar.xz
+            tar xvf cachyos-repo.tar.xz && cd cachyos-repo
+            sudo ./cachyos-repo.sh
+            cd ..
+            rm -rf cachyos-repo
+            install_pacman "${cachyos_packages[@]}"
+            ;;
+        *)
+            ;;
+    esac
+    
+}
+
 install_video_drivers(){
     # Install base drivers
     install_pacman "${base_drivers[@]}"
@@ -423,28 +445,35 @@ install_video_drivers(){
         install_pacman "${amd_drivers[@]}"
     fi
     if [[ -n "$HAS_NVIDIA" ]]; then
-        if [ "$mode" = "1" ]; then
-            echo "Detected NVIDIA GPU."
-            echo "NVIDIA driver options:"
-            echo "1) Proprietary: Better performance, closed-source."
-            echo "2) Open: Open-source, may have lower performance."
-            read -p "Enter 1 or 2: " choiceNV
-        else
-            choiceNV=1
-        fi
-        case $choiceNV in
-            1)
-                install_pacman "${nvidia_proprietary[@]}"
-                install_pacman "${nvidia_common_utils[@]}"
+
+        case $choiceCAO in
+            1)  
+                install_pacman "${nvidia-cachyos[@]}"
                 ;;
             2)
-                install_pacman "${nvidia_open[@]}"
+                if [ "$mode" = "1" ]; then
+                    echo "Detected NVIDIA GPU."
+                    echo "NVIDIA driver options:"
+                    echo "1) Proprietary: Better performance, closed-source."
+                    echo "2) Open: Open-source, may have lower performance."
+                    read -p "Enter 1 or 2: " choiceNV
+                else
+                    choiceNV=1
+                fi
                 install_pacman "${nvidia_common_utils[@]}"
-                ;;
-            *)
+                case $choiceNV in
+                    1)
+                        install_pacman "${nvidia_proprietary[@]}"
+                        ;;
+                    2)
+                        install_pacman "${nvidia_open[@]}"
+                        ;;
+                    *)
+                        ;;
+                esac
+                nvidia_setup
                 ;;
         esac
-        nvidia_setup
     else
         sudo cp grub/grub /etc/default/grub
         choiceNV=3

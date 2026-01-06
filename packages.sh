@@ -61,6 +61,10 @@ font_packages=(
     ttf-cascadia-code-nerd ttf-ms-fonts
 )
 
+cachyos_packages(
+    linux-cachyos linux-cachyos-headers cachyos-settings
+)
+
 base_drivers=(
     mesa
     xorg-server
@@ -87,6 +91,10 @@ nvidia_proprietary=(
 
 nvidia_open=(
     nvidia-open-dkms
+)
+
+nvidia-cachyos(
+    linux-cachyos-nvidia-open
 )
 
 nvidia_common_utils=(
