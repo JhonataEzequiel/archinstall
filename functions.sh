@@ -445,46 +445,26 @@ install_video_drivers(){
         install_pacman "${amd_drivers[@]}"
     fi
     if [[ -n "$HAS_NVIDIA" ]]; then
-
+        install_pacman "${nvidia_common_utils[@]}"
         case $choiceCAO in
             1)  
                 install_pacman "${nvidia-cachyos[@]}"
                 ;;
             2)
-                if [ "$mode" = "1" ]; then
-                    echo "Detected NVIDIA GPU."
-                    echo "NVIDIA driver options:"
-                    echo "1) Proprietary: Better performance, closed-source."
-                    echo "2) Open: Open-source, may have lower performance."
-                    read -p "Enter 1 or 2: " choiceNV
-                else
-                    choiceNV=1
-                fi
-                install_pacman "${nvidia_common_utils[@]}"
-                case $choiceNV in
-                    1)
-                        install_pacman "${nvidia_proprietary[@]}"
-                        ;;
-                    2)
-                        install_pacman "${nvidia_open[@]}"
-                        ;;
-                    *)
-                        ;;
-                esac
+                install_pacman "${nvidia_drivers[@]}"
                 nvidia_setup
                 ;;
         esac
     else
         sudo cp grub/grub /etc/default/grub
-        choiceNV=3
     fi
     # Check if running in VMware
     if lspci | grep -i vmware &> /dev/null; then
         install_pacman "${vmware_drivers[@]}"
     fi
 
-    # Export choiceNV for use in install.sh
-    export choiceNV
+    # Export HAS_NVIDIA for use in install.sh
+    export HAS_NVIDIA
 }
 
 nvidia_setup(){
@@ -540,12 +520,12 @@ gaming_setup(){
             sed -i 's|whiptail --title "Shader Booster" --msgbox "System already patched." 8 78|echo "Shader Booster: System already patched."|g' patcher.sh
             ./patcher.sh
             rm patcher.sh
-            case $choiceNV in
-                1)
+            case $HAS_NVIDIA in
+                true)
                     install_yay "${gaming_nvidia_proprietary[@]}"
                     echo "Finished installing gaming packages"
                     ;;
-                *)
+                false)
                     install_yay "${gaming[@]}"
                     echo "Finished installing gaming packages"
                     ;;

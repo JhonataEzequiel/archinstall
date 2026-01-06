@@ -85,11 +85,7 @@ amd_drivers=(
     xf86-video-ati
 )
 
-nvidia_proprietary=(
-    nvidia-dkms
-)
-
-nvidia_open=(
+nvidia_drivers=(
     nvidia-open-dkms
 )
 
