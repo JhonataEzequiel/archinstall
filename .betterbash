@@ -94,3 +94,4 @@ alias gs='git status'
 alias ga='git add .'
 alias gc='git commit -m'
 alias duh='du -h --max-depth=1 | sort -hr'
+alias update-grub="sudo update-grub"

@@ -150,7 +150,7 @@ choose_de(){
                 ;;
         esac
     done
-    if systemctl is-enabled gdm &> /dev/null || systemctl is-enabled sddm &> /dev/null; then
+    if systemctl is-enabled gdm &> /dev/null || systemctl is-enabled ly &> /dev/null; then
         echo "A display manager is already enabled. Skipping."
     else
         case $choiceDE in
@@ -182,6 +182,7 @@ install_basic_features(){
     sudo systemctl enable paccache.timer
     sudo systemctl enable --now cronie.service
     sudo systemctl enable --now ufw.service
+    bluetooth_setup
 }
 
 aur_setup(){
@@ -284,17 +285,16 @@ terminal_setup(){
 
     case $choiceTPKG in
         1)
-            install_pacman "${terminal_packages[@]}"
+            install_yay "${terminal_packages[@]}"
             tldr --update
             cp -r yazi ~/.config/
-            install_yay resvg
             ;;
         *)
             ;;
     esac
 
     if [ "$mode" = "1" ]; then
-        echo "Choose a Terminal (fastfetch custom config available only for kitty and ghostty)"
+        echo "Choose a Terminal: "
         terminals=("gnome-console" "ptyxis" "konsole" "alacritty" "ghostty" "kitty" "none")
         for i in "${!terminals[@]}"; do
             echo "$((i+1))) ${terminals[i]}"
@@ -350,9 +350,10 @@ terminal_setup(){
         echo "1) Yes"
         echo "2) No"
         read -p "Enter 1 or 2: " choiceSS
+    else
         case $choiceSS in
             1)
-                curl -sS https://starship.rs/install.sh | sh
+                curl -sS https://starship.rs/install.sh | sh -s -- --yes
                 case $choiceTE in
                     5|6)
                         sudo cp -r fastfetch ~/.config/
@@ -360,25 +361,6 @@ terminal_setup(){
                     *)
                         ;;
                 esac
-                case $choiceTPKG in
-                    1)
-                        sudo cp .betterbash ~/.bashrc
-                        ;;
-                    *)
-                        sudo cp .bashrc ~/.bashrc
-                        ;;
-                esac
-                echo "Done"
-                ;;
-            *)
-                echo "Skipping bashrc and starship setup"
-                ;;
-        esac
-    else
-        case $choiceSS in
-            1)
-                curl -sS https://starship.rs/install.sh | sh -- --y
-                sudo cp -r fastfetch ~/.config/
                 case $choiceTPKG in
                     1)
                         sudo cp .betterbash ~/.bashrc
@@ -406,10 +388,11 @@ cachyos_setup(){
         1)
             curl https://mirror.cachyos.org/cachyos-repo.tar.xz -o cachyos-repo.tar.xz
             tar xvf cachyos-repo.tar.xz && cd cachyos-repo
-            sudo ./cachyos-repo.sh
+            yes | sudo ./cachyos-repo.sh
             cd ..
             rm -rf cachyos-repo
             install_pacman "${cachyos_packages[@]}"
+            remove_pacman linux linux-headers
             ;;
         *)
             ;;
@@ -462,43 +445,24 @@ install_video_drivers(){
     if lspci | grep -i vmware &> /dev/null; then
         install_pacman "${vmware_drivers[@]}"
     fi
-
-    # Export HAS_NVIDIA for use in install.sh
-    export HAS_NVIDIA
 }
 
 nvidia_setup(){
-    sudo mkdir -p /etc/modprobe.d
-    echo "options nvidia_drm modeset=1" | sudo tee /etc/modprobe.d/nvidia.conf > /dev/null
-
     if [[ -n "$IS_HYBRID" ]]; then
-        if grep -qE '^MODULES=.*\bnvidia\b' /etc/mkinitcpio.conf; then
-            echo "Skipping Hybrid Config"
-        else
-            sudo sed -i '/^MODULES=/ s/)/ nvidia nvidia_modeset nvidia_uvm nvidia_drm)/' /etc/mkinitcpio.conf
+        echo "no need for nvidia configuration"
+    else
+        if [[ "$choiceDE" == "3" ]]; then
+            mkdir -p "${HOME}/.config/hypr"
+            # Append env entries only if not already present
+            HYPRCONF="${HOME}/.config/hypr/hyprland.conf"
+            touch "$HYPRCONF"
+            grep -q '^env = GBM_BACKEND,nvidia-drm' "$HYPRCONF" || echo 'env = GBM_BACKEND,nvidia-drm' >> "$HYPRCONF"
+            grep -q '^env = LIBVA_DRIVER_NAME,nvidia' "$HYPRCONF" || echo 'env = LIBVA_DRIVER_NAME,nvidia' >> "$HYPRCONF"
+            grep -q '^env = __GLX_VENDOR_LIBRARY_NAME,nvidia' "$HYPRCONF" || echo 'env = __GLX_VENDOR_LIBRARY_NAME,nvidia' >> "$HYPRCONF"
+            grep -q '^env = WLR_NO_HARDWARE_CURSORS,1' "$HYPRCONF" || echo 'env = WLR_NO_HARDWARE_CURSORS,1' >> "$HYPRCONF"
         fi
+        sudo mkinitcpio -P
     fi
-
-    echo -e "GBM_BACKEND=nvidia-drm\n__GLX_VENDOR_LIBRARY_NAME=nvidia\nLIBVA_DRIVER_NAME=nvidia\nNVIDIA_PRIME_RENDER_OFFLOAD=1" | sudo tee -a /etc/environment
-    sudo cp grub/grubnvidia /etc/default/grub
-
-    sudo nvidia-xconfig --cool-bits=28
-
-    # DE-specific configurations
-    if [[ "$choiceDE" == "1" ]]; then
-        sudo sed -i '/exit 0/i /usr/bin/prime-run' /etc/gdm/Init/Default
-    elif [[ "$choiceDE" == "3" ]]; then
-        mkdir -p "${HOME}/.config/hypr"
-        # Append env entries only if not already present
-        HYPRCONF="${HOME}/.config/hypr/hyprland.conf"
-        touch "$HYPRCONF"
-        grep -q '^env = GBM_BACKEND,nvidia-drm' "$HYPRCONF" || echo 'env = GBM_BACKEND,nvidia-drm' >> "$HYPRCONF"
-        grep -q '^env = LIBVA_DRIVER_NAME,nvidia' "$HYPRCONF" || echo 'env = LIBVA_DRIVER_NAME,nvidia' >> "$HYPRCONF"
-        grep -q '^env = __GLX_VENDOR_LIBRARY_NAME,nvidia' "$HYPRCONF" || echo 'env = __GLX_VENDOR_LIBRARY_NAME,nvidia' >> "$HYPRCONF"
-        # WLR_NO_HARDWARE_CURSORS=1 is sometimes recommended for NVIDIA+Wayland (Hyprland)
-        grep -q '^env = WLR_NO_HARDWARE_CURSORS,1' "$HYPRCONF" || echo 'env = WLR_NO_HARDWARE_CURSORS,1' >> "$HYPRCONF"
-    fi
-    sudo mkinitcpio -P
 }
 
 gaming_setup(){
@@ -520,16 +484,8 @@ gaming_setup(){
             sed -i 's|whiptail --title "Shader Booster" --msgbox "System already patched." 8 78|echo "Shader Booster: System already patched."|g' patcher.sh
             ./patcher.sh
             rm patcher.sh
-            case $HAS_NVIDIA in
-                true)
-                    install_yay "${gaming_nvidia_proprietary[@]}"
-                    echo "Finished installing gaming packages"
-                    ;;
-                false)
-                    install_yay "${gaming[@]}"
-                    echo "Finished installing gaming packages"
-                    ;;
-            esac
+            install_yay "${gaming[@]}"
+            echo "Finished installing gaming packages"
             sudo usermod -aG gamemode $USER
             sudo mkdir /usr/share/gamemode/
             sudo cp gamemode/gamemode.ini /usr/share/gamemode/.
