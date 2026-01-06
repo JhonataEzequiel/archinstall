@@ -114,7 +114,7 @@ extra=(
     audacity komikku raider bottles gearlever
     flatseal switcheroo spotify-launcher 
     obs-studio discord libreoffice-still
-    octopi
+    octopi vscodium
 )
 
 gaming_nvidia_proprietary=(
