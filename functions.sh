@@ -429,7 +429,7 @@ cachyos_setup(){
             tar xvf cachyos-repo.tar.xz && cd cachyos-repo
             yes | sudo ./cachyos-repo.sh
             cd ..
-            rm -rf cachyos-repo
+            rm -rf cachyos-repo cachyos-repo-tar.xz
             install_pacman "${cachyos_packages[@]}"
             remove_pacman linux linux-headers
             ;;
