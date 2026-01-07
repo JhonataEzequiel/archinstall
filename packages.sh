@@ -25,7 +25,7 @@ gnome_packages=(
     decibels mission-center showtime qbittorrent
     gnome-themes-extra pavucontrol gnome-keyring gvfs-goa
     gvfs-afc gvfs-mtp gvfs-nfs gvfs-smb gvfs-wsdd gvfs-dnssd
-    gvfs-gphoto2 gvfs-onedrive gnome-software
+    gvfs-gphoto2 gvfs-onedrive gnome-software nautilus-python
 )
 
 kde_packages=(
