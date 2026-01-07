@@ -4,7 +4,7 @@ base_packages=(
     dconf bluez bluez-utils git curl wget pacman-contrib
     unzip unrar 7zip tar python-pip ufw zip timeshift
     fuse2 openssh cronie ntfs-3g linux-headers ibus flatpak
-    python power-profiles-daemon
+    python power-profiles-daemon pciutils
 )
 
 printer(

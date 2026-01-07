@@ -442,11 +442,6 @@ install_video_drivers(){
     # Install base drivers
     install_pacman "${base_drivers[@]}"
 
-    # Detect GPU(s) using lspci
-    if ! command -v lspci &> /dev/null; then
-        install_pacman pciutils
-    fi
-
     GPU_INFO=$(lspci | grep -iE "VGA|3D|Display" || true)
     HAS_INTEL=$(echo "$GPU_INFO" | grep -i intel || true)
     HAS_AMD=$(echo "$GPU_INFO" | grep -i amd || true)
