@@ -590,6 +590,7 @@ extra_setup(){
                 1)
                     install_yay "${gnome_extra[@]}" && remove_yay gnome-software
                     gsettings set org.gnome.mutter check-alive-timeout 0
+                    sudo -u gdm dbus-launch gsettings set org.gnome.login-screen logo ''
                     ;;
                 *)
                     ;;
