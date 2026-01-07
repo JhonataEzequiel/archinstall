@@ -55,6 +55,7 @@ set_variables(){
     choiceGRUB=4
     choiceCAO=2
     choiceWI=1
+    choicePRIN=1
 
     case $mode in
         2)
@@ -183,7 +184,29 @@ install_basic_features(){
     sudo systemctl enable paccache.timer
     sudo systemctl enable --now cronie.service
     sudo systemctl enable --now ufw.service
+
     bluetooth_setup
+    
+    if [ "$mode" = "1" ]; then
+        echo "Do you want to install printer support?"
+        echo "1) Yes\n2) No"
+        read -p "Enter 1 or 2: " choicePRIN
+    fi
+    printer_support
+}
+
+printer_support(){
+    case $choicePRIN in
+        1)
+            install_pacman "${printer[@]}"
+            sudo systemctl enable --now cups.socket
+            sudo systemctl enable --now avahi-daemon.service
+            sudo sed -i.bak '/^hosts:/c\hosts: files mymachines mdns_minimal [NOTFOUND=return] resolve [!UNAVAIL=return] dns myhostname' /etc/nsswitch.conf
+            sudo usermod -aG lp,sys,wheel $USER
+            ;;
+        *)
+            ;;
+    esac
 }
 
 aur_setup(){
@@ -413,7 +436,6 @@ cachyos_setup(){
         *)
             ;;
     esac
-    
 }
 
 install_video_drivers(){

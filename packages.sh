@@ -4,7 +4,11 @@ base_packages=(
     dconf bluez bluez-utils git curl wget pacman-contrib
     unzip unrar 7zip tar python-pip ufw zip timeshift
     fuse2 openssh cronie ntfs-3g linux-headers ibus flatpak
-    python
+    python power-profiles-daemon
+)
+
+printer(
+    cups cups-filters ghostscript gsfonts avahi nss-mdns
 )
 
 audio=(
@@ -116,7 +120,7 @@ wine_and_dependencies(
     wine-staging winetricks giflib libpng libldap gnutls mpg123 openal v4l-utils 
     libpulse alsa-plugins alsa-lib libjpeg-turbo libxcomposite libxinerama 
     ncurses opencl-icd-loader libxslt libva gtk3 gst-plugins-base-libs 
-    vulkan-icd-loader cups samba dosbox
+    vulkan-icd-loader
 )
 
 extra=(
