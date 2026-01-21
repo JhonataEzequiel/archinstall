@@ -7,7 +7,7 @@ base_packages=(
     python power-profiles-daemon pciutils
 )
 
-printer(
+printer=(
     cups cups-filters ghostscript gsfonts avahi nss-mdns
 )
 
@@ -65,7 +65,7 @@ font_packages=(
     ttf-cascadia-code-nerd ttf-ms-fonts
 )
 
-cachyos_packages(
+cachyos_packages=(
     linux-cachyos linux-cachyos-headers cachyos-settings
 )
 
@@ -93,7 +93,7 @@ nvidia_drivers=(
     nvidia-open-dkms
 )
 
-nvidia-cachyos(
+nvidia-cachyos=(
     linux-cachyos-nvidia-open
 )
 
@@ -116,7 +116,7 @@ vmware_drivers=(
     xf86-video-vmware
 )
 
-wine_and_dependencies(
+wine_and_dependencies=(
     wine-staging winetricks giflib libpng libldap gnutls mpg123 openal v4l-utils 
     libpulse alsa-plugins alsa-lib libjpeg-turbo libxcomposite libxinerama 
     ncurses opencl-icd-loader libxslt libva gtk3 gst-plugins-base-libs 
