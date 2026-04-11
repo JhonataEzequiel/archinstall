@@ -33,7 +33,7 @@ kde_packages=(
     plasma-nm plasma-pa powerdevil kscreen kinfocenter breeze-icons
     xdg-desktop-portal-kde kcalc ark partitionmanager systemsettings
     plasma-workspace plasma-systemmonitor kde-gtk-config bluedevil
-    discover filelight kdeplasma-addons okular gwenview ly
+    discover filelight kdeplasma-addons okular gwenview plasma-login-manager
     dolphin-plugins elisa qbittorrent
     plasma-wayland-protocols haruna kwalletmanager
 )
