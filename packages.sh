@@ -38,20 +38,29 @@ kde_packages=(
     plasma-wayland-protocols haruna kwalletmanager
 )
 
-# Base Hyprland packages — bar is installed separately based on user choice
+# Base Hyprland packages — bar, launcher, and screenshot tool installed separately
 hyprland_packages=(
-    xdg-desktop-portal xdg-desktop-portal-hyprland xdg-user-dirs-gtk
-    pavucontrol polkit hyprpolkitagent ly hyprland wofi hyprpaper
-    hypridle hyprlock hyprpicker hyprshot cliphist network-manager-applet
+    xdg-desktop-portal-hyprland xdg-user-dirs-gtk
+    pavucontrol polkit hyprpolkitagent ly hyprland hyprpaper
+    hypridle hyprlock hyprpicker cliphist network-manager-applet
     swaync brightnessctl playerctl
+    qt5-wayland qt6-wayland xwaylandvideobridge
+    hyprutils hyprcursor
 )
+
+# Launcher / app menu (choose one)
+launcher_wofi=(wofi)
+launcher_rofi=(rofi-wayland)
+launcher_walker=(walker)   # AUR
+
+# Screenshot stack: grimblast (hyprwm extras) + deps
+screenshot_packages=(grimblast grim slurp)
 
 # Bar / shell options
 bar_waybar=(waybar)
-bar_ags=(ags)          # AGS v1 (JS/CSS based)
+bar_ags=(ags)
 bar_eww=(eww)
 bar_quickshell=(quickshell-git)
-bar_dank=(material-shell) # Dank Material Shell — GNOME extension, listed for reference
 
 rendering_packages=(
     imagemagick ffmpeg poppler
