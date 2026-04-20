@@ -1,7 +1,7 @@
 #!/bin/bash
 
 base_packages=(
-    dconf bluez bluez-utils git curl wget pacman-contrib
+    dconf bluez bluez-utils git wget pacman-contrib
     unzip unrar 7zip tar python-pip ufw zip timeshift
     fuse2 openssh cronie ntfs-3g linux-headers ibus flatpak
     python power-profiles-daemon pciutils
@@ -164,31 +164,6 @@ gnome_extra=(
 
 grub_packages=(
     grub grub-btrfs os-prober inotify-tools update-grub
-)
-
-emulators_aur=(
-    melonds-git azahar shadps4-git mgba-qt-git rpcs3-git
-    pcsx2-git duckstation-git ryujinx-canary cemu-git
-    dolphin-emu-git kega-fusion ppsspp-git vita3k-git
-    mesen2-git
-)
-
-emulators_mixed_aur=(
-    melonds-git shadps4-git vita3k-git
-)
-
-emulators_mixed_flatpak=(
-    org.DolphinEmu.dolphin-emu io.mgba.mGBA com.carpeludum.KegaFusion
-    org.ppsspp.PPSSPP net.pcsx2.PCSX2 io.github.ryubing.Ryujinx
-    org.duckstation.DuckStation info.cemu.Cemu org.azahar_emu.Azahar
-    net.rpcs3.RPCS3 com.snes9x.Snes9x
-)
-
-emulators_flatpak_complete=(
-    org.DolphinEmu.dolphin-emu io.mgba.mGBA com.carpeludum.KegaFusion
-    org.ppsspp.PPSSPP net.pcsx2.PCSX2 io.github.ryubing.Ryujinx
-    org.duckstation.DuckStation info.cemu.Cemu org.azahar_emu.Azahar
-    net.rpcs3.RPCS3 com.snes9x.Snes9x net.shadps4.shadPS4 net.kuribo64.melonDS
 )
 
 # --- Package management helpers ---

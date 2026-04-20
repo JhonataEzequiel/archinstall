@@ -81,22 +81,6 @@ EOF
     else
         echo "Skipped gaming packages."
     fi
-
-    if [[ "$mode" == "1" ]]; then
-        echo "Install video game emulators?"
-        echo "1) Flatpak (recommended, easy updates)"
-        echo "2) AUR only"
-        echo "3) Mix — best of both (recommended)"
-        echo "4) No"
-        read -p "Enter 1-4: " choiceEM
-    fi
-
-    case $choiceEM in
-        1) install_flatpak "${emulators_flatpak_complete[@]}" ;;
-        2) install_yay "${emulators_aur[@]}" ;;
-        3) install_yay "${emulators_mixed_aur[@]}" && install_flatpak "${emulators_mixed_flatpak[@]}" ;;
-        *) echo "Skipped emulators." ;;
-    esac
 }
 
 # ---------------------------------------------------------------------------

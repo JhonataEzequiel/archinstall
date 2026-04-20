@@ -10,8 +10,8 @@ check_prerequisites() {
         echo "Error: This script is designed for Arch Linux only."
         exit 1
     fi
-
-    for cmd in pacman git sudo; do
+    install_pacman git
+    for cmd in pacman sudo; do
         if ! command -v "$cmd" &>/dev/null; then
             echo "Error: $cmd is not installed."
             exit 1
@@ -29,6 +29,7 @@ update_mirrors() {
     # Detect country via IP for geographically closer mirrors.
     # Falls back to no --country flag (world-wide) if the lookup fails.
     local country country_arg=""
+    install_pacman curl
     country=$(curl -sf --max-time 5 "https://ipapi.co/country" 2>/dev/null || true)
     if [[ -n "$country" && "$country" =~ ^[A-Z]{2}$ ]]; then
         echo "Detected country: ${country} — filtering mirrors accordingly."
@@ -49,12 +50,12 @@ update_mirrors() {
 set_variables() {
     echo "Choose your installation method:"
     echo "1) Manual (choose everything yourself)"
-    echo "2) GNOME + gaming + emulators"
-    echo "3) GNOME, no gaming / emulators"
-    echo "4) KDE Plasma + gaming + emulators"
-    echo "5) KDE Plasma, no gaming / emulators"
-    echo "6) Hyprland + gaming + emulators"
-    echo "7) Hyprland, no gaming / emulators"
+    echo "2) GNOME + gaming"
+    echo "3) GNOME, no gaming"
+    echo "4) KDE Plasma + gaming"
+    echo "5) KDE Plasma, no gaming"
+    echo "6) Hyprland + gaming"
+    echo "7) Hyprland, no gaming"
     echo "8) Exit"
     read -p "Enter 1-8: " mode
 
@@ -81,19 +82,18 @@ set_variables() {
     choiceLAUNCHER=1  # launcher: wofi
     choiceSSTOOL=1    # screenshot tool: grimblast
     choiceGM=2        # gaming: no
-    choiceEM=4        # emulators: no
     choiceZEN=2       # zen kernel: no
 
     case $mode in
-        2) choiceDE=1; choiceGM=1; choiceEM=3; choiceTE=5 ;;
-        3) choiceDE=1; choiceGM=2; choiceEM=4; choiceTE=5 ;;
-        4) choiceDE=2; choiceGM=1; choiceEM=3; choiceTE=3 ;;
-        5) choiceDE=2; choiceGM=2; choiceEM=4; choiceTE=3 ;;
-        6) choiceDE=3; choiceGM=1; choiceEM=3; choiceTE=6 ;;
-        7) choiceDE=3; choiceGM=2; choiceEM=4; choiceTE=6 ;;
+        2) choiceDE=1; choiceGM=1; choiceTE=5 ;;
+        3) choiceDE=1; choiceGM=2; choiceTE=5 ;;
+        4) choiceDE=2; choiceGM=1; choiceTE=3 ;;
+        5) choiceDE=2; choiceGM=2; choiceTE=3 ;;
+        6) choiceDE=3; choiceGM=1; choiceTE=6 ;;
+        7) choiceDE=3; choiceGM=2; choiceTE=6 ;;
     esac
 
-    export mode choiceDE choiceTE choiceGM choiceEM choiceTPKG choiceTTE \
+    export mode choiceDE choiceTE choiceGM choiceTPKG choiceTTE \
            choiceAUR choiceSHELL choiceSS choiceBL choiceGRUB choiceCAO \
            choiceWI choicePRIN choiceBAR choiceLAUNCHER choiceSSTOOL choiceZEN
 }
