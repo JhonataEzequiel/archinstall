@@ -12,7 +12,7 @@ printer=(
 )
 
 audio=(
-    pipewire pipewire-pulse pipewire-alsa lib32-pipewire 
+    pipewire pipewire-pulse pipewire-alsa lib32-pipewire
     pipewire-audio pipewire-v4l2 wireplumber
 )
 
@@ -38,16 +38,26 @@ kde_packages=(
     plasma-wayland-protocols haruna kwalletmanager
 )
 
+# Base Hyprland packages — bar is installed separately based on user choice
 hyprland_packages=(
     xdg-desktop-portal xdg-desktop-portal-hyprland xdg-user-dirs-gtk
     pavucontrol polkit hyprpolkitagent ly hyprland wofi hyprpaper
     hypridle hyprlock hyprpicker hyprshot cliphist network-manager-applet
-    swaync brightnessctl waybar
+    swaync brightnessctl playerctl
 )
 
+# Bar / shell options
+bar_waybar=(waybar)
+bar_ags=(ags)          # AGS v1 (JS/CSS based)
+bar_eww=(eww)
+bar_quickshell=(quickshell-git)
+bar_dank=(material-shell) # Dank Material Shell — GNOME extension, listed for reference
+
 rendering_packages=(
-    imagemagick ffmpeg poppler gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav
-    x264 x265 libvpx aom dav1d rav1e svt-av1 libfdk-aac faad2 lame libmad opus flac mkvtoolnix-cli
+    imagemagick ffmpeg poppler
+    gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav
+    x264 x265 libvpx aom dav1d rav1e svt-av1
+    libfdk-aac faad2 lame libmad opus flac mkvtoolnix-cli
 )
 
 terminal_packages=(
@@ -93,20 +103,20 @@ nvidia_drivers=(
     nvidia-open-dkms
 )
 
-nvidia-cachyos=(
+nvidia_cachyos=(
     linux-cachyos-nvidia-open
 )
 
 nvidia_common_utils=(
     nvidia-utils
     nvidia-prime
-    nvidia-settings 
-    lib32-nvidia-utils 
-    lib32-opencl-nvidia 
-    opencl-nvidia 
-    libvdpau 
+    nvidia-settings
+    lib32-nvidia-utils
+    lib32-opencl-nvidia
+    opencl-nvidia
+    libvdpau
     libxnvctrl
-    vulkan-icd-loader 
+    vulkan-icd-loader
     lib32-vulkan-icd-loader
     egl-gbm
     egl-x11
@@ -117,9 +127,9 @@ vmware_drivers=(
 )
 
 wine_and_dependencies=(
-    wine-staging winetricks giflib libpng libldap gnutls mpg123 openal v4l-utils 
-    libpulse alsa-plugins alsa-lib libjpeg-turbo libxcomposite libxinerama 
-    ncurses opencl-icd-loader libxslt libva gtk3 gst-plugins-base-libs 
+    wine-staging winetricks giflib libpng libldap gnutls mpg123 openal v4l-utils
+    libpulse alsa-plugins alsa-lib libjpeg-turbo libxcomposite libxinerama
+    ncurses opencl-icd-loader libxslt libva gtk3 gst-plugins-base-libs
     vulkan-icd-loader
 )
 
@@ -127,7 +137,7 @@ extra=(
     upscayl-desktop-git parsec-bin
     obsidian pokemon-colorscripts-git gimp kdenlive
     audacity komikku raider bottles gearlever
-    flatseal switcheroo spotify-launcher 
+    flatseal switcheroo spotify-launcher
     obs-studio discord libreoffice-still
     octopi vscodium
 )
@@ -172,7 +182,8 @@ emulators_flatpak_complete=(
     net.rpcs3.RPCS3 com.snes9x.Snes9x net.shadps4.shadPS4 net.kuribo64.melonDS
 )
 
-# Functions for package installation
+# --- Package management helpers ---
+
 install_pacman() {
     sudo pacman -S --needed --noconfirm "$@"
 }
@@ -185,14 +196,14 @@ install_flatpak() {
     flatpak install -y --noninteractive flathub "$@"
 }
 
-remove_pacman(){
+remove_pacman() {
     sudo pacman -R --noconfirm "$@"
 }
 
-remove_yay(){
+remove_yay() {
     yay -R --noconfirm "$@"
 }
 
-remove_flatpak(){
-    flatpak remove -y --noninteractive flathub "$@"
+remove_flatpak() {
+    flatpak remove -y --noninteractive "$@"
 }

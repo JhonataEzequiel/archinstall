@@ -12,6 +12,7 @@ install_basic_features
 aur_setup
 terminal_text_editors_setup
 terminal_setup
+shell_setup
 wine_setup
 cachyos_setup
 install_video_drivers
@@ -19,15 +20,15 @@ gaming_setup
 zen_kernel_setup
 extra_setup
 hyprland_setup
-grub_setup
-grub_theme_selection
+bootloader_setup
 
-echo "Installation complete. Reboot required to apply changes."
+echo ""
+echo "Installation complete. A reboot is required to apply all changes."
 read -p "Reboot now? (y/N): " reboot_choice
 if [[ "$reboot_choice" =~ ^[Yy]$ ]]; then
     echo "Rebooting in 5 seconds..."
     sleep 5
     reboot
 else
-    echo "Please reboot manually to apply changes."
+    echo "Please reboot manually when ready."
 fi
