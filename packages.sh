@@ -154,7 +154,7 @@ extra=(
 gaming=(
     heroic-games-launcher-bin gamescope mangohud
     wine vkd3d glfw mangojuice wqy-zenhei
-    gamemode lib32-gamemode jdk21-openjdk
+    jdk21-openjdk
     steam proton-ge-custom-bin
 )
 

@@ -52,7 +52,7 @@ cachyos_setup() {
 
 gaming_setup() {
     if [[ "$mode" == "1" ]]; then
-        echo "Install gaming packages? (Steam, Proton, MangoHud, gamemode...)"
+        echo "Install gaming packages? (Steam, Proton, MangoHud...)"
         echo "1) Yes  2) No"
         read -p "Enter 1-2: " choiceGM
     fi
@@ -60,10 +60,23 @@ gaming_setup() {
     if [[ "$choiceGM" == "1" ]]; then
         echo "vm.max_map_count = 2147483642" | sudo tee /etc/sysctl.d/80-gamecompatibility.conf
         install_yay "${gaming[@]}"
-        sudo usermod -aG gamemode "$USER"
-        sudo mkdir -p /usr/share/gamemode/
-        sudo cp gamemode/gamemode.ini /usr/share/gamemode/
-        systemctl --user enable --now gamemoded
+
+        # gamescope needs cap_sys_nice to properly elevate frame priority.
+        # A pacman hook re-applies this automatically after every gamescope update.
+        sudo setcap cap_sys_nice=eip /usr/bin/gamescope
+        sudo mkdir -p /etc/pacman.d/hooks
+        sudo tee /etc/pacman.d/hooks/gamescope-cap.hook > /dev/null << 'EOF'
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = gamescope
+
+[Action]
+Description = Restoring cap_sys_nice capability for gamescope...
+When = PostTransaction
+Exec = /usr/bin/setcap cap_sys_nice=eip /usr/bin/gamescope
+EOF
         echo "Gaming packages installed."
     else
         echo "Skipped gaming packages."
@@ -124,8 +137,6 @@ extra_setup() {
         if [[ "$choiceDE" == "1" ]]; then
             install_yay "${gnome_extra[@]}"
             remove_yay gnome-software
-            gsettings set org.gnome.mutter check-alive-timeout 0
-            sudo ./gnome_logo.sh
         fi
     else
         echo "Skipped extra packages."

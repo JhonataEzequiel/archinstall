@@ -52,7 +52,22 @@ install_video_drivers() {
             nvidia_setup
         fi
     else
-        sudo cp grub/grub /etc/default/grub
+        sudo tee /etc/default/grub > /dev/null << 'EOF'
+GRUB_DEFAULT=saved
+GRUB_TIMEOUT=5
+GRUB_DISTRIBUTOR="Arch"
+GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet"
+GRUB_CMDLINE_LINUX="zswap.enabled=0 rootfstype=btrfs"
+GRUB_PRELOAD_MODULES="part_gpt part_msdos"
+GRUB_TIMEOUT_STYLE=menu
+GRUB_TERMINAL_INPUT=console
+GRUB_GFXMODE=auto
+GRUB_GFXPAYLOAD_LINUX=keep
+GRUB_DISABLE_RECOVERY=true
+GRUB_SAVEDEFAULT=true
+GRUB_DISABLE_SUBMENU=y
+GRUB_DISABLE_OS_PROBER=false
+EOF
     fi
 
     if lspci | grep -i vmware &>/dev/null; then

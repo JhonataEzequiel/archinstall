@@ -17,12 +17,12 @@ shell_setup() {
     case $choiceSHELL in
         2)
             install_pacman zsh
-            chsh -s "$(which zsh)" "$USER"
+            sudo usermod -s "$(which zsh)" "$USER"
             echo "Zsh installed and set as default shell."
             ;;
         3)
             install_pacman fish
-            chsh -s "$(which fish)" "$USER"
+            sudo usermod -s "$(which fish)" "$USER"
             echo "Fish installed and set as default shell."
             ;;
         *)
@@ -38,7 +38,7 @@ shell_setup() {
 
     [[ "$choiceSS" != "1" ]] && return
 
-    curl -sS https://starship.rs/install.sh | sh -s -- --yes
+    curl -sS https://starship.rs/install.sh | sudo sh -s -- --yes
 
     case $choiceSHELL in
         1) _apply_bash_config  ;;
@@ -50,15 +50,8 @@ shell_setup() {
 }
 
 _apply_bash_config() {
-    if [[ "$choiceTPKG" == "1" ]]; then
-        cp .betterbash ~/.bashrc
-    else
-        cp .bashrc ~/.bashrc
-    fi
-
     if [[ "$terminal_choice" == "ghostty" || "$terminal_choice" == "kitty" ]]; then
-        mkdir -p ~/.config/fastfetch
-        cp -r fastfetch ~/.config/
+        echo "fastfetch" >> ~/.bashrc
     fi
 }
 
@@ -89,8 +82,6 @@ autoload -Uz compinit && compinit
 EOF
 
     if [[ "$terminal_choice" == "ghostty" || "$terminal_choice" == "kitty" ]]; then
-        mkdir -p ~/.config/fastfetch
-        cp -r fastfetch ~/.config/
         echo "fastfetch" >> "$ZSHRC"
     fi
 
@@ -148,8 +139,6 @@ EOF
     fi
 
     if [[ "$terminal_choice" == "ghostty" || "$terminal_choice" == "kitty" ]]; then
-        mkdir -p ~/.config/fastfetch
-        cp -r fastfetch ~/.config/
         echo "    fastfetch" >> "$FISH_DIR/config.fish"
     fi
 

@@ -55,8 +55,6 @@ terminal_setup() {
     if [[ "$choiceTPKG" == "1" ]]; then
         install_yay "${terminal_packages[@]}"
         tldr --update
-        mkdir -p ~/.config/yazi
-        cp -r yazi ~/.config/
     fi
 
     if [[ "$mode" == "1" ]]; then
@@ -82,12 +80,6 @@ terminal_setup() {
                 ;;
             alacritty|ghostty)
                 install_yay "$terminal_choice"
-                if [[ "$terminal_choice" == "ghostty" ]]; then
-                    echo "Apply ghostty customization from dotfiles?"
-                    echo "1) Yes  2) No"
-                    read -p "Enter 1-2: " choiceGH
-                    [[ "$choiceGH" == "1" ]] && mkdir -p ~/.config/ghostty && cp -r ghostty ~/.config/
-                fi
                 ;;
             none)
                 echo "Skipping terminal emulator installation."

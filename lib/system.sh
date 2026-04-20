@@ -288,7 +288,11 @@ aur_setup() {
         sudo pacman-key --lsign-key 3056513887B78AEB
         sudo pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst'
         sudo pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
-        sudo cp pacman.conf /etc/pacman.conf
+        sudo tee -a /etc/pacman.conf > /dev/null << 'EOF'
+
+[chaotic-aur]
+Include = /etc/pacman.d/chaotic-mirrorlist
+EOF
         sudo pacman -Syu --noconfirm
     fi
 }
