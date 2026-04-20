@@ -539,8 +539,8 @@ _hyprland_finalize() {
     if [[ -n "$BAR_CMD" ]]; then
         if grep -q 'exec-once = \$bar' "$HYPRCONF"; then
             sed -i "s|exec-once = \\\$bar.*|exec-once = ${BAR_CMD}|" "$HYPRCONF"
-        else
-            sed -i "/^exec-once/a exec-once = ${BAR_CMD}" "$HYPRCONF" | head -1
+        elif ! grep -q "exec-once = ${BAR_CMD}" "$HYPRCONF"; then
+            sed -i "/^exec-once/a exec-once = ${BAR_CMD}" "$HYPRCONF"
         fi
     fi
 

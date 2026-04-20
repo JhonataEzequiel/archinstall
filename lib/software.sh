@@ -32,11 +32,15 @@ cachyos_setup() {
 
     if [[ "$choiceCAO" == "1" ]]; then
         curl https://mirror.cachyos.org/cachyos-repo.tar.xz -o cachyos-repo.tar.xz
-        tar xvf cachyos-repo.tar.xz && cd cachyos-repo
-        yes | sudo ./cachyos-repo.sh
-        cd .. && rm -rf cachyos-repo cachyos-repo.tar.xz
-        install_pacman "${cachyos_packages[@]}"
-        remove_pacman linux linux-headers
+        tar xvf cachyos-repo.tar.xz
+        (cd cachyos-repo && yes | sudo ./cachyos-repo.sh)
+        rm -rf cachyos-repo cachyos-repo.tar.xz
+        if install_pacman "${cachyos_packages[@]}"; then
+            remove_pacman linux linux-headers
+        else
+            echo "ERROR: linux-cachyos installation failed. Keeping default kernel."
+            return 1
+        fi
     else
         echo "Skipped CachyOS."
     fi

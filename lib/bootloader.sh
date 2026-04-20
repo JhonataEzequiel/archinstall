@@ -64,30 +64,32 @@ _grub_theme_selection() {
     case $choiceGRUB in
         1)
             git clone --depth=1 https://github.com/uiriansan/LainGrubTheme
-            cd LainGrubTheme && ./install.sh && ./patch_entries.sh
-            cd .. && rm -rf LainGrubTheme
+            (cd LainGrubTheme && ./install.sh && ./patch_entries.sh)
+            rm -rf LainGrubTheme
             ;;
         2|3|4|5)
             git clone https://github.com/vinceliuice/grub2-themes.git
-            cd grub2-themes && chmod +x install.sh
             local res="1080p"
             local resolutions=("1080p" "2k" "4k" "ultrawide" "ultrawide2k")
             echo "Select your display resolution:"
             for i in "${!resolutions[@]}"; do echo "$((i+1))) ${resolutions[i]}"; done
             read -p "Enter 1-${#resolutions[@]} (default: 1080p): " res_choice
             [[ "$res_choice" =~ ^[1-5]$ ]] && res="${resolutions[$((res_choice-1))]}"
-            case $choiceGRUB in
-                2) sudo ./install.sh -t tela     -s "$res" ;;
-                3) sudo ./install.sh -t stylish  -s "$res" ;;
-                4) sudo ./install.sh -t vimix    -s "$res" ;;
-                5) sudo ./install.sh -t whitesur -s "$res" ;;
-            esac
-            cd .. && rm -rf grub2-themes
+            (
+                cd grub2-themes && chmod +x install.sh
+                case $choiceGRUB in
+                    2) sudo ./install.sh -t tela     -s "$res" ;;
+                    3) sudo ./install.sh -t stylish  -s "$res" ;;
+                    4) sudo ./install.sh -t vimix    -s "$res" ;;
+                    5) sudo ./install.sh -t whitesur -s "$res" ;;
+                esac
+            )
+            rm -rf grub2-themes
             ;;
         6)
             git clone https://github.com/shvchk/fallout-grub-theme.git
-            cd fallout-grub-theme && chmod +x install.sh && ./install.sh
-            cd .. && rm -rf fallout-grub-theme
+            (cd fallout-grub-theme && chmod +x install.sh && ./install.sh)
+            rm -rf fallout-grub-theme
             ;;
         *)
             echo "No GRUB theme applied."
@@ -234,21 +236,46 @@ _install_limine() {
         return 1
     fi
 
-    # Determine active kernel (supports linux, linux-zen, linux-cachyos)
-    local KERNEL_IMG INITRD_IMG
-    if [[ -f /boot/vmlinuz-linux-cachyos ]]; then
+    # Determine active kernel via pacman (reliable even right after install/removal)
+    # Falls back to file-based detection so it also works on already-installed systems.
+    local KERNEL_IMG INITRD_IMG FALLBACK_INITRD
+    if pacman -Qq linux-cachyos &>/dev/null; then
         KERNEL_IMG="vmlinuz-linux-cachyos"
         INITRD_IMG="initramfs-linux-cachyos.img"
-    elif [[ -f /boot/vmlinuz-linux-zen ]]; then
+        FALLBACK_INITRD="initramfs-linux-cachyos-fallback.img"
+    elif pacman -Qq linux-zen &>/dev/null; then
         KERNEL_IMG="vmlinuz-linux-zen"
         INITRD_IMG="initramfs-linux-zen.img"
-    else
+        FALLBACK_INITRD="initramfs-linux-zen-fallback.img"
+    elif pacman -Qq linux &>/dev/null; then
         KERNEL_IMG="vmlinuz-linux"
         INITRD_IMG="initramfs-linux.img"
+        FALLBACK_INITRD="initramfs-linux-fallback.img"
+    else
+        # Last resort: scan /boot for any vmlinuz-* file
+        local found
+        found=$(find /boot -maxdepth 1 -name 'vmlinuz-*' | head -1)
+        if [[ -z "$found" ]]; then
+            echo "ERROR: No kernel image found. Aborting Limine setup."
+            return 1
+        fi
+        KERNEL_IMG=$(basename "$found")
+        local kname="${KERNEL_IMG#vmlinuz-}"
+        INITRD_IMG="initramfs-${kname}.img"
+        FALLBACK_INITRD="initramfs-${kname}-fallback.img"
+        echo "WARNING: Kernel detected by file scan: ${KERNEL_IMG}"
     fi
 
-    # Build the kernel cmdline — include btrfs subvolume for root (@)
-    local CMDLINE="root=PARTUUID=${ROOT_PARTUUID} rootflags=subvol=@ rw quiet loglevel=3"
+    # Build the kernel cmdline — rootflags=subvol=@ only applies to btrfs
+    local ROOT_FSTYPE
+    ROOT_FSTYPE=$(findmnt -n -o FSTYPE / 2>/dev/null)
+    local CMDLINE
+    if [[ "$ROOT_FSTYPE" == "btrfs" ]]; then
+        CMDLINE="root=PARTUUID=${ROOT_PARTUUID} rootflags=subvol=@ rw quiet loglevel=3"
+    else
+        CMDLINE="root=PARTUUID=${ROOT_PARTUUID} rw quiet loglevel=3"
+    fi
+    echo "Root filesystem detected: ${ROOT_FSTYPE} — CMDLINE: ${CMDLINE}"
 
     sudo tee /boot/limine.cfg > /dev/null << EOF
 # Limine bootloader configuration
@@ -260,8 +287,8 @@ GRAPHICS=yes
     PROTOCOL=linux
     KERNEL_PATH=boot():///${KERNEL_IMG}
     CMDLINE=${CMDLINE}
-    MODULE_PATH=boot():////${INITRD_IMG}
-    MODULE_PATH=boot():///initramfs-linux-fallback.img
+    MODULE_PATH=boot():///${INITRD_IMG}
+    MODULE_PATH=boot():///${FALLBACK_INITRD}
 EOF
 
     # -----------------------------------------------------------------------

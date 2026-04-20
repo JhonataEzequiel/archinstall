@@ -25,7 +25,19 @@ update_mirrors() {
         echo "Installing reflector..."
         install_pacman reflector
     fi
-    sudo reflector --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist
+
+    # Detect country via IP for geographically closer mirrors.
+    # Falls back to no --country flag (world-wide) if the lookup fails.
+    local country country_arg=""
+    country=$(curl -sf --max-time 5 "https://ipapi.co/country" 2>/dev/null || true)
+    if [[ -n "$country" && "$country" =~ ^[A-Z]{2}$ ]]; then
+        echo "Detected country: ${country} — filtering mirrors accordingly."
+        country_arg="--country ${country}"
+    else
+        echo "Could not detect country. Using worldwide mirror list."
+    fi
+
+    sudo reflector $country_arg --sort rate --latest 20 --protocol https --save /etc/pacman.d/mirrorlist
     echo "Mirrorlist updated."
     sudo pacman -Syy --noconfirm
 }
@@ -53,7 +65,7 @@ set_variables() {
 
     [[ "$mode" == "8" ]] && exit 0
 
-    # Defaults for every preset
+    # Defaults for every preset (including manual mode — guards against set -u crashes)
     choiceTE=6        # terminal emulator: kitty (default for Hyprland)
     choiceTPKG=1      # terminal packages: yes
     choiceTTE=1       # terminal text editor: nano
@@ -68,6 +80,9 @@ set_variables() {
     choiceBAR=1       # bar: waybar
     choiceLAUNCHER=1  # launcher: wofi
     choiceSSTOOL=1    # screenshot tool: grimblast
+    choiceGM=2        # gaming: no
+    choiceEM=4        # emulators: no
+    choiceZEN=2       # zen kernel: no
 
     case $mode in
         2) choiceDE=1; choiceGM=1; choiceEM=3; choiceTE=5 ;;
@@ -80,7 +95,7 @@ set_variables() {
 
     export mode choiceDE choiceTE choiceGM choiceEM choiceTPKG choiceTTE \
            choiceAUR choiceSHELL choiceSS choiceBL choiceGRUB choiceCAO \
-           choiceWI choicePRIN choiceBAR choiceLAUNCHER choiceSSTOOL
+           choiceWI choicePRIN choiceBAR choiceLAUNCHER choiceSSTOOL choiceZEN
 }
 
 # ---------------------------------------------------------------------------
@@ -169,7 +184,7 @@ printer_support() {
 
 install_basic_features() {
     install_pacman "${base_packages[@]}"
-    ibus-daemon -drx
+    _ibus_setup
 
     install_pacman "${audio[@]}"
     systemctl --user enable --now pipewire
@@ -192,6 +207,63 @@ install_basic_features() {
 }
 
 # ---------------------------------------------------------------------------
+# IBus — input method for accented characters in all applications
+# (fixes first accented uppercase char being dropped in Firefox/Electron)
+# ---------------------------------------------------------------------------
+
+_ibus_setup() {
+    # Environment variables must be set before the graphical session starts.
+    # Without GTK_IM_MODULE and XMODIFIERS, GTK/Qt apps use XIM instead of
+    # ibus, causing the first composed character (e.g. "É") to be swallowed.
+    local ENV_FILE="/etc/environment"
+    local env_vars=(
+        "GTK_IM_MODULE=ibus"
+        "QT_IM_MODULE=ibus"
+        "XMODIFIERS=@im=ibus"
+    )
+    for var in "${env_vars[@]}"; do
+        grep -qF "$var" "$ENV_FILE" || echo "$var" | sudo tee -a "$ENV_FILE" > /dev/null
+    done
+    echo "IBus environment variables written to ${ENV_FILE}."
+
+    # Autostart the ibus daemon depending on the chosen DE:
+    #   GNOME  — ibus is integrated; gnome-session starts it automatically.
+    #            We only need to ensure ibus-daemon is installed and the
+    #            gsettings input-sources key includes ibus.
+    #   KDE    — autostart via a .desktop entry in ~/.config/autostart/
+    #   Hyprland — exec-once in hyprland.conf (written here, before dotfiles
+    #              are copied so _hyprland_copy_dotfiles can override if needed)
+    case $choiceDE in
+        1)
+            # GNOME handles ibus natively — nothing extra needed beyond the env vars.
+            echo "GNOME detected — ibus will be started automatically by the session."
+            ;;
+        2)
+            # KDE Plasma: drop an autostart .desktop
+            local autostart_dir="$HOME/.config/autostart"
+            mkdir -p "$autostart_dir"
+            cat > "$autostart_dir/ibus-daemon.desktop" << 'EOF'
+[Desktop Entry]
+Type=Application
+Name=IBus Daemon
+Exec=ibus-daemon -drx
+X-KDE-AutostartScript=true
+EOF
+            echo "IBus autostart entry created for KDE Plasma."
+            ;;
+        3)
+            # Hyprland: add exec-once — _hyprland_copy_dotfiles runs after this
+            # and will respect whatever is already in the conf.
+            local HYPRCONF="$HOME/.config/hypr/hyprland.conf"
+            mkdir -p "$HOME/.config/hypr"
+            grep -q 'exec-once = ibus-daemon' "$HYPRCONF" 2>/dev/null || \
+                echo 'exec-once = ibus-daemon -drx' >> "$HYPRCONF"
+            echo "IBus exec-once added to hyprland.conf."
+            ;;
+    esac
+}
+
+# ---------------------------------------------------------------------------
 # AUR helper (yay) + Chaotic AUR
 # ---------------------------------------------------------------------------
 
@@ -200,7 +272,8 @@ aur_setup() {
         echo "Installing yay..."
         install_pacman base-devel
         git clone https://aur.archlinux.org/yay.git
-        cd yay && makepkg -si --noconfirm && cd .. && rm -rf yay
+        (cd yay && makepkg -si --noconfirm)
+        rm -rf yay
     else
         echo "yay is already installed."
     fi

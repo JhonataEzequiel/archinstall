@@ -44,14 +44,14 @@ hyprland_packages=(
     pavucontrol polkit hyprpolkitagent ly hyprland hyprpaper
     hypridle hyprlock hyprpicker cliphist network-manager-applet
     swaync brightnessctl playerctl
-    qt5-wayland qt6-wayland xwaylandvideobridge
+    qt5-wayland qt6-wayland
     hyprutils hyprcursor
 )
 
 # Launcher / app menu (choose one)
 launcher_wofi=(wofi)
 launcher_rofi=(rofi-wayland)
-launcher_walker=(walker)   # AUR
+launcher_walker=(walker-bin)   # AUR
 
 # Screenshot stack: grimblast (hyprwm extras) + deps
 screenshot_packages=(grimblast grim slurp)
