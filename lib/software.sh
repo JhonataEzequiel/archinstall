@@ -11,7 +11,12 @@ wine_setup() {
         echo "1) Yes  2) No"
         read -p "Enter 1-2: " choiceWI
     fi
-    [[ "$choiceWI" == "1" ]] && install_yay "${wine_and_dependencies[@]}"
+
+    if [[ "$choiceWI" == "1" ]]; then
+        install_yay "${wine_and_dependencies[@]}"
+    else
+        echo "Skipped Wine."
+    fi
 }
 
 # ---------------------------------------------------------------------------
@@ -32,6 +37,8 @@ cachyos_setup() {
         cd .. && rm -rf cachyos-repo cachyos-repo.tar.xz
         install_pacman "${cachyos_packages[@]}"
         remove_pacman linux linux-headers
+    else
+        echo "Skipped CachyOS."
     fi
 }
 
@@ -41,20 +48,13 @@ cachyos_setup() {
 
 gaming_setup() {
     if [[ "$mode" == "1" ]]; then
-        echo "Install gaming packages and Shader Booster (credits: psygreg)?"
+        echo "Install gaming packages? (Steam, Proton, MangoHud, gamemode...)"
         echo "1) Yes  2) No"
         read -p "Enter 1-2: " choiceGM
     fi
 
     if [[ "$choiceGM" == "1" ]]; then
         echo "vm.max_map_count = 2147483642" | sudo tee /etc/sysctl.d/80-gamecompatibility.conf
-        wget https://github.com/psygreg/shader-booster/releases/latest/download/patcher.sh
-        chmod +x patcher.sh
-        sed -i 's|whiptail --title "Shader Booster" --msgbox "No valid shell found." 8 78|echo "Shader Booster: No valid shell found."|g' patcher.sh
-        sed -i 's|whiptail --title "Shader Booster" --msgbox "Success! Reboot to apply." 8 78|echo "Shader Booster: Success! Reboot to apply."|g' patcher.sh
-        sed -i 's|whiptail --title "Shader Booster" --msgbox "No compatible GPU found to patch." 8 78|echo "Shader Booster: No compatible GPU found to patch."|g' patcher.sh
-        sed -i 's|whiptail --title "Shader Booster" --msgbox "System already patched." 8 78|echo "Shader Booster: System already patched."|g' patcher.sh
-        ./patcher.sh && rm patcher.sh
         install_yay "${gaming[@]}"
         sudo usermod -aG gamemode "$USER"
         sudo mkdir -p /usr/share/gamemode/
@@ -92,7 +92,12 @@ zen_kernel_setup() {
         echo "1) Yes  2) No"
         read -p "Enter 1-2: " choiceZEN
         choiceZEN=${choiceZEN:-2}
-        [[ "$choiceZEN" == "1" ]] && install_pacman linux-zen linux-zen-headers
+
+        if [[ "$choiceZEN" == "1" ]]; then
+            install_pacman linux-zen linux-zen-headers
+        else
+            echo "Skipped Zen kernel."
+        fi
     fi
 }
 
@@ -118,6 +123,8 @@ extra_setup() {
             gsettings set org.gnome.mutter check-alive-timeout 0
             sudo ./gnome_logo.sh
         fi
+    else
+        echo "Skipped extra packages."
     fi
 
     if [[ "$mode" == "1" ]]; then
@@ -131,6 +138,8 @@ extra_setup() {
         if [[ -n "$browser" && "$browser" != "none" ]]; then
             install_yay "$browser"
             echo "$browser installed."
+        else
+            echo "Skipped browser installation."
         fi
     fi
 }

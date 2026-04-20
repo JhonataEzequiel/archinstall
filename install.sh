@@ -1,8 +1,11 @@
 #!/bin/bash
-set -e
+set -uo pipefail
 
 source packages.sh
 source functions.sh
+
+# Trap erros inesperados com contexto útil
+trap 'echo ""; echo "ERRO: falha na linha $LINENO (código $?). Verifique o output acima." >&2' ERR
 
 check_prerequisites
 update_mirrors

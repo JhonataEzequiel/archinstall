@@ -170,33 +170,104 @@ _install_refind() {
 _install_limine() {
     install_yay limine
 
-    local EFI_DISK
-    EFI_DISK=$(lsblk -no PKNAME "$(findmnt -n -o SOURCE /boot)" 2>/dev/null | head -1)
-    if [[ -z "$EFI_DISK" ]]; then
-        echo "WARNING: Could not auto-detect EFI disk. Install Limine manually:"
-        echo "  sudo limine bios-install /dev/sdX"
-        echo "  sudo cp /usr/share/limine/BOOTX64.EFI /boot/EFI/limine/"
-        return
+    # -----------------------------------------------------------------------
+    # Detect the ESP (EFI System Partition) — expected to be mounted at /boot
+    # as a dedicated FAT32 partition (e.g. 3 GB, separate from root btrfs).
+    # -----------------------------------------------------------------------
+    local ESP_DEV ESP_DISK
+    ESP_DEV=$(findmnt -n -o SOURCE /boot 2>/dev/null)
+
+    if [[ -z "$ESP_DEV" ]]; then
+        echo "ERROR: Could not find a partition mounted at /boot."
+        echo "Make sure your FAT32 ESP is mounted at /boot before running this script."
+        return 1
     fi
 
-    sudo limine bios-install "/dev/$EFI_DISK"
+    # Resolve symlinks (e.g. /dev/disk/by-uuid/... → /dev/sda1)
+    ESP_DEV=$(realpath "$ESP_DEV")
+    # Parent disk: strip trailing digits and 'p' for NVMe (nvme0n1p1 → nvme0n1)
+    ESP_DISK=$(lsblk -no PKNAME "$ESP_DEV" 2>/dev/null | head -1)
+
+    if [[ -z "$ESP_DISK" ]]; then
+        echo "ERROR: Could not determine parent disk of $ESP_DEV."
+        return 1
+    fi
+
+    echo "ESP detected: $ESP_DEV  (disk: /dev/$ESP_DISK)"
+
+    # -----------------------------------------------------------------------
+    # UEFI install — copy the EFI binary into the ESP.
+    # limine bios-install is NOT needed on pure UEFI systems.
+    # -----------------------------------------------------------------------
     sudo mkdir -p /boot/EFI/limine
     sudo cp /usr/share/limine/BOOTX64.EFI /boot/EFI/limine/
 
+    # Register with the UEFI firmware (requires efibootmgr)
+    if ! command -v efibootmgr &>/dev/null; then
+        install_pacman efibootmgr
+    fi
+
+    # Get the partition number (e.g. sda1 → 1, nvme0n1p1 → 1)
+    local ESP_PARTNUM
+    ESP_PARTNUM=$(cat /sys/class/block/"$(basename "$ESP_DEV")"/partition 2>/dev/null || echo "1")
+
+    sudo efibootmgr \
+        --create \
+        --disk "/dev/$ESP_DISK" \
+        --part "$ESP_PARTNUM" \
+        --label "Limine" \
+        --loader "\\EFI\\limine\\BOOTX64.EFI" \
+        --unicode || {
+            echo "WARNING: efibootmgr failed — Limine EFI binary is in place but"
+            echo "no boot entry was created. Add one manually or via your UEFI firmware."
+        }
+
+    # -----------------------------------------------------------------------
+    # Build limine.cfg
+    # Root partition PARTUUID (the btrfs partition, not /boot)
+    # -----------------------------------------------------------------------
     local ROOT_PARTUUID
-    ROOT_PARTUUID=$(blkid -s PARTUUID -o value "$(findmnt -n -o SOURCE /)")
+    ROOT_PARTUUID=$(blkid -s PARTUUID -o value "$(findmnt -n -o SOURCE /)" 2>/dev/null)
+
+    if [[ -z "$ROOT_PARTUUID" ]]; then
+        echo "ERROR: Could not determine PARTUUID of root partition."
+        return 1
+    fi
+
+    # Determine active kernel (supports linux, linux-zen, linux-cachyos)
+    local KERNEL_IMG INITRD_IMG
+    if [[ -f /boot/vmlinuz-linux-cachyos ]]; then
+        KERNEL_IMG="vmlinuz-linux-cachyos"
+        INITRD_IMG="initramfs-linux-cachyos.img"
+    elif [[ -f /boot/vmlinuz-linux-zen ]]; then
+        KERNEL_IMG="vmlinuz-linux-zen"
+        INITRD_IMG="initramfs-linux-zen.img"
+    else
+        KERNEL_IMG="vmlinuz-linux"
+        INITRD_IMG="initramfs-linux.img"
+    fi
+
+    # Build the kernel cmdline — include btrfs subvolume for root (@)
+    local CMDLINE="root=PARTUUID=${ROOT_PARTUUID} rootflags=subvol=@ rw quiet loglevel=3"
 
     sudo tee /boot/limine.cfg > /dev/null << EOF
+# Limine bootloader configuration
+# Full reference: https://limine-bootloader.org/USAGE.html
 TIMEOUT=5
+GRAPHICS=yes
 
-:Arch Linux
+/:Arch Linux
     PROTOCOL=linux
-    KERNEL_PATH=boot:///vmlinuz-linux
-    CMDLINE=root=PARTUUID=${ROOT_PARTUUID} rw quiet
-    MODULE_PATH=boot:///initramfs-linux.img
+    KERNEL_PATH=boot():///${KERNEL_IMG}
+    CMDLINE=${CMDLINE}
+    MODULE_PATH=boot():////${INITRD_IMG}
+    MODULE_PATH=boot():///initramfs-linux-fallback.img
 EOF
 
-    local WIN_PART WIN_DISK WIN_PARTNUM
+    # -----------------------------------------------------------------------
+    # Auto-detect Windows and add a chainload entry
+    # -----------------------------------------------------------------------
+    local WIN_PART
     WIN_PART=$(blkid -t TYPE=vfat -o device | while read -r dev; do
         local mp search_path
         mp=$(findmnt -n -o TARGET "$dev" 2>/dev/null)
@@ -214,19 +285,26 @@ EOF
     done)
 
     if [[ -n "$WIN_PART" ]]; then
+        local WIN_DISK WIN_PARTNUM
         WIN_DISK=$(lsblk -no PKNAME "$WIN_PART")
         WIN_PARTNUM=$(cat /sys/class/block/"$(basename "$WIN_PART")"/partition 2>/dev/null || echo "1")
         sudo tee -a /boot/limine.cfg > /dev/null << EOF
 
-:Windows
+/:Windows
     PROTOCOL=chainload
-    DRIVE=${WIN_DISK}
+    DRIVE=/dev/${WIN_DISK}
     PARTITION=${WIN_PARTNUM}
 EOF
-        echo "Windows detected on ${WIN_PART} — chainload entry added to limine.cfg."
+        echo "Windows detected on ${WIN_PART} — chainload entry added."
     else
         echo "No Windows installation detected. Skipping Windows entry."
     fi
 
-    echo "Limine installed. Edit /boot/limine.cfg to adjust entries."
+    echo ""
+    echo "Limine installed successfully."
+    echo "  EFI binary : /boot/EFI/limine/BOOTX64.EFI"
+    echo "  Config     : /boot/limine.cfg"
+    echo "  Kernel     : ${KERNEL_IMG}  (subvol=@)"
+    echo ""
+    echo "Edit /boot/limine.cfg to adjust entries or add kernel parameters."
 }
