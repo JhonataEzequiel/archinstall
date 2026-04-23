@@ -1,5 +1,5 @@
 #!/bin/bash
-# hyprland.sh — Bar, launcher, screenshot stack, dotfiles, config generation
+# hyprland.sh — Launcher, screenshot stack, config generation
 
 # ---------------------------------------------------------------------------
 # Entry point
@@ -8,58 +8,13 @@
 hyprland_setup() {
     [[ "$choiceDE" != "3" ]] && return
 
-    _hyprland_choose_bar
-    _hyprland_install_bar
     _hyprland_choose_launcher
     _hyprland_install_launcher
     _hyprland_install_screenshot
-    _hyprland_copy_dotfiles
-    _hyprland_finalize
-}
+    _hyprland_generate_conf
+    sudo usermod -aG video "$USER"
 
-# ---------------------------------------------------------------------------
-# Bar
-# ---------------------------------------------------------------------------
-
-_hyprland_choose_bar() {
-    echo ""
-    echo "Choose a status bar / shell for Hyprland:"
-    echo "1) Waybar       — simple, reliable, highly configurable via JSON+CSS"
-    echo "2) AGS          — scriptable in JavaScript, modern widget toolkit"
-    echo "3) Eww          — widget system in Yuck (Lisp-like), very flexible"
-    echo "4) Quickshell   — QML-based, fast and composable"
-    echo "5) None         — skip bar installation"
-    read -p "Enter 1-5 [1]: " choiceBAR
-    choiceBAR=${choiceBAR:-1}
-    export choiceBAR
-}
-
-_hyprland_install_bar() {
-    case $choiceBAR in
-        1)
-            echo "Installing Waybar..."
-            install_pacman waybar
-            ;;
-        2)
-            echo "Installing AGS..."
-            install_yay ags
-            ;;
-        3)
-            echo "Installing Eww..."
-            install_yay eww
-            ;;
-        4)
-            echo "Installing Quickshell..."
-            install_yay quickshell-git
-            ;;
-        5)
-            echo "Skipping bar installation."
-            ;;
-        *)
-            echo "Invalid choice. Skipping bar."
-            choiceBAR=5
-            ;;
-    esac
+    echo "Hyprland setup complete."
 }
 
 # ---------------------------------------------------------------------------
@@ -68,36 +23,26 @@ _hyprland_install_bar() {
 
 _hyprland_choose_launcher() {
     echo ""
-    echo "Choose an application launcher / menu for Hyprland:"
-    echo "1) wofi         — lightweight, native wlroots launcher (simple)"
-    echo "2) rofi-wayland — feature-rich, themeable, actively maintained"
-    echo "3) walker       — modern, plugin-based launcher (AUR)"
+    echo "Choose an application launcher for Hyprland:"
+    echo "1) wofi         — lightweight, native wlroots launcher"
+    echo "2) rofi-wayland — feature-rich, themeable  [default]"
+    echo "3) walker       — modern, plugin-based (AUR)"
     read -p "Enter 1-3 [2]: " choiceLAUNCHER
     choiceLAUNCHER=${choiceLAUNCHER:-2}
     export choiceLAUNCHER
 }
 
 _hyprland_install_launcher() {
-    case $choiceLAUNCHER in
-        1)
-            echo "Installing wofi..."
-            install_pacman wofi
-            ;;
-        2)
-            echo "Installing rofi-wayland..."
-            install_pacman rofi-wayland
-            ;;
-        3)
-            echo "Installing walker (AUR)..."
-            install_yay walker
-            ;;
-        *)
-            echo "Invalid launcher choice. Defaulting to rofi-wayland."
-            install_pacman rofi-wayland
-            choiceLAUNCHER=2
-            ;;
-    esac
-    export choiceLAUNCHER
+    # hyprland_launchers is 0-indexed: wofi=0  rofi-wayland=1  walker-bin=2
+    # choiceLAUNCHER is 1-indexed, so subtract 1
+    local pkg="${hyprland_launchers[$((choiceLAUNCHER - 1))]}"
+
+    # walker-bin lives in the AUR; everything else is in the official repos
+    if [[ "$choiceLAUNCHER" == "3" ]]; then
+        install_yay "$pkg"
+    else
+        install_pacman "$pkg"
+    fi
 }
 
 # ---------------------------------------------------------------------------
@@ -105,29 +50,18 @@ _hyprland_install_launcher() {
 # ---------------------------------------------------------------------------
 
 _hyprland_install_screenshot() {
-    echo "Installing screenshot stack (grimblast + grim + slurp)..."
-    install_yay grimblast
-    install_pacman grim slurp
+    echo "Installing screenshot stack..."
+    install_yay "${hyprland_screenshot[@]}"
 }
 
 # ---------------------------------------------------------------------------
-# Dotfiles
+# Config generation
 # ---------------------------------------------------------------------------
 
-_hyprland_copy_dotfiles() {
-    echo ""
+_hyprland_generate_conf() {
     mkdir -p ~/.config/hypr
-    echo "Generating default hyprland.conf..."
-    _hyprland_generate_default_conf
+    echo "Generating hyprland.conf..."
 
-    sudo usermod -aG video "$USER"
-}
-
-# ---------------------------------------------------------------------------
-# Default hyprland.conf generator
-# ---------------------------------------------------------------------------
-
-_hyprland_generate_default_conf() {
     local TERM_BIN
     case "${terminal_choice:-kitty}" in
         gnome-console) TERM_BIN="kgx"       ;;
@@ -141,22 +75,20 @@ _hyprland_generate_default_conf() {
     local MENU_CMD
     case ${choiceLAUNCHER:-2} in
         1) MENU_CMD="wofi --show drun" ;;
-        2) MENU_CMD="rofi -show drun"  ;;
         3) MENU_CMD="walker"           ;;
         *) MENU_CMD="rofi -show drun"  ;;
     esac
 
-    local BAR_EXEC=""
-    case $choiceBAR in
-        1) BAR_EXEC="exec-once = waybar"       ;;
-        2) BAR_EXEC="exec-once = ags"          ;;
-        3) BAR_EXEC="exec-once = eww open bar" ;;
-        4) BAR_EXEC="exec-once = quickshell"   ;;
+    local CLIP_CMD
+    case ${choiceLAUNCHER:-2} in
+        1) CLIP_CMD="wofi --dmenu"   ;;
+        3) CLIP_CMD="walker --dmenu" ;;
+        *) CLIP_CMD="rofi -dmenu"    ;;
     esac
 
     cat > ~/.config/hypr/hyprland.conf << EOF
 # =============================================================================
-# Hyprland default configuration — generated by archinstall
+# Hyprland configuration — generated by archinstall
 # Full reference: https://wiki.hyprland.org/Configuring/
 # =============================================================================
 
@@ -169,7 +101,6 @@ exec-once = nm-applet
 exec-once = swaync
 exec-once = wl-paste --type text  --watch cliphist store
 exec-once = wl-paste --type image --watch cliphist store
-${BAR_EXEC}
 
 # --- Environment variables ---------------------------------------------------
 env = XCURSOR_SIZE,24
@@ -313,7 +244,7 @@ bind = \$mainMod,       Print, exec, grimblast copy area
 bind = \$mainMod SHIFT, Print, exec, grimblast copy active
 
 # Clipboard history
-bind = \$mainMod, C, exec, cliphist list | ${MENU_CMD/--show drun/--dmenu} | cliphist decode | wl-copy
+bind = \$mainMod, C, exec, cliphist list | ${CLIP_CMD} | cliphist decode | wl-copy
 
 # Colour picker
 bind = \$mainMod SHIFT, C, exec, hyprpicker -a
@@ -324,9 +255,6 @@ bind = \$mainMod SHIFT, N, exec, swaync-client -C
 
 # Lock screen
 bind = \$mainMod, L, exec, hyprlock
-
-# Bar toggle (Super+Escape)
-bind = \$mainMod, Escape, exec, killall waybar || waybar
 
 # Audio (wireplumber + playerctl)
 bindel = , XF86AudioRaiseVolume,  exec, wpctl set-volume    @DEFAULT_AUDIO_SINK@ 5%+
@@ -351,40 +279,5 @@ windowrulev2 = float, title:^(Picture-in-Picture)$
 windowrulev2 = pin,   title:^(Picture-in-Picture)$
 EOF
 
-    echo "Default hyprland.conf written to ~/.config/hypr/hyprland.conf"
-}
-
-# ---------------------------------------------------------------------------
-# Finalize — patch hyprland.conf bar references
-# ---------------------------------------------------------------------------
-
-_hyprland_finalize() {
-    local HYPRCONF="$HOME/.config/hypr/hyprland.conf"
-
-    local BAR_CMD=""
-    case $choiceBAR in
-        1) BAR_CMD="waybar"       ;;
-        2) BAR_CMD="ags"          ;;
-        3) BAR_CMD="eww open bar" ;;
-        4) BAR_CMD="quickshell"   ;;
-    esac
-
-    if [[ -n "$BAR_CMD" ]]; then
-        if grep -q 'exec-once = \$bar' "$HYPRCONF"; then
-            sed -i "s|exec-once = \\\$bar.*|exec-once = ${BAR_CMD}|" "$HYPRCONF"
-        elif ! grep -q "exec-once = ${BAR_CMD}" "$HYPRCONF"; then
-            sed -i "/^exec-once/a exec-once = ${BAR_CMD}" "$HYPRCONF"
-        fi
-    fi
-
-    case $choiceBAR in
-        1) sed -i 's|exec, killall waybar || waybar|exec, killall waybar \|\| waybar|' "$HYPRCONF" ;;
-        2) sed -i "s|exec, killall waybar || waybar|exec, killall ags \|\| ags|"       "$HYPRCONF" ;;
-        3) sed -i "s|exec, killall waybar || waybar|exec, eww close-all \|\| eww open bar|" "$HYPRCONF" ;;
-        4) sed -i "s|exec, killall waybar || waybar|exec, killall quickshell \|\| quickshell|" "$HYPRCONF" ;;
-        5) sed -i '/killall waybar/d' "$HYPRCONF" ;;
-    esac
-
-    echo "Hyprland setup complete."
-    echo "Bar chosen: ${BAR_CMD:-none}"
+    echo "hyprland.conf written to ~/.config/hypr/hyprland.conf"
 }

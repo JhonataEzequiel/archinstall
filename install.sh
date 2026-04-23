@@ -1,8 +1,7 @@
 #!/bin/bash
 set -uo pipefail
 
-source packages.sh
-source functions.sh
+source lib/functions.sh
 
 # ---------------------------------------------------------------------------
 # Sudo — ask for the password once and keep the cache alive for the entire
@@ -35,18 +34,10 @@ terminal_text_editors_setup
 terminal_setup
 shell_setup
 wine_setup
-cachyos_setup
 install_video_drivers
 gaming_setup
-zen_kernel_setup
 extra_setup
 hyprland_setup
-
-# Regenerate initramfs for all installed kernels before configuring the bootloader.
-echo "Regenerating initramfs for all kernels..."
-sudo mkinitcpio -P
-
-bootloader_setup
 
 echo ""
 echo "Installation complete. A reboot is required to apply all changes."

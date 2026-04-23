@@ -45,12 +45,8 @@ install_video_drivers() {
 
     if [[ -n "$HAS_NVIDIA" ]]; then
         install_pacman "${nvidia_common_utils[@]}"
-        if [[ "$choiceCAO" == "1" ]]; then
-            install_pacman "${nvidia_cachyos[@]}"
-        else
-            install_pacman "${nvidia_drivers[@]}"
-            nvidia_setup
-        fi
+        install_pacman "${nvidia_drivers[@]}"
+        nvidia_setup
     else
         sudo tee /etc/default/grub > /dev/null << 'EOF'
 GRUB_DEFAULT=saved

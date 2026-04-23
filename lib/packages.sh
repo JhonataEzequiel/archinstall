@@ -2,9 +2,9 @@
 
 base_packages=(
     dconf bluez bluez-utils git wget pacman-contrib
-    unzip unrar 7zip tar python-pip ufw zip timeshift
-    fuse2 openssh cronie ntfs-3g linux-headers ibus flatpak
-    python power-profiles-daemon pciutils
+    unzip unrar 7zip tar python-pip ufw zip
+    openssh ntfs-3g linux-headers ibus flatpak
+    python pciutils base-devel
 )
 
 printer=(
@@ -43,24 +43,22 @@ hyprland_packages=(
     xdg-desktop-portal-hyprland xdg-user-dirs-gtk
     pavucontrol polkit hyprpolkitagent ly hyprland hyprpaper
     hypridle hyprlock hyprpicker cliphist network-manager-applet
-    swaync brightnessctl playerctl
+    swaync brightnessctl playerctl waybar
     qt5-wayland qt6-wayland
     hyprutils hyprcursor
 )
 
-# Launcher / app menu (choose one)
-launcher_wofi=(wofi)
-launcher_rofi=(rofi-wayland)
-launcher_walker=(walker-bin)   # AUR
+# Hyprland — launchers: 1=wofi  2=rofi-wayland  3=walker-bin
+hyprland_launchers=(wofi rofi-wayland walker-bin)
 
-# Screenshot stack: grimblast (hyprwm extras) + deps
-screenshot_packages=(grimblast grim slurp)
+# Hyprland — screenshot stack
+hyprland_screenshot=(grimblast grim slurp)
 
-# Bar / shell options
-bar_waybar=(waybar)
-bar_ags=(ags)
-bar_eww=(eww)
-bar_quickshell=(quickshell-git)
+# Zsh plugins
+zsh_plugins=(zsh-autosuggestions zsh-syntax-highlighting zsh-completions)
+
+# Mirror management
+mirrors_prereqs=(reflector curl)
 
 rendering_packages=(
     imagemagick ffmpeg poppler
@@ -82,10 +80,6 @@ font_packages=(
     noto-fonts-emoji otf-font-awesome ttf-droid ttf-fira-code
     ttf-jetbrains-mono-nerd ttf-font-awesome ttf-cascadia-mono-nerd
     ttf-cascadia-code-nerd ttf-ms-fonts
-)
-
-cachyos_packages=(
-    linux-cachyos linux-cachyos-headers cachyos-settings
 )
 
 base_drivers=(
@@ -110,10 +104,6 @@ amd_drivers=(
 
 nvidia_drivers=(
     nvidia-open-dkms
-)
-
-nvidia_cachyos=(
-    linux-cachyos-nvidia-open
 )
 
 nvidia_common_utils=(
@@ -146,13 +136,13 @@ extra=(
     upscayl-desktop-git parsec-bin
     obsidian pokemon-colorscripts-git gimp kdenlive
     audacity komikku raider bottles gearlever
-    flatseal switcheroo spotify-launcher
+    flatseal switcheroo
     obs-studio discord libreoffice-still
     octopi vscodium
 )
 
 gaming=(
-    heroic-games-launcher-bin gamescope mangohud
+    heroic-games-launcher-bin mangohud
     wine vkd3d glfw mangojuice wqy-zenhei
     jdk21-openjdk
     steam proton-ge-custom-bin
@@ -160,10 +150,6 @@ gaming=(
 
 gnome_extra=(
     extension-manager gapless gradia numix-folders-git numix-circle-icon-theme-git bazaar-git
-)
-
-grub_packages=(
-    grub grub-btrfs os-prober inotify-tools update-grub
 )
 
 # --- Package management helpers ---

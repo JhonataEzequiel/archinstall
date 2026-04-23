@@ -19,36 +19,6 @@ wine_setup() {
     fi
 }
 
-# ---------------------------------------------------------------------------
-# CachyOS kernel & repos
-# ---------------------------------------------------------------------------
-
-cachyos_setup() {
-    if [[ "$mode" == "1" ]]; then
-        echo "Install CachyOS kernel and optimizations?"
-        echo "1) Yes  2) No"
-        read -p "Enter 1-2: " choiceCAO
-    fi
-
-    if [[ "$choiceCAO" == "1" ]]; then
-        curl https://mirror.cachyos.org/cachyos-repo.tar.xz -o cachyos-repo.tar.xz
-        tar xvf cachyos-repo.tar.xz
-        (cd cachyos-repo && yes | sudo ./cachyos-repo.sh)
-        rm -rf cachyos-repo cachyos-repo.tar.xz
-        if install_pacman "${cachyos_packages[@]}"; then
-            remove_pacman linux linux-headers
-        else
-            echo "ERROR: linux-cachyos installation failed. Keeping default kernel."
-            return 1
-        fi
-    else
-        echo "Skipped CachyOS."
-    fi
-}
-
-# ---------------------------------------------------------------------------
-# Gaming
-# ---------------------------------------------------------------------------
 
 gaming_setup() {
     if [[ "$mode" == "1" ]]; then
@@ -60,45 +30,9 @@ gaming_setup() {
     if [[ "$choiceGM" == "1" ]]; then
         echo "vm.max_map_count = 2147483642" | sudo tee /etc/sysctl.d/80-gamecompatibility.conf
         install_yay "${gaming[@]}"
-
-        # gamescope needs cap_sys_nice to properly elevate frame priority.
-        # A pacman hook re-applies this automatically after every gamescope update.
-        sudo setcap cap_sys_nice=eip /usr/bin/gamescope
-        sudo mkdir -p /etc/pacman.d/hooks
-        sudo tee /etc/pacman.d/hooks/gamescope-cap.hook > /dev/null << 'EOF'
-[Trigger]
-Operation = Install
-Operation = Upgrade
-Type = Package
-Target = gamescope
-
-[Action]
-Description = Restoring cap_sys_nice capability for gamescope...
-When = PostTransaction
-Exec = /usr/bin/setcap cap_sys_nice=eip /usr/bin/gamescope
-EOF
         echo "Gaming packages installed."
     else
         echo "Skipped gaming packages."
-    fi
-}
-
-# ---------------------------------------------------------------------------
-# Zen kernel
-# ---------------------------------------------------------------------------
-
-zen_kernel_setup() {
-    if [[ "$mode" == "1" ]]; then
-        echo "Install linux-zen kernel? (requires ≥2 GB on /boot if keeping default kernel)"
-        echo "1) Yes  2) No"
-        read -p "Enter 1-2: " choiceZEN
-        choiceZEN=${choiceZEN:-2}
-
-        if [[ "$choiceZEN" == "1" ]]; then
-            install_pacman linux-zen linux-zen-headers
-        else
-            echo "Skipped Zen kernel."
-        fi
     fi
 }
 

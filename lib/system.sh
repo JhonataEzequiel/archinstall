@@ -21,15 +21,11 @@ check_prerequisites() {
 
 update_mirrors() {
     echo "Updating mirrorlist for faster downloads..."
-    if ! command -v reflector &>/dev/null; then
-        echo "Installing reflector..."
-        install_pacman reflector
-    fi
+    install_pacman "${mirrors_prereqs[@]}"
 
     # Detect country via IP for geographically closer mirrors.
     # Falls back to no --country flag (world-wide) if the lookup fails.
     local country country_arg=""
-    install_pacman curl
     country=$(curl -sf --max-time 5 "https://ipapi.co/country" 2>/dev/null || true)
     if [[ -n "$country" && "$country" =~ ^[A-Z]{2}$ ]]; then
         echo "Detected country: ${country} — filtering mirrors accordingly."
@@ -73,16 +69,10 @@ set_variables() {
     choiceAUR=1       # extra AUR packages: yes
     choiceSHELL=1     # shell: bash
     choiceSS=1        # starship / shell customization: yes
-    choiceBL=4        # bootloader: limine (safe default)
-    choiceGRUB=7      # grub theme: none
-    choiceCAO=2       # cachyos: no
     choiceWI=2        # wine: no
     choicePRIN=2      # printer: no
-    choiceBAR=1       # bar: waybar
     choiceLAUNCHER=1  # launcher: wofi
-    choiceSSTOOL=1    # screenshot tool: grimblast
     choiceGM=2        # gaming: no
-    choiceZEN=2       # zen kernel: no
 
     case $mode in
         2) choiceDE=1; choiceGM=1; choiceTE=5 ;;
@@ -94,8 +84,8 @@ set_variables() {
     esac
 
     export mode choiceDE choiceTE choiceGM choiceTPKG choiceTTE \
-           choiceAUR choiceSHELL choiceSS choiceBL choiceGRUB choiceCAO \
-           choiceWI choicePRIN choiceBAR choiceLAUNCHER choiceSSTOOL choiceZEN
+           choiceAUR choiceSHELL choiceSS \
+           choiceWI choicePRIN choiceLAUNCHER
 }
 
 # ---------------------------------------------------------------------------
@@ -193,7 +183,6 @@ install_basic_features() {
     install_pacman "${rendering_packages[@]}"
 
     sudo systemctl enable paccache.timer
-    sudo systemctl enable --now cronie.service
     sudo systemctl enable --now ufw.service
 
     bluetooth_setup
@@ -270,7 +259,7 @@ EOF
 aur_setup() {
     if ! command -v yay &>/dev/null; then
         echo "Installing yay..."
-        install_pacman base-devel
+        install_pacman "${base_packages[@]}"
         git clone https://aur.archlinux.org/yay.git
         (cd yay && makepkg -si --noconfirm)
         rm -rf yay

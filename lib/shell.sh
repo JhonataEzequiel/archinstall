@@ -56,7 +56,7 @@ _apply_bash_config() {
 }
 
 _apply_zsh_config() {
-    install_pacman zsh-autosuggestions zsh-syntax-highlighting zsh-completions
+    install_pacman "${zsh_plugins[@]}"
 
     local ZSHRC="$HOME/.zshrc"
 
