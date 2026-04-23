@@ -1,7 +1,13 @@
 #!/bin/bash
 set -uo pipefail
 
-source lib/functions.sh
+source lib/packages.sh
+source lib/system.sh
+source lib/terminal.sh
+source lib/shell.sh
+source lib/drivers.sh
+source lib/software.sh
+source lib/hyprland.sh
 
 # ---------------------------------------------------------------------------
 # Sudo — ask for the password once and keep the cache alive for the entire
