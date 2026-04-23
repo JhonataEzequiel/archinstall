@@ -201,9 +201,6 @@ install_basic_features() {
 # ---------------------------------------------------------------------------
 
 _ibus_setup() {
-    # Environment variables must be set before the graphical session starts.
-    # Without GTK_IM_MODULE and XMODIFIERS, GTK/Qt apps use XIM instead of
-    # ibus, causing the first composed character (e.g. "É") to be swallowed.
     local ENV_FILE="/etc/environment"
     local env_vars=(
         "GTK_IM_MODULE=ibus"
@@ -214,14 +211,6 @@ _ibus_setup() {
         grep -qF "$var" "$ENV_FILE" || echo "$var" | sudo tee -a "$ENV_FILE" > /dev/null
     done
     echo "IBus environment variables written to ${ENV_FILE}."
-
-    # Autostart the ibus daemon depending on the chosen DE:
-    #   GNOME  — ibus is integrated; gnome-session starts it automatically.
-    #            We only need to ensure ibus-daemon is installed and the
-    #            gsettings input-sources key includes ibus.
-    #   KDE    — autostart via a .desktop entry in ~/.config/autostart/
-    #   Hyprland — exec-once in hyprland.conf (written here, before dotfiles
-    #              are copied so _hyprland_copy_dotfiles can override if needed)
     case $choiceDE in
         1)
             # GNOME handles ibus natively — nothing extra needed beyond the env vars.
