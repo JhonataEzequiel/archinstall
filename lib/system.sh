@@ -141,7 +141,7 @@ choose_de() {
         case $choiceDE in
             1) sudo systemctl enable gdm                   && echo "Enabled GDM." ;;
             2) sudo systemctl enable plasma-login-manager  && echo "Enabled Plasma Login Manager." ;;
-            3) sudo systemctl enable ly                    && echo "Enabled LY." ;;
+            3) sudo systemctl enable ly@tty2.service       && echo "Enabled LY." ;;
         esac
     fi
 

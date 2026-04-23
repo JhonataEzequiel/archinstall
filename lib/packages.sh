@@ -145,7 +145,7 @@ gaming=(
     heroic-games-launcher-bin mangohud
     wine vkd3d glfw mangojuice wqy-zenhei
     jdk21-openjdk
-    steam proton-ge-custom-bin
+    steam
 )
 
 gnome_extra=(
